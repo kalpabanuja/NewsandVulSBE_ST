@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/NewsAndVulBackend.Api/NewsAndVulBackend.Api.csproj" />
+    <Project Path="src/NewsAndVulBackend.Core/NewsAndVulBackend.Core.csproj" />
+    <Project Path="src/NewsAndVulBackend.Infrastructure/NewsAndVulBackend.Infrastructure.csproj" />
+  </Folder>
+</Solution>

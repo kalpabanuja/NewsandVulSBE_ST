@@ -1,0 +1,6 @@
+@NewsAndVulBackend.Api_HostAddress = http://localhost:5239
+
+GET {{NewsAndVulBackend.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

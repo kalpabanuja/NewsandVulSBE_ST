@@ -1,0 +1,15 @@
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NewsAndVulBackend.Infrastructure\obj\Debug\net10.0\NewsAndVulBackend.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NewsAndVulBackend.Infrastructure\obj\Debug\net10.0\NewsAndVulBackend.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NewsAndVulBackend.Infrastructure\obj\Debug\net10.0\NewsAndVulBackend.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NewsAndVulBackend.Infrastructure\obj\Debug\net10.0\NewsAndVulBackend.Infrastructure.AssemblyInfo.cs
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NewsAndVulBackend.Infrastructure\obj\Debug\net10.0\NewsAndVulBackend.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NewsAndVulBackend.Infrastructure\bin\Debug\net10.0\NewsAndVulBackend.Infrastructure.deps.json
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NewsAndVulBackend.Infrastructure\bin\Debug\net10.0\NewsAndVulBackend.Infrastructure.dll
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NewsAndVulBackend.Infrastructure\bin\Debug\net10.0\NewsAndVulBackend.Infrastructure.pdb
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NewsAndVulBackend.Infrastructure\bin\Debug\net10.0\NewsAndVulBackend.Core.dll
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NewsAndVulBackend.Infrastructure\bin\Debug\net10.0\NewsAndVulBackend.Core.pdb
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NewsAndVulBackend.Infrastructure\obj\Debug\net10.0\NewsAndV.3963E716.Up2Date
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NewsAndVulBackend.Infrastructure\obj\Debug\net10.0\NewsAndVulBackend.Infrastructure.dll
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NewsAndVulBackend.Infrastructure\obj\Debug\net10.0\refint\NewsAndVulBackend.Infrastructure.dll
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NewsAndVulBackend.Infrastructure\obj\Debug\net10.0\NewsAndVulBackend.Infrastructure.pdb
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NewsAndVulBackend.Infrastructure\obj\Debug\net10.0\ref\NewsAndVulBackend.Infrastructure.dll

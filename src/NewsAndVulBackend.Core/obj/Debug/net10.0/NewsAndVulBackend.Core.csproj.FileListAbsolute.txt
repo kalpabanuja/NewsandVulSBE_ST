@@ -1,0 +1,11 @@
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NewsAndVulBackend.Core\bin\Debug\net10.0\NewsAndVulBackend.Core.deps.json
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NewsAndVulBackend.Core\bin\Debug\net10.0\NewsAndVulBackend.Core.dll
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NewsAndVulBackend.Core\bin\Debug\net10.0\NewsAndVulBackend.Core.pdb
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NewsAndVulBackend.Core\obj\Debug\net10.0\NewsAndVulBackend.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NewsAndVulBackend.Core\obj\Debug\net10.0\NewsAndVulBackend.Core.AssemblyInfoInputs.cache
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NewsAndVulBackend.Core\obj\Debug\net10.0\NewsAndVulBackend.Core.AssemblyInfo.cs
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NewsAndVulBackend.Core\obj\Debug\net10.0\NewsAndVulBackend.Core.csproj.CoreCompileInputs.cache
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NewsAndVulBackend.Core\obj\Debug\net10.0\NewsAndVulBackend.Core.dll
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NewsAndVulBackend.Core\obj\Debug\net10.0\refint\NewsAndVulBackend.Core.dll
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NewsAndVulBackend.Core\obj\Debug\net10.0\NewsAndVulBackend.Core.pdb
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NewsAndVulBackend.Core\obj\Debug\net10.0\ref\NewsAndVulBackend.Core.dll
