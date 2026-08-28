@@ -26,13 +26,17 @@ public class TokenService : ITokenService
             new Claim("deviceId", device.Id.ToString())
         };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JwtSettings:Secret"]!));
+        var secret = _config["JwtSettings:Secret"] ?? "fallback_secret_key_that_is_at_least_32_bytes_long_12345!";
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        var expires = DateTime.UtcNow.AddMinutes(double.Parse(_config["JwtSettings:ExpirationInMinutes"]!));
+        
+        var expirationMinutesString = _config["JwtSettings:ExpirationInMinutes"];
+        var expirationMinutes = double.TryParse(expirationMinutesString, out var parsed) ? parsed : 60.0;
+        var expires = DateTime.UtcNow.AddMinutes(expirationMinutes);
 
         var token = new JwtSecurityToken(
-            issuer: _config["JwtSettings:Issuer"],
-            audience: _config["JwtSettings:Audience"],
+            issuer: _config["JwtSettings:Issuer"] ?? "NotesAndFileBackend",
+            audience: _config["JwtSettings:Audience"] ?? "NotesAndFileBackend.Users",
             claims: claims,
             expires: expires,
             signingCredentials: creds
