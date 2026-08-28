@@ -1,0 +1,140 @@
+ubuntu@vps-2d7f6a34:~/NewsandVulSBE_ST$ sudo docker compose logs -f api
+WARN[0000] /home/ubuntu/NewsandVulSBE_ST/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+api-1  | warn: Microsoft.AspNetCore.DataProtection.Repositories.FileSystemXmlRepository[60]
+api-1  |       Storing keys in a directory '/root/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed. For more information go to https://aka.ms/aspnet/dataprotectionwarning
+api-1  | info: NotesAndFileBackend.Api.Services.ExpirationCleanupService[0]
+api-1  |       Expiration Cleanup Service running.
+api-1  | fail: Microsoft.EntityFrameworkCore.Database.Connection[20004]
+api-1  |       An error occurred using the connection to database 'backend_db' on server 'tcp://postgres:5432'.
+api-1  | fail: NotesAndFileBackend.Api.Services.AdminSeederService[0]
+api-1  |       An error occurred while migrating the database.
+api-1  |       Npgsql.NpgsqlException (0x80004005): Failed to connect to 172.20.0.2:5432
+api-1  |        ---> System.Net.Sockets.SocketException (111): Connection refused
+api-1  |          at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.CreateException(SocketError error, Boolean forAsyncThrow)
+api-1  |          at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ConnectAsync(Socket socket, CancellationToken cancellationToken)
+api-1  |          at System.Net.Sockets.Socket.ConnectAsync(EndPoint remoteEP, CancellationToken cancellationToken)
+api-1  |          at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+api-1  |          at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)
+api-1  |          at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+api-1  |          at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)
+api-1  |          at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()
+api-1  |          at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)
+api-1  |          at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)
+api-1  |          at System.Threading.Tasks.Task.FinishSlow(Boolean userDelegateExecute)
+api-1  |          at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+api-1  |          at System.Threading.ThreadPoolWorkQueue.Dispatch()
+api-1  |          at System.Threading.PortableThreadPool.WorkerThread.WorkerThreadStart()
+api-1  |          at System.Threading.Thread.StartCallback()
+api-1  |       --- End of stack trace from previous location ---
+api-1  |          at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+api-1  |          at Npgsql.Internal.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken)
+api-1  |          at Npgsql.Internal.NpgsqlConnector.RawOpen(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+api-1  |          at Npgsql.Internal.NpgsqlConnector.<Open>g__OpenCore|209_0(NpgsqlConnector conn, String username, SslMode sslMode, GssEncryptionMode gssEncMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+api-1  |          at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+api-1  |          at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+api-1  |          at Npgsql.PoolingDataSource.<Get>g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+api-1  |          at Npgsql.NpgsqlConnection.<Open>g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+api-1  |          at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+api-1  |          at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+api-1  |          at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+api-1  |          at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+api-1  |          at Microsoft.EntityFrameworkCore.Migrations.HistoryRepository.GetAppliedMigrationsAsync(CancellationToken cancellationToken)
+api-1  |          at Npgsql.EntityFrameworkCore.PostgreSQL.Migrations.Internal.NpgsqlHistoryRepository.GetAppliedMigrationsAsync(CancellationToken cancellationToken)
+api-1  |          at Npgsql.EntityFrameworkCore.PostgreSQL.Migrations.Internal.NpgsqlMigrator.MigrateAsync(String targetMigration, CancellationToken cancellationToken)
+api-1  |          at NotesAndFileBackend.Api.Services.AdminSeederService.StartAsync(CancellationToken cancellationToken) in /source/src/NotesAndFileBackend.Api/Services/AdminSeederService.cs:line 46
+api-1  | warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[35]
+api-1  |       No XML encryptor configured. Key {20ce216f-10a1-407b-b00e-f5d783bbffbf} may be persisted to storage in unencrypted form.
+api-1  | info: Microsoft.Hosting.Lifetime[14]
+api-1  |       Now listening on: http://[::]:8080
+api-1  | info: Microsoft.Hosting.Lifetime[0]
+api-1  |       Application started. Press Ctrl+C to shut down.
+api-1  | info: Microsoft.Hosting.Lifetime[0]
+api-1  |       Hosting environment: Production
+api-1  | info: Microsoft.Hosting.Lifetime[0]
+api-1  |       Content root path: /app
+api-1  | Cannot load library libgssapi_krb5.so.2 
+api-1  | Error: libgssapi_krb5.so.2: cannot open shared object file: No such file or directory
+api-1  | fail: Microsoft.EntityFrameworkCore.Database.Command[20102]
+api-1  |       Failed executing DbCommand (84ms) [Parameters=[@now='?' (DbType = DateTime)], CommandType='Text', CommandTimeout='30']
+api-1  |       SELECT f."Id", f."ByteSize", f."Checksum", f."CreatedAt", f."DeletedAt", f."Extension", f."MimeType", f."OriginalFilename", f."OwnerDeviceId", f."OwnerUserId", f."RetentionExpiresAt", f."Status", f."StorageBackend", f."StoredFilename", f."UpdatedAt", f."UploadSessionId"
+api-1  |       FROM "Files" AS f
+api-1  |       WHERE f."Status" = 'ACTIVE' AND f."RetentionExpiresAt" <= @now
+api-1  | fail: Microsoft.EntityFrameworkCore.Query[10100]
+api-1  |       An exception occurred while iterating over the results of a query for context type 'NotesAndFileBackend.Infrastructure.Data.AppDbContext'.
+api-1  |       Npgsql.PostgresException (0x80004005): 42P01: relation "Files" does not exist
+api-1  |       
+api-1  |       POSITION: 277
+api-1  |          at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+api-1  |          at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+api-1  |          at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+api-1  |          at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+api-1  |          at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+api-1  |          at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+api-1  |          at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+api-1  |          at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+api-1  |          at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+api-1  |          at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+api-1  |          at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+api-1  |          at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+api-1  |         Exception data:
+api-1  |           Severity: ERROR
+api-1  |           SqlState: 42P01
+api-1  |           MessageText: relation "Files" does not exist
+api-1  |           Position: 277
+api-1  |           File: parse_relation.c
+api-1  |           Line: 1392
+api-1  |           Routine: parserOpenTable
+api-1  |       Npgsql.PostgresException (0x80004005): 42P01: relation "Files" does not exist
+api-1  |       
+api-1  |       POSITION: 277
+api-1  |          at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+api-1  |          at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+api-1  |          at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+api-1  |          at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+api-1  |          at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+api-1  |          at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+api-1  |          at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+api-1  |          at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+api-1  |          at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+api-1  |          at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+api-1  |          at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+api-1  |          at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+api-1  |         Exception data:
+api-1  |           Severity: ERROR
+api-1  |           SqlState: 42P01
+api-1  |           MessageText: relation "Files" does not exist
+api-1  |           Position: 277
+api-1  |           File: parse_relation.c
+api-1  |           Line: 1392
+api-1  |           Routine: parserOpenTable
+api-1  | fail: NotesAndFileBackend.Api.Services.ExpirationCleanupService[0]
+api-1  |       Error occurred executing Expiration Cleanup.
+api-1  |       Npgsql.PostgresException (0x80004005): 42P01: relation "Files" does not exist
+api-1  |       
+api-1  |       POSITION: 277
+api-1  |          at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+api-1  |          at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+api-1  |          at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+api-1  |          at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+api-1  |          at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+api-1  |          at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+api-1  |          at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+api-1  |          at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+api-1  |          at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+api-1  |          at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+api-1  |          at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+api-1  |          at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+api-1  |          at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+api-1  |          at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+api-1  |          at NotesAndFileBackend.Api.Services.ExpirationCleanupService.CleanupExpiredResourcesAsync(CancellationToken stoppingToken) in /source/src/NotesAndFileBackend.Api/Services/ExpirationCleanupService.cs:line 48
+api-1  |          at NotesAndFileBackend.Api.Services.ExpirationCleanupService.ExecuteAsync(CancellationToken stoppingToken) in /source/src/NotesAndFileBackend.Api/Services/ExpirationCleanupService.cs:line 28
+api-1  |         Exception data:
+api-1  |           Severity: ERROR
+api-1  |           SqlState: 42P01
+api-1  |           MessageText: relation "Files" does not exist
+api-1  |           Position: 277
+api-1  |           File: parse_relation.c
+api-1  |           Line: 1392
+api-1  |           Routine: parserOpenTable
+api-1  | warn: Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware[3]
+api-1  |       Failed to determine the https port for redirect.

@@ -23,7 +23,6 @@ builder.Services.AddScoped<IStorageService, S3StorageService>();
 
 // Register Background Services
 builder.Services.AddHostedService<ExpirationCleanupService>();
-builder.Services.AddHostedService<AdminSeederService>();
 
 // Configure JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -199,5 +198,12 @@ app.MapGet("/", () =>
 </html>";
     return Results.Content(html, "text/html");
 });
+
+// Run migrations and seeder synchronously before handling requests or background tasks
+using (var scope = app.Services.CreateScope())
+{
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    await AdminSeeder.SeedAsync(scope.ServiceProvider, logger);
+}
 
 app.Run();
