@@ -39,6 +39,8 @@ public class FilesController : ControllerBase
     }
 
     [HttpPost("upload")]
+    [DisableRequestSizeLimit]
+    [RequestFormLimits(MultipartBodyLengthLimit = 1073741824)] // 1 GB
     public async Task<IActionResult> UploadFile(IFormFile file)
     {
         if (file == null || file.Length == 0)

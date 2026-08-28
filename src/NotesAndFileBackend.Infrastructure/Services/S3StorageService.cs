@@ -53,15 +53,18 @@ public class S3StorageService : IStorageService
         
         var objectKey = $"{Guid.NewGuid()}_{originalFilename}";
         
-        var request = new PutObjectRequest
+        using var fileTransferUtility = new Amazon.S3.Transfer.TransferUtility(_s3Client);
+        
+        var uploadRequest = new Amazon.S3.Transfer.TransferUtilityUploadRequest
         {
-            BucketName = _bucketName,
-            Key = objectKey,
             InputStream = fileStream,
+            Key = objectKey,
+            BucketName = _bucketName,
             ContentType = contentType
         };
 
-        await _s3Client.PutObjectAsync(request);
+        await fileTransferUtility.UploadAsync(uploadRequest);
+        
         return objectKey;
     }
 
