@@ -34,9 +34,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
-            ValidAudience = builder.Configuration["JwtSettings:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Secret"]!))
+            ValidIssuer = builder.Configuration["JwtSettings:Issuer"] ?? "NotesAndFileBackend",
+            ValidAudience = builder.Configuration["JwtSettings:Audience"] ?? "NotesAndFileBackend.Users",
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Secret"] ?? "fallback_secret_key_that_is_at_least_32_bytes_long_12345!"))
         };
     });
 
