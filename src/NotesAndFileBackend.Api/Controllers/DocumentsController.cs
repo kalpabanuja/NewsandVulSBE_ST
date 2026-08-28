@@ -63,7 +63,15 @@ public class DocumentsController : ControllerBase
         var userId = GetCurrentUserId();
         var documents = await _context.Documents
             .Where(d => d.OwnerUserId == userId && d.Status == "ACTIVE")
-            .Select(d => new { d.Id, d.Title, d.Description, d.Revision, d.CreatedAt, d.UpdatedAt })
+            .Select(d => new { 
+                d.Id, 
+                d.Title, 
+                d.Description, 
+                d.Revision, 
+                d.CreatedAt, 
+                d.UpdatedAt,
+                PublicShares = d.PublicShares.Where(s => s.RevokedAt == null).ToList()
+            })
             .ToListAsync();
             
         return Ok(documents);
@@ -76,6 +84,7 @@ public class DocumentsController : ControllerBase
         var document = await _context.Documents
             .Include(d => d.Blocks.OrderBy(b => b.Position))
             .Include(d => d.Attachments)
+            .Include(d => d.PublicShares.Where(s => s.RevokedAt == null))
             .FirstOrDefaultAsync(d => d.Id == id && d.OwnerUserId == userId && d.Status == "ACTIVE");
             
         if (document == null) return NotFound();

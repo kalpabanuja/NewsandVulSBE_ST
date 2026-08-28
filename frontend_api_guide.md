@@ -88,15 +88,10 @@ Endpoints for user registration and authentication.
 - **Description:** Get metadata for a specific file.
 - **Response:** `200 OK` returns a `StoredFile` object.
 
-### Download File (Presigned URL)
+### Download File
 - **Method:** `GET /files/{id}/download`
-- **Description:** Generates a temporary, secure URL directly to the cloud storage bucket so the frontend can download the raw file without proxying binary data through the API.
-- **Response:** `200 OK`
-  ```json
-  {
-    "downloadUrl": "http://minio:9000/bucket/file.jpg?X-Amz-Signature=..."
-  }
-  ```
+- **Description:** Downloads the raw file securely. The API proxies the file directly from MinIO to the frontend, so the frontend receives the raw binary data.
+- **Response:** `200 OK` (File Stream)
 
 ### Delete File
 - **Method:** `DELETE /files/{id}`
@@ -195,7 +190,7 @@ Endpoints for user registration and authentication.
 
 ### Access Shared File
 - **Method:** `GET /public/files/{token}`
-- **Description:** Accesses a shared file. The server will immediately redirect (`302 Found`) the user to a secure, temporary MinIO download URL. This means you can simply put this URL in an `<a href="">` or `<img src="">` tag and the browser will automatically follow the redirect to load the file!
+- **Description:** Accesses a shared file. The server will stream the raw binary file data directly back to the client. This means you can simply put this URL in an `<a href="">` or `<img src="">` tag and the browser will automatically render or download the file securely.
 
 ### Access Shared Document
 - **Method:** `GET /public/documents/{token}`

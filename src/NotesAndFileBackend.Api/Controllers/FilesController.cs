@@ -105,6 +105,7 @@ public class FilesController : ControllerBase
     {
         var userId = GetCurrentUserId();
         var files = await _context.Files
+            .Include(f => f.PublicShares.Where(s => s.RevokedAt == null))
             .Where(f => f.OwnerUserId == userId && f.Status == "ACTIVE")
             .ToListAsync();
             
@@ -115,7 +116,9 @@ public class FilesController : ControllerBase
     public async Task<IActionResult> GetFile(Guid id)
     {
         var userId = GetCurrentUserId();
-        var file = await _context.Files.FirstOrDefaultAsync(f => f.Id == id && f.OwnerUserId == userId && f.Status == "ACTIVE");
+        var file = await _context.Files
+            .Include(f => f.PublicShares.Where(s => s.RevokedAt == null))
+            .FirstOrDefaultAsync(f => f.Id == id && f.OwnerUserId == userId && f.Status == "ACTIVE");
         
         if (file == null) return NotFound();
         
@@ -130,8 +133,8 @@ public class FilesController : ControllerBase
         
         if (file == null) return NotFound();
         
-        var url = await _storageService.GeneratePresignedDownloadUrlAsync(file.StoredFilename, TimeSpan.FromHours(1));
-        return Ok(new { DownloadUrl = url });
+        var stream = await _storageService.DownloadFileAsync(file.StoredFilename);
+        return File(stream, file.MimeType, file.OriginalFilename);
     }
 
     [HttpDelete("{id}")]

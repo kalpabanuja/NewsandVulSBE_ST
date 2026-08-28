@@ -38,10 +38,10 @@ public class PublicController : ControllerBase
         share.LastAccessedAt = DateTime.UtcNow;
         await _context.SaveChangesAsync();
 
-        // Give a short-lived download URL (e.g. 15 minutes) for the actual file
-        var url = await _storageService.GeneratePresignedDownloadUrlAsync(share.File.StoredFilename, TimeSpan.FromMinutes(15));
+        // Stream the file directly through the API
+        var stream = await _storageService.DownloadFileAsync(share.File.StoredFilename);
         
-        return Redirect(url); // Redirect directly to the file!
+        return File(stream, share.File.MimeType, share.File.OriginalFilename);
     }
 
     [HttpGet("documents/{token}")]
