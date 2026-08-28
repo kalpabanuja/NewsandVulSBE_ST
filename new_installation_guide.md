@@ -58,7 +58,7 @@ Make sure the following files and folders are present on the VPS:
 
 ## Step 3: Create the Production `docker-compose.yml`
 
-Create a new file named `docker-compose.prod.yml` in the `~/apps/NotesAndFileBackend` directory:
+Create a new file named `docker-compose.yml` in the `~/apps/NotesAndFileBackend` directory:
 
 ```yaml
 version: '3.8'
@@ -151,12 +151,12 @@ ENTRYPOINT ["dotnet", "NotesAndFileBackend.Api.dll"]
 Run the following command to build the API image and start all services in the background:
 
 ```bash
-docker compose -f docker-compose.prod.yml up -d --build
+sudo docker compose up -d --build
 ```
 
 To verify everything is running:
 ```bash
-docker compose -f docker-compose.prod.yml logs -f api
+sudo docker compose logs -f api
 ```
 *Look for a log line indicating "DEFAULT ADMIN USER CREATED" along with the generated secure password. **Copy this password!***
 
