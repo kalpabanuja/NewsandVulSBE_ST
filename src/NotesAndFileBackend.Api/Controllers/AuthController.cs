@@ -15,15 +15,18 @@ public class AuthController : ControllerBase
 {
     private readonly AppDbContext _context;
     private readonly ITokenService _tokenService;
+    private readonly ILogger<AuthController> _logger;
 
-    public AuthController(AppDbContext context, ITokenService tokenService)
+    public AuthController(AppDbContext context, ITokenService tokenService, ILogger<AuthController> logger)
     {
         _context = context;
         _tokenService = tokenService;
+        _logger = logger;
     }
 
     private string HashPassword(string password)
     {
+        if (password == null) return string.Empty;
         using var sha256 = SHA256.Create();
         var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
         return Convert.ToBase64String(bytes);
@@ -41,7 +44,8 @@ public class AuthController : ControllerBase
         {
             Email = request.Email,
             DisplayName = request.DisplayName,
-            PasswordHash = HashPassword(request.Password)
+            PasswordHash = HashPassword(request.Password),
+            Status = "ACTIVE"
         };
 
         var device = new Device
@@ -72,9 +76,19 @@ public class AuthController : ControllerBase
     [HttpPost("sign-in")]
     public async Task<IActionResult> SignIn([FromBody] SignInRequest request)
     {
+        _logger.LogInformation($"SignIn attempt for email: '{request.Email}'");
+        
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
-        if (user == null || user.PasswordHash != HashPassword(request.Password))
+        if (user == null)
         {
+            _logger.LogWarning($"SignIn failed: User with email '{request.Email}' not found in database.");
+            return Unauthorized(new { error = new { code = "INVALID_CREDENTIALS", message = "Invalid email or password." } });
+        }
+
+        var providedHash = HashPassword(request.Password);
+        if (user.PasswordHash != providedHash)
+        {
+            _logger.LogWarning($"SignIn failed for '{request.Email}': Password hash mismatch. Expected: {user.PasswordHash}, Got: {providedHash}. Password length provided: {request.Password?.Length}");
             return Unauthorized(new { error = new { code = "INVALID_CREDENTIALS", message = "Invalid email or password." } });
         }
 
