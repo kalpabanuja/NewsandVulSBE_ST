@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/NotesAndFileBackend.Api/NotesAndFileBackend.Api.csproj" />
+    <Project Path="src/NotesAndFileBackend.Core/NotesAndFileBackend.Core.csproj" />
+    <Project Path="src/NotesAndFileBackend.Infrastructure/NotesAndFileBackend.Infrastructure.csproj" />
+  </Folder>
+</Solution>
