@@ -10,6 +10,8 @@ public class S3StorageService : IStorageService
     private readonly IAmazonS3 _s3Client;
     private readonly string _bucketName;
 
+    private bool _bucketExistsChecked = false;
+
     public S3StorageService(IConfiguration config)
     {
         var s3Config = new AmazonS3Config
@@ -23,11 +25,32 @@ public class S3StorageService : IStorageService
             config["Storage:SecretKey"], 
             s3Config);
             
-        _bucketName = config["Storage:BucketName"] ?? "newsandvul-bucket";
+        _bucketName = config["Storage:BucketName"] ?? "notesandfile-bucket";
+    }
+
+    private async Task EnsureBucketExistsAsync()
+    {
+        if (_bucketExistsChecked) return;
+        
+        try
+        {
+            var exists = await Amazon.S3.Util.AmazonS3Util.DoesS3BucketExistV2Async(_s3Client, _bucketName);
+            if (!exists)
+            {
+                await _s3Client.PutBucketAsync(new PutBucketRequest { BucketName = _bucketName, UseClientRegion = true });
+            }
+            _bucketExistsChecked = true;
+        }
+        catch
+        {
+            // Ignore error here and let the PutObject fail if bucket couldn't be created
+        }
     }
 
     public async Task<string> UploadFileAsync(Stream fileStream, string contentType, string originalFilename)
     {
+        await EnsureBucketExistsAsync();
+        
         var objectKey = $"{Guid.NewGuid()}_{originalFilename}";
         
         var request = new PutObjectRequest
