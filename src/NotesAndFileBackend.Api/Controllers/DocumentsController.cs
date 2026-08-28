@@ -130,4 +130,58 @@ public class DocumentsController : ControllerBase
         
         return NoContent();
     }
+
+    [HttpPost("{id}/share")]
+    public async Task<IActionResult> ShareDocument(Guid id, [FromBody] NotesAndFileBackend.Api.DTOs.CreateShareRequest request)
+    {
+        var userId = GetCurrentUserId();
+        var document = await _context.Documents.FirstOrDefaultAsync(d => d.Id == id && d.OwnerUserId == userId && d.Status == "ACTIVE");
+        
+        if (document == null) return NotFound();
+
+        var token = NotesAndFileBackend.Api.Helpers.TokenHelper.GenerateToken(request.Alias);
+        
+        var share = new PublicDocumentShare
+        {
+            DocumentId = document.Id,
+            TokenHash = token,
+            CreatedByUserId = userId,
+            ExpiresAt = request.ExpiresInHours.HasValue ? DateTime.UtcNow.AddHours(request.ExpiresInHours.Value) : null
+        };
+
+        _context.PublicDocumentShares.Add(share);
+        
+        // Audit log
+        _context.AuditEvents.Add(new AuditEvent { UserId = userId, EventType = "document.shared", ResourceType = "document", ResourceId = document.Id.ToString() });
+
+        await _context.SaveChangesAsync();
+
+        var publicUrl = $"{Request.Scheme}://{Request.Host}/api/v1/public/documents/{token}";
+
+        return Ok(new NotesAndFileBackend.Api.DTOs.ShareResponseDto
+        {
+            Id = share.Id,
+            Token = token,
+            PublicUrl = publicUrl,
+            ExpiresAt = share.ExpiresAt
+        });
+    }
+
+    [HttpDelete("{id}/share/{shareId}")]
+    public async Task<IActionResult> RevokeDocumentShare(Guid id, Guid shareId)
+    {
+        var userId = GetCurrentUserId();
+        var share = await _context.PublicDocumentShares.FirstOrDefaultAsync(s => s.Id == shareId && s.DocumentId == id && s.CreatedByUserId == userId && s.RevokedAt == null);
+        
+        if (share == null) return NotFound();
+
+        share.RevokedAt = DateTime.UtcNow;
+        
+        // Audit log
+        _context.AuditEvents.Add(new AuditEvent { UserId = userId, EventType = "document.share_revoked", ResourceType = "document", ResourceId = id.ToString() });
+
+        await _context.SaveChangesAsync();
+        
+        return NoContent();
+    }
 }

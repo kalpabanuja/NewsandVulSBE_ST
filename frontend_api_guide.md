@@ -103,6 +103,32 @@ Endpoints for user registration and authentication.
 - **Description:** Soft-deletes a file and queues it for permanent storage deletion.
 - **Response:** `204 No Content`
 
+### Generate Public Link
+- **Method:** `POST /files/{id}/share`
+- **Description:** Generates a public share link for a file.
+- **Request Body (JSON):**
+  ```json
+  {
+    "alias": "my-vacation-photo", 
+    "expiresInHours": 24
+  }
+  ```
+  *(Note: `alias` and `expiresInHours` are optional. If `alias` is omitted, it generates a secure random 32-character base62 string. If `alias` is provided, it generates `{alias}_{randomNumber}`)*
+- **Response:** `200 OK`
+  ```json
+  {
+    "id": "uuid",
+    "token": "my-vacation-photo_8492",
+    "publicUrl": "http://api.yourdomain.com/api/v1/public/files/my-vacation-photo_8492",
+    "expiresAt": "2026-08-30T..."
+  }
+  ```
+
+### Revoke Public Link
+- **Method:** `DELETE /files/{id}/share/{shareId}`
+- **Description:** Revokes a previously generated public share link.
+- **Response:** `204 No Content`
+
 ---
 
 ## 3. Documents (Notes/Scripts) Service (`/documents`)
@@ -145,6 +171,17 @@ Endpoints for user registration and authentication.
   *(Note: The `revision` number MUST match the `revision` number currently on the server, otherwise it returns `409 Conflict`)*
 - **Response:** `200 OK` returns the updated document with an incremented revision number.
 
+### Generate Public Link
+- **Method:** `POST /documents/{id}/share`
+- **Description:** Generates a public share link for a document.
+- **Request Body (JSON):** Same as the Files share endpoint (`alias` and `expiresInHours` are optional).
+- **Response:** `200 OK` returns share token and URL.
+
+### Revoke Public Link
+- **Method:** `DELETE /documents/{id}/share/{shareId}`
+- **Description:** Revokes a previously generated public share link.
+- **Response:** `204 No Content`
+
 ### Delete Document
 - **Method:** `DELETE /documents/{id}`
 - **Description:** Soft-deletes a document.
@@ -152,7 +189,22 @@ Endpoints for user registration and authentication.
 
 ---
 
-## 4. Admin Dashboard (`/admin`)
+## 4. Public Access (`/public`)
+
+*(Does NOT Require Authentication)*
+
+### Access Shared File
+- **Method:** `GET /public/files/{token}`
+- **Description:** Accesses a shared file. The server will immediately redirect (`302 Found`) the user to a secure, temporary MinIO download URL. This means you can simply put this URL in an `<a href="">` or `<img src="">` tag and the browser will automatically follow the redirect to load the file!
+
+### Access Shared Document
+- **Method:** `GET /public/documents/{token}`
+- **Description:** Retrieves the full document payload in read-only mode for unauthenticated users.
+- **Response:** `200 OK` returns the `Document` object. Returns `404 Not Found` if the token is invalid, expired, or revoked.
+
+---
+
+## 5. Admin Dashboard (`/admin`)
 
 *(Requires Authentication + Must be the Admin User)*
 

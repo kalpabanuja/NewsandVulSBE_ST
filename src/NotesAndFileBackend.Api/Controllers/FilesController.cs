@@ -162,4 +162,58 @@ public class FilesController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpPost("{id}/share")]
+    public async Task<IActionResult> ShareFile(Guid id, [FromBody] NotesAndFileBackend.Api.DTOs.CreateShareRequest request)
+    {
+        var userId = GetCurrentUserId();
+        var file = await _context.Files.FirstOrDefaultAsync(f => f.Id == id && f.OwnerUserId == userId && f.Status == "ACTIVE");
+        
+        if (file == null) return NotFound();
+
+        var token = NotesAndFileBackend.Api.Helpers.TokenHelper.GenerateToken(request.Alias);
+        
+        var share = new PublicFileShare
+        {
+            FileId = file.Id,
+            TokenHash = token, // Store raw token for now, in prod you might hash it if high security
+            CreatedByUserId = userId,
+            ExpiresAt = request.ExpiresInHours.HasValue ? DateTime.UtcNow.AddHours(request.ExpiresInHours.Value) : null
+        };
+
+        _context.PublicFileShares.Add(share);
+        
+        // Audit log
+        _context.AuditEvents.Add(new AuditEvent { UserId = userId, EventType = "file.shared", ResourceType = "file", ResourceId = file.Id.ToString() });
+
+        await _context.SaveChangesAsync();
+
+        var publicUrl = $"{Request.Scheme}://{Request.Host}/api/v1/public/files/{token}";
+
+        return Ok(new NotesAndFileBackend.Api.DTOs.ShareResponseDto
+        {
+            Id = share.Id,
+            Token = token,
+            PublicUrl = publicUrl,
+            ExpiresAt = share.ExpiresAt
+        });
+    }
+
+    [HttpDelete("{id}/share/{shareId}")]
+    public async Task<IActionResult> RevokeFileShare(Guid id, Guid shareId)
+    {
+        var userId = GetCurrentUserId();
+        var share = await _context.PublicFileShares.FirstOrDefaultAsync(s => s.Id == shareId && s.FileId == id && s.CreatedByUserId == userId && s.RevokedAt == null);
+        
+        if (share == null) return NotFound();
+
+        share.RevokedAt = DateTime.UtcNow;
+        
+        // Audit log
+        _context.AuditEvents.Add(new AuditEvent { UserId = userId, EventType = "file.share_revoked", ResourceType = "file", ResourceId = id.ToString() });
+
+        await _context.SaveChangesAsync();
+        
+        return NoContent();
+    }
 }
