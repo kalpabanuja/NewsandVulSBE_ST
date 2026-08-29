@@ -55,7 +55,9 @@ public class AuthController : ControllerBase
             User = user,
             DeviceName = request.DeviceName,
             Platform = request.Platform,
-            AppVersion = "1.0.0" // Ideally read from headers
+            AppVersion = "1.0.0", // Ideally read from headers
+            RefreshToken = _tokenService.GenerateRefreshToken(),
+            RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(30)
         };
 
         _context.Users.Add(user);
@@ -69,7 +71,7 @@ public class AuthController : ControllerBase
         return Ok(new AuthResponse
         {
             AccessToken = accessToken,
-            RefreshToken = refreshToken,
+            RefreshToken = device.RefreshToken,
             UserId = user.Id,
             DeviceId = device.Id
         });
@@ -95,6 +97,8 @@ public class AuthController : ControllerBase
         }
 
         var device = await _context.Devices.FirstOrDefaultAsync(d => d.UserId == user.Id && d.DeviceName == request.DeviceName);
+        var newRefreshToken = _tokenService.GenerateRefreshToken();
+
         if (device == null)
         {
             device = new Device
@@ -102,13 +106,17 @@ public class AuthController : ControllerBase
                 UserId = user.Id,
                 DeviceName = request.DeviceName,
                 Platform = request.Platform,
-                AppVersion = "1.0.0"
+                AppVersion = "1.0.0",
+                RefreshToken = newRefreshToken,
+                RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(30)
             };
             _context.Devices.Add(device);
         }
         else
         {
             device.LastSeenAt = DateTime.UtcNow;
+            device.RefreshToken = newRefreshToken;
+            device.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(30);
             _context.Devices.Update(device);
         }
 
@@ -118,12 +126,11 @@ public class AuthController : ControllerBase
         await _context.SaveChangesAsync();
 
         var accessToken = _tokenService.GenerateAccessToken(user, device);
-        var refreshToken = _tokenService.GenerateRefreshToken();
 
         return Ok(new AuthResponse
         {
             AccessToken = accessToken,
-            RefreshToken = refreshToken,
+            RefreshToken = device.RefreshToken,
             UserId = user.Id,
             DeviceId = device.Id
         });
@@ -162,6 +169,40 @@ public class AuthController : ControllerBase
         }
         
         return Ok();
+    }
+
+    [HttpPost("refresh")]
+    public async Task<IActionResult> Refresh([FromBody] RefreshRequest request)
+    {
+        var device = await _context.Devices
+            .Include(d => d.User)
+            .FirstOrDefaultAsync(d => d.Id == request.DeviceId);
+
+        if (device == null || device.RefreshToken != request.RefreshToken || device.RefreshTokenExpiryTime <= DateTime.UtcNow)
+        {
+            _logger.LogWarning($"Refresh failed for DeviceId {request.DeviceId}. Invalid or expired token.");
+            return Unauthorized(new { error = new { code = "INVALID_REFRESH_TOKEN", message = "Refresh token is invalid or expired." } });
+        }
+
+        // Generate new tokens
+        var newAccessToken = _tokenService.GenerateAccessToken(device.User, device);
+        var newRefreshToken = _tokenService.GenerateRefreshToken();
+
+        // Save new refresh token (refresh token rotation)
+        device.RefreshToken = newRefreshToken;
+        device.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(30);
+        device.LastSeenAt = DateTime.UtcNow;
+        
+        _context.Devices.Update(device);
+        await _context.SaveChangesAsync();
+
+        return Ok(new AuthResponse
+        {
+            AccessToken = newAccessToken,
+            RefreshToken = newRefreshToken,
+            UserId = device.UserId,
+            DeviceId = device.Id
+        });
     }
 }
 

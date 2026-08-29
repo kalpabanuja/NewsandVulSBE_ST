@@ -10,4 +10,7 @@ public class Device : BaseEntity
     public string AppVersion { get; set; } = string.Empty;
     
     public DateTime LastSeenAt { get; set; } = DateTime.UtcNow;
+
+    public string? RefreshToken { get; set; }
+    public DateTime? RefreshTokenExpiryTime { get; set; }
 }
