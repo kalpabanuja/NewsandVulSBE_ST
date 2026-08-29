@@ -278,6 +278,62 @@ public class NotesController : ControllerBase
         return NoContent();
     }
 
+    [HttpGet("deleted")]
+    public async Task<IActionResult> ListDeletedNotes([FromQuery] int page = 1, [FromQuery] int pageSize = 20, CancellationToken ct = default)
+    {
+        pageSize = Math.Min(pageSize, 100);
+        page = Math.Max(1, page);
+        var userId = GetCurrentUserId();
+        
+        var query = _context.Notes
+            .Include(n => n.NoteTags).ThenInclude(nt => nt.Tag)
+            .Include(n => n.Category)
+            .Where(d => d.UserId == userId && d.IsDeleted == true);
+
+        var notes = await query
+            .Select(d => new { 
+                d.Id, 
+                d.Title, 
+                d.Summary,
+                Category = d.Category != null ? d.Category.Name : null,
+                Tags = d.NoteTags.Select(nt => nt.Tag.Name).ToList(),
+                d.ToolName,
+                d.IsFavorite,
+                d.IsPinned,
+                d.IsArchived,
+                d.DeletedAt
+            })
+            .OrderByDescending(d => d.DeletedAt)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(ct);
+            
+        return Ok(notes);
+    }
+
+    [HttpPost("{id}/restore")]
+    public async Task<IActionResult> RestoreNote(Guid id, CancellationToken ct)
+    {
+        var userId = GetCurrentUserId();
+        var note = await _context.Notes
+            .FirstOrDefaultAsync(d => d.Id == id && d.UserId == userId && d.IsDeleted == true, ct);
+        
+        if (note == null) return NotFound();
+
+        // Restore
+        note.IsDeleted = false;
+        note.DeletedAt = null;
+        note.UpdatedAt = DateTime.UtcNow;
+        note.UpdatedByUserId = userId;
+
+        // Audit log
+        _context.AuditEvents.Add(new AuditEvent { UserId = userId, EventType = "note.restored", ResourceType = "note", ResourceId = note.Id.ToString() });
+
+        await _context.SaveChangesAsync(ct);
+        
+        return Ok(new { id = note.Id, title = note.Title });
+    }
+
     [HttpPost("{id}/duplicate")]
     public async Task<IActionResult> DuplicateNote(Guid id, CancellationToken ct)
     {
@@ -324,6 +380,53 @@ public class NotesController : ControllerBase
             id = newNote.Id,
             slug = newNote.Slug,
             version = newNote.Version
+        });
+    }
+
+    [HttpGet("{id}/revisions")]
+    public async Task<IActionResult> ListNoteRevisions(Guid id, CancellationToken ct)
+    {
+        var userId = GetCurrentUserId();
+
+        // Ensure note exists and belongs to user
+        var noteExists = await _context.Notes.AnyAsync(n => n.Id == id && n.UserId == userId && n.IsDeleted == false, ct);
+        if (!noteExists) return NotFound();
+
+        var revisions = await _context.NoteRevisions
+            .Where(r => r.NoteId == id)
+            .OrderByDescending(r => r.Version)
+            .Select(r => new {
+                r.Id,
+                r.Version,
+                r.Title,
+                r.Summary,
+                r.CreatedAt
+            })
+            .ToListAsync(ct);
+
+        return Ok(revisions);
+    }
+
+    [HttpGet("{id}/revisions/{version}")]
+    public async Task<IActionResult> GetNoteRevision(Guid id, int version, CancellationToken ct)
+    {
+        var userId = GetCurrentUserId();
+
+        var noteExists = await _context.Notes.AnyAsync(n => n.Id == id && n.UserId == userId && n.IsDeleted == false, ct);
+        if (!noteExists) return NotFound();
+
+        var revision = await _context.NoteRevisions
+            .FirstOrDefaultAsync(r => r.NoteId == id && r.Version == version, ct);
+
+        if (revision == null) return NotFound();
+
+        return Ok(new {
+            revision.Id,
+            revision.Version,
+            revision.Title,
+            revision.Summary,
+            revision.ContentJsonb,
+            revision.CreatedAt
         });
     }
 
