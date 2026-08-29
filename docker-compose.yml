@@ -9,14 +9,12 @@ services:
       - ASPNETCORE_ENVIRONMENT=Production
       - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=backend_db;Username=prod_user;Password=SuperSecurePassword!
       - JwtSettings__Secret=YOUR_VERY_SECURE_LONG_RANDOM_SECRET_KEY_HERE_12345!
-      - Storage__ServiceUrl=http://minio:9000
-      - Storage__AccessKey=admin
-      - Storage__SecretKey=SuperSecureMinioPassword!
+      - JwtSettings__Issuer=NotesAndFileBackend
+      - JwtSettings__Audience=NotesAndFileBackend.Users
     ports:
       - "5001:8080" # Maps the container's internal port to port 5001 on the host to avoid conflict
     depends_on:
       - postgres
-      - minio
     restart: unless-stopped
 
   postgres:
@@ -29,20 +27,25 @@ services:
     volumes:
       - postgres_data_prod:/var/lib/postgresql/data
     restart: unless-stopped
-
-  minio:
-    image: minio/minio:latest
-    command: server /data --console-address ":9001"
-    environment:
-      MINIO_ROOT_USER: admin
-      MINIO_ROOT_PASSWORD: SuperSecureMinioPassword!
-    ports:
-      - "9000:9000"
-      - "9001:9001" # MinIO Admin Console
+    
+  postgres-backup:
+    image: prodrigestivill/postgres-backup-local
+    restart: always
+    user: postgres:postgres 
     volumes:
-      - minio_data_prod:/data
-    restart: unless-stopped
+      - /var/opt/pgbackups:/backups
+    depends_on:
+      - postgres
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=backend_db
+      - POSTGRES_USER=prod_user
+      - POSTGRES_PASSWORD=SuperSecurePassword!
+      - SCHEDULE=@daily
+      - BACKUP_KEEP_DAYS=7
+      - BACKUP_KEEP_WEEKS=4
+      - BACKUP_KEEP_MONTHS=6
+      - HEALTHCHECK_PORT=8080
 
 volumes:
   postgres_data_prod:
-  minio_data_prod:

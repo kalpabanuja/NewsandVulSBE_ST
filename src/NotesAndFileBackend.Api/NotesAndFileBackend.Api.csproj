@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.11">
@@ -17,11 +19,13 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="10.0.11" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NotesAndFileBackend.Core\NotesAndFileBackend.Core.csproj" />
     <ProjectReference Include="..\NotesAndFileBackend.Infrastructure\NotesAndFileBackend.Infrastructure.csproj" />
+    <ProjectReference Include="..\NotesAndFileBackend.Application\NotesAndFileBackend.Application.csproj" />
+    <ProjectReference Include="..\NotesAndFileBackend.Contracts\NotesAndFileBackend.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

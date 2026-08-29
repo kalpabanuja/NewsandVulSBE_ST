@@ -1,222 +1,229 @@
-# Frontend API Integration Guide
+# MAUI Client API Integration Guide (v1)
 
-This guide details all available endpoints for integrating your frontend application with the `NotesAndFileBackend`.
+This document is the official API contract for integrating the existing `.NET MAUI` application with the new `NotesAndFileBackend.Api`.
+It defines all authentication, note, command generation, import/export, and sharing endpoints expected by the frontend.
 
 ## Base URL
-When running locally: `http://localhost:5001/api/v1`
-When running in production (VPS): `http://YOUR_VPS_IP:5001/api/v1` or `https://api.yourdomain.com/api/v1`
+When running locally: `http://localhost:5001/api/v1` or `https://localhost:5000/api/v1`
+When running in production (VPS): `https://api.yourdomain.com/api/v1`
 
-## Authentication
+## API Authentication & Security Boundary
+- **Access Token:** Most endpoints require a short-lived JWT Access Token. Provide it in the header:
+  `Authorization: Bearer <your_access_token>`
+- **Idempotency Key:** State-mutating operations like Sharing, Import, and Export expect an `Idempotency-Key` header (usually a UUID) to prevent duplicate executions across network retries.
+- **Client Validation:** The MAUI app is responsible for fast UX feedback validation. However, the API serves as the absolute security boundary and will perform comprehensive domain validation before executing any operation.
 
-Most endpoints require a JWT Access Token. To authenticate, include the token in the `Authorization` header of your HTTP requests:
-
-```http
-Authorization: Bearer <your_access_token>
+## Error Contract (RFC 7807)
+The API strictly uses `application/problem+json` for validation and domain errors.
+```json
+{
+  "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+  "title": "One or more validation errors occurred.",
+  "status": 400,
+  "errors": {
+    "Title": ["Title cannot be longer than 300 characters."],
+    "Summary": ["Summary must be at least 10 characters long."]
+  }
+}
 ```
 
 ---
 
-## 1. Auth Service (`/auth`)
-
-Endpoints for user registration and authentication.
-
-### Sign Up
-- **Method:** `POST /auth/sign-up`
-- **Description:** Register a new user account.
-- **Request Body (JSON):**
-  ```json
-  {
-    "email": "user@example.com",
-    "password": "your_password",
-    "displayName": "John Doe",
-    "deviceName": "MyLaptop",
-    "platform": "Web"
-  }
-  ```
-- **Response:** `200 OK`
-  ```json
-  {
-    "accessToken": "eyJhbGci...",
-    "refreshToken": "base64_string",
-    "userId": "uuid",
-    "deviceId": "uuid"
-  }
-  ```
+## 1. Auth / Tokens (`/auth`)
+*The integration should support JWT access tokens and Secure Storage of refresh tokens in the MAUI client.*
 
 ### Sign In
 - **Method:** `POST /auth/sign-in`
-- **Description:** Authenticate an existing user.
-- **Request Body (JSON):**
+- **Request Body:**
   ```json
-  {
-    "email": "user@example.com",
-    "password": "your_password",
-    "deviceName": "MyLaptop",
-    "platform": "Web"
-  }
+  { "email": "user@example.com", "password": "your_password" }
   ```
-- **Response:** `200 OK`
+- **Response (200 OK):**
   ```json
-  {
-    "accessToken": "eyJhbGci...",
-    "refreshToken": "base64_string",
-    "userId": "uuid",
-    "deviceId": "uuid"
-  }
+  { "accessToken": "...", "refreshToken": "...", "userId": "..." }
   ```
 
 ---
 
-## 2. File Storage Service (`/files`)
+## 2. Notes & Search CRUD (`/notes`)
+*The Note List contract is deliberately lightweight. Full Note JSONB content is only downloaded when retrieving a specific note.*
 
-*(Requires Authentication)*
-
-### Upload File
-- **Method:** `POST /files/upload`
-- **Description:** Uploads a file to cloud storage (MinIO) securely.
-- **Request Body:** `multipart/form-data`
-  - Key: `file` (The binary file you are uploading)
-- **Response:** `200 OK` returns a `StoredFile` metadata object.
-
-### List Files
-- **Method:** `GET /files`
-- **Description:** Retrieves all active files owned by the authenticated user.
-- **Query Parameters (Optional):**
-  - `search` (string): Filter files by name (e.g., `?search=vacation`).
-  - `sortBy` (string): Field to sort by. Options: `date` (default) or `size`.
-  - `sortOrder` (string): Sort direction. Options: `desc` (default, e.g., newest/largest first) or `asc`.
-  - *Example:* `GET /files?search=report&sortBy=size&sortOrder=desc`
-- **Response:** `200 OK` returns an array of `StoredFile` objects.
-
-### Get File Metadata
-- **Method:** `GET /files/{id}`
-- **Description:** Get metadata for a specific file.
-- **Response:** `200 OK` returns a `StoredFile` object.
-
-### Download File
-- **Method:** `GET /files/{id}/download`
-- **Description:** Downloads the raw file securely. The API proxies the file directly from MinIO to the frontend, so the frontend receives the raw binary data.
-- **Response:** `200 OK` (File Stream)
-
-### Delete File
-- **Method:** `DELETE /files/{id}`
-- **Description:** Soft-deletes a file and queues it for permanent storage deletion.
-- **Response:** `204 No Content`
-
-### Generate Public Link
-- **Method:** `POST /files/{id}/share`
-- **Description:** Generates a public share link for a file.
-- **Request Body (JSON):**
+### List Notes
+- **Method:** `GET /notes`
+- **Query Params:** `includeArchived (bool)`, `page (int)`, `pageSize (int, max 100)`
+- **Response (200 OK):** Array of lightweight `NoteListItemDto`:
   ```json
-  {
-    "alias": "my-vacation-photo", 
-    "expiresInHours": 24
-  }
+  [
+    {
+      "id": "uuid",
+      "title": "Nmap Full Scan",
+      "summary": "Short description...",
+      "category": "Networking",
+      "tags": ["nmap", "scanning"],
+      "toolName": "nmap",
+      "isFavorite": true,
+      "isPinned": false,
+      "isArchived": false,
+      "updatedAt": "2026-08-29T..."
+    }
+  ]
   ```
-  *(Note: `alias` and `expiresInHours` are optional. If `alias` is omitted, it generates a secure random 32-character base62 string. If `alias` is provided, it generates `{alias}_{randomNumber}`)*
-- **Response:** `200 OK`
+
+### Get Full Note
+- **Method:** `GET /notes/{id}`
+- **Response (200 OK):**
   ```json
   {
     "id": "uuid",
-    "token": "my-vacation-photo_8492",
-    "publicUrl": "http://api.yourdomain.com/api/v1/public/files/my-vacation-photo_8492",
-    "expiresAt": "2026-08-30T..."
+    "title": "Nmap Full Scan",
+    "summary": "...",
+    "category": "Networking",
+    "tags": ["nmap"],
+    "toolName": "nmap",
+    "contentJsonb": "{ \"blocks\": [...] }",
+    "isPinned": false,
+    "isFavorite": true,
+    "isArchived": false,
+    "version": 2,
+    "createdAt": "...",
+    "updatedAt": "...",
+    "publicShares": [ { "id": "...", "tokenHash": "...", "expiresAt": "..." } ]
   }
   ```
 
-### Revoke Public Link
-- **Method:** `DELETE /files/{id}/share/{shareId}`
-- **Description:** Revokes a previously generated public share link.
-- **Response:** `204 No Content`
+### Create Note
+- **Method:** `POST /notes`
+- **Request Body:**
+  ```json
+  {
+    "title": "My Note",
+    "summary": "...",
+    "categoryId": "uuid",
+    "tags": ["tag1", "tag2"],
+    "toolName": "custom",
+    "content": { "blocks": [] },
+    "isPinned": false,
+    "isFavorite": false
+  }
+  ```
+
+### Update Note (Optimistic Concurrency)
+- **Method:** `PUT /notes/{id}`
+- **Description:** Updates the note. The `version` field must match the server's current version, otherwise `409 Conflict` is returned.
+
+### Duplicate Note
+- **Method:** `POST /notes/{id}/duplicate`
+- **Description:** Creates a deep copy of the note and tags. Appends `(Copy)` to the title.
+
+### Search Notes (PostgreSQL Full-Text Search)
+- **Method:** `GET /notes/search`
+- **Query Params:** `q (string)`, `categoryId (uuid)`, `tag (string)`, `tool (string)`, `page (int)`, `pageSize (int)`
+- **Response (200 OK):**
+  ```json
+  {
+    "items": [ /* NoteListItemDto */ ],
+    "page": 1,
+    "pageSize": 20,
+    "total": 45
+  }
+  ```
+
+### Search Inside Note (Block Search)
+- **Method:** `GET /notes/{id}/search?q=query`
+- **Response (200 OK):** Returns matched JSON blocks and snippets.
 
 ---
 
-## 3. Documents (Notes/Scripts) Service (`/documents`)
+## 3. Command Generators (`/command-generators`)
 
-*(Requires Authentication)*
-
-### Create Document
-- **Method:** `POST /documents`
-- **Description:** Create a new empty note/script document.
-- **Request Body (JSON):**
+### Get Command Generator Schema
+- **Method:** `GET /command-generators/{id}`
+- **Description:** Provides metadata for the MAUI app to render the generator dynamically without hardcoding fields.
+- **Response (200 OK):**
   ```json
   {
-    "title": "My First Note",
-    "description": "Optional short summary"
+    "id": "uuid",
+    "name": "Nmap Scan",
+    "toolName": "nmap",
+    "fields": [
+      {
+        "key": "target",
+        "label": "Target IP/Hostname",
+        "type": "target",
+        "required": true
+      }
+    ],
+    "template": "nmap {target}"
   }
   ```
-- **Response:** `201 Created` returns the newly created `Document` object.
 
-### List Documents
-- **Method:** `GET /documents`
-- **Description:** Retrieve a lightweight list of all active documents (without heavy blocks/attachments).
-- **Response:** `200 OK` returns an array of lightweight document objects.
-
-### Get Full Document
-- **Method:** `GET /documents/{id}`
-- **Description:** Retrieve the full document, including all of its content blocks and attachments.
-- **Response:** `200 OK` returns the full `Document` object.
-
-### Update Document (Optimistic Concurrency)
-- **Method:** `PUT /documents/{id}`
-- **Description:** Update the title and description of a document. Uses optimistic locking to prevent overwriting someone else's changes.
-- **Request Body (JSON):**
+### Generate Command
+- **Method:** `POST /command-generators/{id}/generate`
+- **Description:** Evaluates the user's input against the deterministic C# engine. The server **never** executes the generated command.
+- **Request Body:**
   ```json
   {
-    "title": "Updated Title",
-    "description": "Updated summary",
-    "revision": 1 
+    "values": {
+      "target": "192.168.1.1"
+    }
   }
   ```
-  *(Note: The `revision` number MUST match the `revision` number currently on the server, otherwise it returns `409 Conflict`)*
-- **Response:** `200 OK` returns the updated document with an incremented revision number.
-
-### Generate Public Link
-- **Method:** `POST /documents/{id}/share`
-- **Description:** Generates a public share link for a document.
-- **Request Body (JSON):** Same as the Files share endpoint (`alias` and `expiresInHours` are optional).
-- **Response:** `200 OK` returns share token and URL.
-
-### Revoke Public Link
-- **Method:** `DELETE /documents/{id}/share/{shareId}`
-- **Description:** Revokes a previously generated public share link.
-- **Response:** `204 No Content`
-
-### Delete Document
-- **Method:** `DELETE /documents/{id}`
-- **Description:** Soft-deletes a document.
-- **Response:** `204 No Content`
+- **Response (200 OK):**
+  ```json
+  {
+    "success": true,
+    "command": "nmap 192.168.1.1",
+    "displayCommand": "nmap 192.168.1.1",
+    "warnings": []
+  }
+  ```
 
 ---
 
-## 4. Public Access (`/public`)
+## 4. Sharing & Import / Export (`/notes`)
 
-*(Does NOT Require Authentication)*
+### Create Share Link
+- **Method:** `POST /notes/{id}/share`
+- **Headers:** `Idempotency-Key: <uuid>`
+- **Request Body:**
+  ```json
+  {
+    "alias": "my-nmap-cheatsheet",
+    "expiresInHours": 24,
+    "password": "optional_password",
+    "allowIndexing": false,
+    "maxViews": 100
+  }
+  ```
+- **Response (200 OK):** `token` and full `publicUrl` to `/s/{token}`.
 
-### Access Shared File
-- **Method:** `GET /public/files/{token}`
-- **Description:** Accesses a shared file. The server will stream the raw binary file data directly back to the client. This means you can simply put this URL in an `<a href="">` or `<img src="">` tag and the browser will automatically render or download the file securely.
+### Revoke Share
+- **Method:** `DELETE /notes/{id}/share/{shareId}`
 
-### Access Shared Document
-- **Method:** `GET /public/documents/{token}`
-- **Description:** Retrieves the full document payload in read-only mode for unauthenticated users.
-- **Response:** `200 OK` returns the `Document` object. Returns `404 Not Found` if the token is invalid, expired, or revoked.
+### Export Data
+- **Method:** `POST /notes/export`
+- **Headers:** `Idempotency-Key: <uuid>`
+- **Request Body:**
+  ```json
+  {
+    "format": "json",
+    "includeAttachments": true
+  }
+  ```
+- **Response (200 OK):** Returns raw file stream (`application/zip` or `application/json`).
+
+### Import Data
+- **Method:** `POST /notes/import`
+- **Headers:** `Idempotency-Key: <uuid>`
+- **Request Body:** Requires `multipart/form-data` with key `file`.
+- **Response (200 OK):** `ImportResultDto` indicating success, conflicts, or errors.
 
 ---
 
-## 5. Admin Dashboard (`/admin`)
+## 5. Public Access (`/s` / `/public`)
+*No Authentication Required. Protected by `StrictPolicy` Rate Limiting.*
 
-*(Requires Authentication + Must be the Admin User)*
-
-### Get System Metrics
-- **Method:** `GET /admin/metrics`
-- **Description:** Retrieves real-time statistics for the dashboard.
-- **Response:** `200 OK`
-  ```json
-  {
-    "totalUsers": 1,
-    "totalFiles": 15,
-    "totalStorageUsed": 1048576,
-    "totalDocuments": 5
-  }
-  ```
+### View Shared Note
+- **Method:** `GET /public/notes/{token}`
+- **Query Params:** `pwd` (if password-protected)
+- **Response:** Returns the read-only Note representation for unauthenticated rendering.

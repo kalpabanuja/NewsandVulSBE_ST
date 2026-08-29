@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NotesAndFileBackend.Api.DTOs;
-using NotesAndFileBackend.Core.Entities;
-using NotesAndFileBackend.Core.Interfaces;
+using NotesAndFileBackend.Domain.Entities;
+using NotesAndFileBackend.Application.Interfaces;
 using NotesAndFileBackend.Infrastructure.Data;
 
 namespace NotesAndFileBackend.Api.Controllers;
@@ -164,3 +164,4 @@ public class AuthController : ControllerBase
         return Ok();
     }
 }
+

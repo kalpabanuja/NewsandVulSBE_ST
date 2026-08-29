@@ -30,14 +30,16 @@ public class AdminController : ControllerBase
         var totalUsers = await _context.Users.CountAsync();
         var totalFiles = await _context.Files.Where(f => f.Status != "DELETED").CountAsync();
         var totalStorageUsed = await _context.Files.Where(f => f.Status != "DELETED").SumAsync(f => f.ByteSize);
-        var totalDocuments = await _context.Documents.Where(d => d.Status != "DELETED").CountAsync();
+        var totalNotes = await _context.Notes.Where(d => d.Status != "DELETED").CountAsync();
 
         return Ok(new
         {
             TotalUsers = totalUsers,
             TotalFiles = totalFiles,
             TotalStorageUsed = totalStorageUsed,
-            TotalDocuments = totalDocuments
+            TotalNotes = totalNotes
         });
     }
 }
+
+

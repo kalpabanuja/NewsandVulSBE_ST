@@ -5,7 +5,9 @@ WORKDIR /source
 # Copy solution and project files
 COPY *.slnx .
 COPY src/NotesAndFileBackend.Api/*.csproj src/NotesAndFileBackend.Api/
-COPY src/NotesAndFileBackend.Core/*.csproj src/NotesAndFileBackend.Core/
+COPY src/NotesAndFileBackend.Application/*.csproj src/NotesAndFileBackend.Application/
+COPY src/NotesAndFileBackend.Contracts/*.csproj src/NotesAndFileBackend.Contracts/
+COPY src/NotesAndFileBackend.Domain/*.csproj src/NotesAndFileBackend.Domain/
 COPY src/NotesAndFileBackend.Infrastructure/*.csproj src/NotesAndFileBackend.Infrastructure/
 RUN dotnet restore
 
@@ -15,7 +17,7 @@ WORKDIR /source/src/NotesAndFileBackend.Api
 RUN dotnet publish -c Release -o /app
 
 # Serve stage
-FROM mcr.microsoft.com/dotnet/aspnet:10.0
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine
 WORKDIR /app
 COPY --from=build /app ./
 EXPOSE 8080

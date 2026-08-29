@@ -67,20 +67,34 @@ public class ExpirationCleanupService : BackgroundService
             _logger.LogInformation($"Public File Share {share.Id} revoked due to expiration.");
         }
 
-        // Cleanup expired public document shares
-        var expiredDocShares = await context.PublicDocumentShares
+        // Cleanup expired public Note shares
+        var expiredDocShares = await context.PublicNoteShares
             .Where(s => s.ExpiresAt <= now && s.RevokedAt == null)
             .ToListAsync(stoppingToken);
 
         foreach (var share in expiredDocShares)
         {
             share.RevokedAt = now;
-            _logger.LogInformation($"Public Document Share {share.Id} revoked due to expiration.");
+            _logger.LogInformation($"Public Note Share {share.Id} revoked due to expiration.");
         }
 
-        if (expiredFiles.Any() || expiredFileShares.Any() || expiredDocShares.Any())
+        // Cleanup old Audit Events (older than 90 days)
+        var ninetyDaysAgo = now.AddDays(-90);
+        var oldAudits = await context.AuditEvents
+            .Where(a => a.CreatedAt <= ninetyDaysAgo)
+            .ToListAsync(stoppingToken);
+
+        if (oldAudits.Any())
+        {
+            context.AuditEvents.RemoveRange(oldAudits);
+            _logger.LogInformation($"Removed {oldAudits.Count} old audit events.");
+        }
+
+        if (expiredFiles.Any() || expiredFileShares.Any() || expiredDocShares.Any() || oldAudits.Any())
         {
             await context.SaveChangesAsync(stoppingToken);
         }
     }
 }
+
+

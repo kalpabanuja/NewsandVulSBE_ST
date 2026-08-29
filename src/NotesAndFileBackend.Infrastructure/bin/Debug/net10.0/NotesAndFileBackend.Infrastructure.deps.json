@@ -10,7 +10,9 @@
         "dependencies": {
           "AWSSDK.S3": "4.0.102.4",
           "Microsoft.Extensions.Configuration.Abstractions": "10.0.11",
-          "NotesAndFileBackend.Core": "1.0.0",
+          "NotesAndFileBackend.Application": "1.0.0",
+          "NotesAndFileBackend.Contracts": "1.0.0",
+          "NotesAndFileBackend.Domain": "1.0.0",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "10.0.3",
           "System.IdentityModel.Tokens.Jwt": "8.22.0"
         },
@@ -259,9 +261,29 @@
           }
         }
       },
-      "NotesAndFileBackend.Core/1.0.0": {
+      "NotesAndFileBackend.Application/1.0.0": {
+        "dependencies": {
+          "NotesAndFileBackend.Contracts": "1.0.0",
+          "NotesAndFileBackend.Domain": "1.0.0"
+        },
         "runtime": {
-          "NotesAndFileBackend.Core.dll": {
+          "NotesAndFileBackend.Application.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "NotesAndFileBackend.Contracts/1.0.0": {
+        "runtime": {
+          "NotesAndFileBackend.Contracts.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "NotesAndFileBackend.Domain/1.0.0": {
+        "runtime": {
+          "NotesAndFileBackend.Domain.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -429,7 +451,17 @@
       "path": "system.identitymodel.tokens.jwt/8.22.0",
       "hashPath": "system.identitymodel.tokens.jwt.8.22.0.nupkg.sha512"
     },
-    "NotesAndFileBackend.Core/1.0.0": {
+    "NotesAndFileBackend.Application/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "NotesAndFileBackend.Contracts/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "NotesAndFileBackend.Domain/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

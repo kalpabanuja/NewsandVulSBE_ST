@@ -25,7 +25,7 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("NotesAndFileBackend.Core.Entities.AuditEvent", b =>
+            modelBuilder.Entity("NotesAndFileBackend.Domain.Entities.AuditEvent", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -68,7 +68,7 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
                     b.ToTable("AuditEvents");
                 });
 
-            modelBuilder.Entity("NotesAndFileBackend.Core.Entities.Device", b =>
+            modelBuilder.Entity("NotesAndFileBackend.Domain.Entities.Device", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -105,7 +105,7 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
                     b.ToTable("Devices");
                 });
 
-            modelBuilder.Entity("NotesAndFileBackend.Core.Entities.Document", b =>
+            modelBuilder.Entity("NotesAndFileBackend.Domain.Entities.Document", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -158,7 +158,7 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
                     b.ToTable("Documents");
                 });
 
-            modelBuilder.Entity("NotesAndFileBackend.Core.Entities.DocumentAttachment", b =>
+            modelBuilder.Entity("NotesAndFileBackend.Domain.Entities.DocumentAttachment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -202,7 +202,7 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
                     b.ToTable("DocumentAttachments");
                 });
 
-            modelBuilder.Entity("NotesAndFileBackend.Core.Entities.DocumentBlock", b =>
+            modelBuilder.Entity("NotesAndFileBackend.Domain.Entities.DocumentBlock", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -235,7 +235,7 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
                     b.ToTable("DocumentBlocks");
                 });
 
-            modelBuilder.Entity("NotesAndFileBackend.Core.Entities.FileAccess", b =>
+            modelBuilder.Entity("NotesAndFileBackend.Domain.Entities.FileAccess", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -266,7 +266,7 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
                     b.ToTable("FileAccesses");
                 });
 
-            modelBuilder.Entity("NotesAndFileBackend.Core.Entities.PublicDocumentShare", b =>
+            modelBuilder.Entity("NotesAndFileBackend.Domain.Entities.PublicDocumentShare", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -309,7 +309,7 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
                     b.ToTable("PublicDocumentShares");
                 });
 
-            modelBuilder.Entity("NotesAndFileBackend.Core.Entities.PublicFileShare", b =>
+            modelBuilder.Entity("NotesAndFileBackend.Domain.Entities.PublicFileShare", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -355,7 +355,7 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
                     b.ToTable("PublicFileShares");
                 });
 
-            modelBuilder.Entity("NotesAndFileBackend.Core.Entities.StoredFile", b =>
+            modelBuilder.Entity("NotesAndFileBackend.Domain.Entities.StoredFile", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -423,7 +423,7 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
                     b.ToTable("Files");
                 });
 
-            modelBuilder.Entity("NotesAndFileBackend.Core.Entities.User", b =>
+            modelBuilder.Entity("NotesAndFileBackend.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -465,9 +465,9 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("NotesAndFileBackend.Core.Entities.Device", b =>
+            modelBuilder.Entity("NotesAndFileBackend.Domain.Entities.Device", b =>
                 {
-                    b.HasOne("NotesAndFileBackend.Core.Entities.User", "User")
+                    b.HasOne("NotesAndFileBackend.Domain.Entities.User", "User")
                         .WithMany("Devices")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -476,14 +476,14 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("NotesAndFileBackend.Core.Entities.Document", b =>
+            modelBuilder.Entity("NotesAndFileBackend.Domain.Entities.Document", b =>
                 {
-                    b.HasOne("NotesAndFileBackend.Core.Entities.Device", "OwnerDevice")
+                    b.HasOne("NotesAndFileBackend.Domain.Entities.Device", "OwnerDevice")
                         .WithMany()
                         .HasForeignKey("OwnerDeviceId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("NotesAndFileBackend.Core.Entities.User", "OwnerUser")
+                    b.HasOne("NotesAndFileBackend.Domain.Entities.User", "OwnerUser")
                         .WithMany()
                         .HasForeignKey("OwnerUserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -494,9 +494,9 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
                     b.Navigation("OwnerUser");
                 });
 
-            modelBuilder.Entity("NotesAndFileBackend.Core.Entities.DocumentAttachment", b =>
+            modelBuilder.Entity("NotesAndFileBackend.Domain.Entities.DocumentAttachment", b =>
                 {
-                    b.HasOne("NotesAndFileBackend.Core.Entities.Document", "Document")
+                    b.HasOne("NotesAndFileBackend.Domain.Entities.Document", "Document")
                         .WithMany("Attachments")
                         .HasForeignKey("DocumentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -505,9 +505,9 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
                     b.Navigation("Document");
                 });
 
-            modelBuilder.Entity("NotesAndFileBackend.Core.Entities.DocumentBlock", b =>
+            modelBuilder.Entity("NotesAndFileBackend.Domain.Entities.DocumentBlock", b =>
                 {
-                    b.HasOne("NotesAndFileBackend.Core.Entities.Document", "Document")
+                    b.HasOne("NotesAndFileBackend.Domain.Entities.Document", "Document")
                         .WithMany("Blocks")
                         .HasForeignKey("DocumentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -516,15 +516,15 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
                     b.Navigation("Document");
                 });
 
-            modelBuilder.Entity("NotesAndFileBackend.Core.Entities.FileAccess", b =>
+            modelBuilder.Entity("NotesAndFileBackend.Domain.Entities.FileAccess", b =>
                 {
-                    b.HasOne("NotesAndFileBackend.Core.Entities.StoredFile", "File")
+                    b.HasOne("NotesAndFileBackend.Domain.Entities.StoredFile", "File")
                         .WithMany("AccessList")
                         .HasForeignKey("FileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("NotesAndFileBackend.Core.Entities.User", "TargetUser")
+                    b.HasOne("NotesAndFileBackend.Domain.Entities.User", "TargetUser")
                         .WithMany()
                         .HasForeignKey("TargetUserId");
 
@@ -533,15 +533,15 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
                     b.Navigation("TargetUser");
                 });
 
-            modelBuilder.Entity("NotesAndFileBackend.Core.Entities.PublicDocumentShare", b =>
+            modelBuilder.Entity("NotesAndFileBackend.Domain.Entities.PublicDocumentShare", b =>
                 {
-                    b.HasOne("NotesAndFileBackend.Core.Entities.User", "CreatedByUser")
+                    b.HasOne("NotesAndFileBackend.Domain.Entities.User", "CreatedByUser")
                         .WithMany()
                         .HasForeignKey("CreatedByUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("NotesAndFileBackend.Core.Entities.Document", "Document")
+                    b.HasOne("NotesAndFileBackend.Domain.Entities.Document", "Document")
                         .WithMany("PublicShares")
                         .HasForeignKey("DocumentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -552,15 +552,15 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
                     b.Navigation("Document");
                 });
 
-            modelBuilder.Entity("NotesAndFileBackend.Core.Entities.PublicFileShare", b =>
+            modelBuilder.Entity("NotesAndFileBackend.Domain.Entities.PublicFileShare", b =>
                 {
-                    b.HasOne("NotesAndFileBackend.Core.Entities.User", "CreatedByUser")
+                    b.HasOne("NotesAndFileBackend.Domain.Entities.User", "CreatedByUser")
                         .WithMany()
                         .HasForeignKey("CreatedByUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("NotesAndFileBackend.Core.Entities.StoredFile", "File")
+                    b.HasOne("NotesAndFileBackend.Domain.Entities.StoredFile", "File")
                         .WithMany("PublicShares")
                         .HasForeignKey("FileId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -571,14 +571,14 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
                     b.Navigation("File");
                 });
 
-            modelBuilder.Entity("NotesAndFileBackend.Core.Entities.StoredFile", b =>
+            modelBuilder.Entity("NotesAndFileBackend.Domain.Entities.StoredFile", b =>
                 {
-                    b.HasOne("NotesAndFileBackend.Core.Entities.Device", "OwnerDevice")
+                    b.HasOne("NotesAndFileBackend.Domain.Entities.Device", "OwnerDevice")
                         .WithMany()
                         .HasForeignKey("OwnerDeviceId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("NotesAndFileBackend.Core.Entities.User", "OwnerUser")
+                    b.HasOne("NotesAndFileBackend.Domain.Entities.User", "OwnerUser")
                         .WithMany()
                         .HasForeignKey("OwnerUserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -589,7 +589,7 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
                     b.Navigation("OwnerUser");
                 });
 
-            modelBuilder.Entity("NotesAndFileBackend.Core.Entities.Document", b =>
+            modelBuilder.Entity("NotesAndFileBackend.Domain.Entities.Document", b =>
                 {
                     b.Navigation("Attachments");
 
@@ -598,14 +598,14 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
                     b.Navigation("PublicShares");
                 });
 
-            modelBuilder.Entity("NotesAndFileBackend.Core.Entities.StoredFile", b =>
+            modelBuilder.Entity("NotesAndFileBackend.Domain.Entities.StoredFile", b =>
                 {
                     b.Navigation("AccessList");
 
                     b.Navigation("PublicShares");
                 });
 
-            modelBuilder.Entity("NotesAndFileBackend.Core.Entities.User", b =>
+            modelBuilder.Entity("NotesAndFileBackend.Domain.Entities.User", b =>
                 {
                     b.Navigation("Devices");
                 });

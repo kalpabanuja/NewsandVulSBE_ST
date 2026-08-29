@@ -1,0 +1,548 @@
+{
+  "NotesAndFileBackend.slnx": {
+    "mtime": 1787936516.4506395,
+    "seen": 1788011091.215315,
+    "ast_hash": "dbf70618c05ee42c860f23a8c493e10d",
+    "semantic_hash": "dbf70618c05ee42c860f23a8c493e10d"
+  },
+  "src/NotesAndFileBackend.Api/Controllers/AdminController.cs": {
+    "mtime": 1787936566.0351367,
+    "seen": 1788011091.2153203,
+    "ast_hash": "98688526509a5e477d486e16d1a77631",
+    "semantic_hash": "98688526509a5e477d486e16d1a77631"
+  },
+  "src/NotesAndFileBackend.Api/Controllers/AuthController.cs": {
+    "mtime": 1787964555.7127528,
+    "seen": 1788011091.215322,
+    "ast_hash": "864721ae8022c4ea80ec019b2c5410e5",
+    "semantic_hash": "864721ae8022c4ea80ec019b2c5410e5"
+  },
+  "src/NotesAndFileBackend.Api/Controllers/DocumentsController.cs": {
+    "mtime": 1787956321.5830386,
+    "seen": 1788011091.2153232,
+    "ast_hash": "1425aafef2d7843189ce33381f8410c9",
+    "semantic_hash": "1425aafef2d7843189ce33381f8410c9"
+  },
+  "src/NotesAndFileBackend.Api/Controllers/FilesController.cs": {
+    "mtime": 1787964954.3077545,
+    "seen": 1788011091.2153242,
+    "ast_hash": "228d606f82c8d0f763e16ed1365ef5b5",
+    "semantic_hash": "228d606f82c8d0f763e16ed1365ef5b5"
+  },
+  "src/NotesAndFileBackend.Api/Controllers/PublicController.cs": {
+    "mtime": 1787955292.997364,
+    "seen": 1788011091.215325,
+    "ast_hash": "004a7f2c487a4ab2f3b8b282ce3b216b",
+    "semantic_hash": "004a7f2c487a4ab2f3b8b282ce3b216b"
+  },
+  "src/NotesAndFileBackend.Api/Controllers/WeatherForecastController.cs": {
+    "mtime": 1787936516.4910448,
+    "seen": 1788011091.2153263,
+    "ast_hash": "f59c04e0fb2168434adab0d7873b81f4",
+    "semantic_hash": "f59c04e0fb2168434adab0d7873b81f4"
+  },
+  "src/NotesAndFileBackend.Api/DTOs/AuthDTOs.cs": {
+    "mtime": 1787936516.4935012,
+    "seen": 1788011091.2153273,
+    "ast_hash": "b40d17543050b1a54933d6fed113e943",
+    "semantic_hash": "b40d17543050b1a54933d6fed113e943"
+  },
+  "src/NotesAndFileBackend.Api/DTOs/DocumentDTOs.cs": {
+    "mtime": 1787936516.4950945,
+    "seen": 1788011091.215328,
+    "ast_hash": "e1788b8c62d3526c369428180f4c1a78",
+    "semantic_hash": "e1788b8c62d3526c369428180f4c1a78"
+  },
+  "src/NotesAndFileBackend.Api/DTOs/ShareDTOs.cs": {
+    "mtime": 1787953841.2187917,
+    "seen": 1788011091.215329,
+    "ast_hash": "5d3942cc1a0a595975f318032a121c7d",
+    "semantic_hash": "5d3942cc1a0a595975f318032a121c7d"
+  },
+  "src/NotesAndFileBackend.Api/DTOs/UpdateProfileRequest.cs": {
+    "mtime": 1787964546.7944713,
+    "seen": 1788011091.21533,
+    "ast_hash": "c2ceb5783decb34ee7161d3b873c0c8a",
+    "semantic_hash": "c2ceb5783decb34ee7161d3b873c0c8a"
+  },
+  "src/NotesAndFileBackend.Api/Helpers/TokenHelper.cs": {
+    "mtime": 1787953851.1244552,
+    "seen": 1788011091.2153308,
+    "ast_hash": "1458fe73497219b74b127bf1763d87a2",
+    "semantic_hash": "1458fe73497219b74b127bf1763d87a2"
+  },
+  "src/NotesAndFileBackend.Api/NotesAndFileBackend.Api.csproj": {
+    "mtime": 1787936516.4576473,
+    "seen": 1788011091.2153318,
+    "ast_hash": "132121394baa69bd41ddd904f3fdf89b",
+    "semantic_hash": "132121394baa69bd41ddd904f3fdf89b"
+  },
+  "src/NotesAndFileBackend.Api/Program.cs": {
+    "mtime": 1787956312.0265613,
+    "seen": 1788011091.2153327,
+    "ast_hash": "183ac550b71fd97035ab5241f44c837b",
+    "semantic_hash": "183ac550b71fd97035ab5241f44c837b"
+  },
+  "src/NotesAndFileBackend.Api/Properties/launchSettings.json": {
+    "mtime": 1787934545.6128268,
+    "seen": 1788011091.215334,
+    "ast_hash": "3a9a3112d6a0d14933438172327c0454",
+    "semantic_hash": "3a9a3112d6a0d14933438172327c0454"
+  },
+  "src/NotesAndFileBackend.Api/Services/AdminSeederService.cs": {
+    "mtime": 1787939863.4457352,
+    "seen": 1788011091.2153347,
+    "ast_hash": "8bb511a63e5d6ad3660ab221ba5fbf93",
+    "semantic_hash": "8bb511a63e5d6ad3660ab221ba5fbf93"
+  },
+  "src/NotesAndFileBackend.Api/Services/ExpirationCleanupService.cs": {
+    "mtime": 1787936516.5069096,
+    "seen": 1788011091.2153356,
+    "ast_hash": "4d870d1c14de245b3691f1eeda548f6b",
+    "semantic_hash": "4d870d1c14de245b3691f1eeda548f6b"
+  },
+  "src/NotesAndFileBackend.Api/WeatherForecast.cs": {
+    "mtime": 1787936516.4606736,
+    "seen": 1788011091.2153366,
+    "ast_hash": "c655781d4b814a70edd5f8a365472994",
+    "semantic_hash": "c655781d4b814a70edd5f8a365472994"
+  },
+  "src/NotesAndFileBackend.Api/appsettings.Development.json": {
+    "mtime": 1787936516.45573,
+    "seen": 1788011091.2153375,
+    "ast_hash": "1b7620892dc851e0454659e35eebfa77",
+    "semantic_hash": "1b7620892dc851e0454659e35eebfa77"
+  },
+  "src/NotesAndFileBackend.Api/appsettings.json": {
+    "mtime": 1787934545.6456757,
+    "seen": 1788011091.2153382,
+    "ast_hash": "f7e65dde4e5533740a0d57ac9355c0e8",
+    "semantic_hash": "f7e65dde4e5533740a0d57ac9355c0e8"
+  },
+  "src/NotesAndFileBackend.Api/bin/Debug/net10.0/BuildHost-netcore/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.deps.json": {
+    "mtime": 1763421306.0,
+    "seen": 1788011091.2153392,
+    "ast_hash": "6a002d69baf7b85bfe11c404487f1905",
+    "semantic_hash": "6a002d69baf7b85bfe11c404487f1905"
+  },
+  "src/NotesAndFileBackend.Api/bin/Debug/net10.0/BuildHost-netcore/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.runtimeconfig.json": {
+    "mtime": 1763421306.0,
+    "seen": 1788011091.2153401,
+    "ast_hash": "4a59cbd5a00293f28ad2649fdda570f9",
+    "semantic_hash": "4a59cbd5a00293f28ad2649fdda570f9"
+  },
+  "src/NotesAndFileBackend.Api/bin/Debug/net10.0/NewsAndVulBackend.Api.deps.json": {
+    "mtime": 1787935045.5356963,
+    "seen": 1788011091.2153413,
+    "ast_hash": "5c037d085f46a2e4fc495d4691f54b88",
+    "semantic_hash": "5c037d085f46a2e4fc495d4691f54b88"
+  },
+  "src/NotesAndFileBackend.Api/bin/Debug/net10.0/NewsAndVulBackend.Api.runtimeconfig.json": {
+    "mtime": 1787935045.6974795,
+    "seen": 1788011091.215342,
+    "ast_hash": "37595336dae30b037bd95e5047b95825",
+    "semantic_hash": "37595336dae30b037bd95e5047b95825"
+  },
+  "src/NotesAndFileBackend.Api/bin/Debug/net10.0/NewsAndVulBackend.Api.staticwebassets.endpoints.json": {
+    "mtime": 1787934819.329108,
+    "seen": 1788011091.215343,
+    "ast_hash": "f44ca44dd881261586b84442f2201257",
+    "semantic_hash": "f44ca44dd881261586b84442f2201257"
+  },
+  "src/NotesAndFileBackend.Api/bin/Debug/net10.0/NotesAndFileBackend.Api.deps.json": {
+    "mtime": 1787936549.766985,
+    "seen": 1788011091.2153442,
+    "ast_hash": "8db1fb381c103cc3d7542699aa19f807",
+    "semantic_hash": "8db1fb381c103cc3d7542699aa19f807"
+  },
+  "src/NotesAndFileBackend.Api/bin/Debug/net10.0/NotesAndFileBackend.Api.runtimeconfig.json": {
+    "mtime": 1787936549.8203647,
+    "seen": 1788011091.215345,
+    "ast_hash": "37595336dae30b037bd95e5047b95825",
+    "semantic_hash": "37595336dae30b037bd95e5047b95825"
+  },
+  "src/NotesAndFileBackend.Api/bin/Debug/net10.0/NotesAndFileBackend.Api.staticwebassets.endpoints.json": {
+    "mtime": 1787934819.329108,
+    "seen": 1788011091.2153459,
+    "ast_hash": "f44ca44dd881261586b84442f2201257",
+    "semantic_hash": "f44ca44dd881261586b84442f2201257"
+  },
+  "src/NotesAndFileBackend.Api/bin/Debug/net10.0/appsettings.Development.json": {
+    "mtime": 1787936516.45573,
+    "seen": 1788011091.2153466,
+    "ast_hash": "1b7620892dc851e0454659e35eebfa77",
+    "semantic_hash": "1b7620892dc851e0454659e35eebfa77"
+  },
+  "src/NotesAndFileBackend.Api/bin/Debug/net10.0/appsettings.json": {
+    "mtime": 1787934545.6456757,
+    "seen": 1788011091.2153478,
+    "ast_hash": "f7e65dde4e5533740a0d57ac9355c0e8",
+    "semantic_hash": "f7e65dde4e5533740a0d57ac9355c0e8"
+  },
+  "src/NotesAndFileBackend.Api/obj/Debug/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": {
+    "mtime": 1787934815.77258,
+    "seen": 1788011091.2153485,
+    "ast_hash": "8479efdf06e2d26e053d27ffa6964185",
+    "semantic_hash": "8479efdf06e2d26e053d27ffa6964185"
+  },
+  "src/NotesAndFileBackend.Api/obj/Debug/net10.0/NewsAndVulBackend.Api.AssemblyInfo.cs": {
+    "mtime": 1787934815.812574,
+    "seen": 1788011091.2153494,
+    "ast_hash": "a5dc453428845701285706c8bcdabf89",
+    "semantic_hash": "a5dc453428845701285706c8bcdabf89"
+  },
+  "src/NotesAndFileBackend.Api/obj/Debug/net10.0/NewsAndVulBackend.Api.GlobalUsings.g.cs": {
+    "mtime": 1787934752.646887,
+    "seen": 1788011091.2153504,
+    "ast_hash": "5b3fdaae7b59d230d7d136eab049a98a",
+    "semantic_hash": "5b3fdaae7b59d230d7d136eab049a98a"
+  },
+  "src/NotesAndFileBackend.Api/obj/Debug/net10.0/NewsAndVulBackend.Api.MvcApplicationPartsAssemblyInfo.cs": {
+    "mtime": 1787935042.313071,
+    "seen": 1788011091.2153513,
+    "ast_hash": "78ebdea476ed39e962105ba794fb3dc3",
+    "semantic_hash": "78ebdea476ed39e962105ba794fb3dc3"
+  },
+  "src/NotesAndFileBackend.Api/obj/Debug/net10.0/NotesAndFileBackend.Api.AssemblyInfo.cs": {
+    "mtime": 1787939900.051788,
+    "seen": 1788011091.215352,
+    "ast_hash": "2ed4063cd4942d39f020aeac92573452",
+    "semantic_hash": "2ed4063cd4942d39f020aeac92573452"
+  },
+  "src/NotesAndFileBackend.Api/obj/Debug/net10.0/NotesAndFileBackend.Api.GlobalUsings.g.cs": {
+    "mtime": 1787936527.6862512,
+    "seen": 1788011091.215353,
+    "ast_hash": "5b3fdaae7b59d230d7d136eab049a98a",
+    "semantic_hash": "5b3fdaae7b59d230d7d136eab049a98a"
+  },
+  "src/NotesAndFileBackend.Api/obj/Debug/net10.0/NotesAndFileBackend.Api.MvcApplicationPartsAssemblyInfo.cs": {
+    "mtime": 1787936542.6499894,
+    "seen": 1788011091.215354,
+    "ast_hash": "78ebdea476ed39e962105ba794fb3dc3",
+    "semantic_hash": "78ebdea476ed39e962105ba794fb3dc3"
+  },
+  "src/NotesAndFileBackend.Api/obj/Debug/net10.0/NotesAndFileBackend.Api.sourcelink.json": {
+    "mtime": 1787939900.158511,
+    "seen": 1788011091.2153547,
+    "ast_hash": "aa09ac4184852d72e3b80f386978af0f",
+    "semantic_hash": "aa09ac4184852d72e3b80f386978af0f"
+  },
+  "src/NotesAndFileBackend.Api/obj/Debug/net10.0/rjsmcshtml.dswa.cache.json": {
+    "mtime": 1787939903.8700302,
+    "seen": 1788011091.2153559,
+    "ast_hash": "9cdd2a158ad96839901f312cbf0aba5d",
+    "semantic_hash": "9cdd2a158ad96839901f312cbf0aba5d"
+  },
+  "src/NotesAndFileBackend.Api/obj/Debug/net10.0/rjsmrazor.dswa.cache.json": {
+    "mtime": 1787939903.8638492,
+    "seen": 1788011091.2153568,
+    "ast_hash": "5a324fa36f80ff6cb3cf624f3a4f7b5c",
+    "semantic_hash": "5a324fa36f80ff6cb3cf624f3a4f7b5c"
+  },
+  "src/NotesAndFileBackend.Api/obj/Debug/net10.0/rpswa.dswa.cache.json": {
+    "mtime": 1787936540.9834206,
+    "seen": 1788011091.2153578,
+    "ast_hash": "cd49bad2187a353f9f5655a7e3fa0e2b",
+    "semantic_hash": "cd49bad2187a353f9f5655a7e3fa0e2b"
+  },
+  "src/NotesAndFileBackend.Api/obj/Debug/net10.0/staticwebassets.build.endpoints.json": {
+    "mtime": 1787934819.329108,
+    "seen": 1788011091.2153587,
+    "ast_hash": "f44ca44dd881261586b84442f2201257",
+    "semantic_hash": "f44ca44dd881261586b84442f2201257"
+  },
+  "src/NotesAndFileBackend.Api/obj/Debug/net10.0/staticwebassets.build.json": {
+    "mtime": 1787936548.8107657,
+    "seen": 1788011091.2153594,
+    "ast_hash": "8e3be7aee3d89dd2be5491ecde148169",
+    "semantic_hash": "8e3be7aee3d89dd2be5491ecde148169"
+  },
+  "src/NotesAndFileBackend.Api/obj/NewsAndVulBackend.Api.csproj.nuget.dgspec.json": {
+    "mtime": 1787935034.4728203,
+    "seen": 1788011091.2153609,
+    "ast_hash": "20f87d14e1c68d2482fabc135c23d491",
+    "semantic_hash": "20f87d14e1c68d2482fabc135c23d491"
+  },
+  "src/NotesAndFileBackend.Api/obj/NotesAndFileBackend.Api.csproj.nuget.dgspec.json": {
+    "mtime": 1787936524.486672,
+    "seen": 1788011091.2153618,
+    "ast_hash": "b4b8a5f5c643a1a734fd416cdd732cf4",
+    "semantic_hash": "b4b8a5f5c643a1a734fd416cdd732cf4"
+  },
+  "src/NotesAndFileBackend.Api/obj/project.assets.json": {
+    "mtime": 1787936524.4677486,
+    "seen": 1788011091.2153625,
+    "ast_hash": "b99a01c1844f842096aa9bb3de58c7e5",
+    "semantic_hash": "b99a01c1844f842096aa9bb3de58c7e5"
+  },
+  "src/NotesAndFileBackend.Core/Class1.cs": {
+    "mtime": 1787936516.5099452,
+    "seen": 1788011091.2153635,
+    "ast_hash": "bf6e3c52de57518319cabb928b09f9d7",
+    "semantic_hash": "bf6e3c52de57518319cabb928b09f9d7"
+  },
+  "src/NotesAndFileBackend.Core/Entities/AuditEvent.cs": {
+    "mtime": 1787936516.513961,
+    "seen": 1788011091.2153647,
+    "ast_hash": "6790f4d1a8d7f522f74a986544664e6c",
+    "semantic_hash": "6790f4d1a8d7f522f74a986544664e6c"
+  },
+  "src/NotesAndFileBackend.Core/Entities/BaseEntity.cs": {
+    "mtime": 1787936516.514961,
+    "seen": 1788011091.2153654,
+    "ast_hash": "f8da30d8e10578cc25f69bbb7404a5c6",
+    "semantic_hash": "f8da30d8e10578cc25f69bbb7404a5c6"
+  },
+  "src/NotesAndFileBackend.Core/Entities/Device.cs": {
+    "mtime": 1787936516.516961,
+    "seen": 1788011091.2153664,
+    "ast_hash": "7d6f4e112e21a60b878936fea6d43874",
+    "semantic_hash": "7d6f4e112e21a60b878936fea6d43874"
+  },
+  "src/NotesAndFileBackend.Core/Entities/Document.cs": {
+    "mtime": 1787936516.5184681,
+    "seen": 1788011091.2153673,
+    "ast_hash": "4cb561f4b1dd5c5dfac74172bfd6db58",
+    "semantic_hash": "4cb561f4b1dd5c5dfac74172bfd6db58"
+  },
+  "src/NotesAndFileBackend.Core/Entities/DocumentAttachment.cs": {
+    "mtime": 1787936516.522501,
+    "seen": 1788011091.2153683,
+    "ast_hash": "113d7bf2f00b264c097bc6bd92fc9061",
+    "semantic_hash": "113d7bf2f00b264c097bc6bd92fc9061"
+  },
+  "src/NotesAndFileBackend.Core/Entities/DocumentBlock.cs": {
+    "mtime": 1787936516.5245,
+    "seen": 1788011091.2153692,
+    "ast_hash": "f4b54126f053c550f868e3048990a2f3",
+    "semantic_hash": "f4b54126f053c550f868e3048990a2f3"
+  },
+  "src/NotesAndFileBackend.Core/Entities/FileAccess.cs": {
+    "mtime": 1787936516.5265007,
+    "seen": 1788011091.21537,
+    "ast_hash": "1892931d345b0737c1e0a31a9518b168",
+    "semantic_hash": "1892931d345b0737c1e0a31a9518b168"
+  },
+  "src/NotesAndFileBackend.Core/Entities/PublicDocumentShare.cs": {
+    "mtime": 1787936516.5275004,
+    "seen": 1788011091.215371,
+    "ast_hash": "6d2bb7a92d975a5a0d49af4abdc32baf",
+    "semantic_hash": "6d2bb7a92d975a5a0d49af4abdc32baf"
+  },
+  "src/NotesAndFileBackend.Core/Entities/PublicFileShare.cs": {
+    "mtime": 1787936516.5305247,
+    "seen": 1788011091.2153718,
+    "ast_hash": "609228ab6d329f100af60eb926191940",
+    "semantic_hash": "609228ab6d329f100af60eb926191940"
+  },
+  "src/NotesAndFileBackend.Core/Entities/StoredFile.cs": {
+    "mtime": 1787936516.5319343,
+    "seen": 1788011091.2153726,
+    "ast_hash": "f8d1ea14bafa7932d1737983ea24b461",
+    "semantic_hash": "f8d1ea14bafa7932d1737983ea24b461"
+  },
+  "src/NotesAndFileBackend.Core/Entities/User.cs": {
+    "mtime": 1787936516.5340378,
+    "seen": 1788011091.2153735,
+    "ast_hash": "0933e607750764808d3028fcb35ae72a",
+    "semantic_hash": "0933e607750764808d3028fcb35ae72a"
+  },
+  "src/NotesAndFileBackend.Core/Interfaces/IStorageService.cs": {
+    "mtime": 1787936516.5370386,
+    "seen": 1788011091.2153742,
+    "ast_hash": "673474c1fd638163daa552301fd87927",
+    "semantic_hash": "673474c1fd638163daa552301fd87927"
+  },
+  "src/NotesAndFileBackend.Core/Interfaces/ITokenService.cs": {
+    "mtime": 1787936516.538547,
+    "seen": 1788011091.2153754,
+    "ast_hash": "5c34020c57054ee83d38fdd75a47c4a3",
+    "semantic_hash": "5c34020c57054ee83d38fdd75a47c4a3"
+  },
+  "src/NotesAndFileBackend.Core/NotesAndFileBackend.Core.csproj": {
+    "mtime": 1787934552.1807008,
+    "seen": 1788011091.2153761,
+    "ast_hash": "46b0780bd56312ea2d1bab391f179e89",
+    "semantic_hash": "46b0780bd56312ea2d1bab391f179e89"
+  },
+  "src/NotesAndFileBackend.Core/bin/Debug/net10.0/NewsAndVulBackend.Core.deps.json": {
+    "mtime": 1787934758.8355293,
+    "seen": 1788011091.2153769,
+    "ast_hash": "97bb5ff12c58fbdb11ed4fd38d64773c",
+    "semantic_hash": "97bb5ff12c58fbdb11ed4fd38d64773c"
+  },
+  "src/NotesAndFileBackend.Core/bin/Debug/net10.0/NotesAndFileBackend.Core.deps.json": {
+    "mtime": 1787936534.6717,
+    "seen": 1788011091.2153778,
+    "ast_hash": "49ac55c7452364622e2894d196a784ea",
+    "semantic_hash": "49ac55c7452364622e2894d196a784ea"
+  },
+  "src/NotesAndFileBackend.Core/obj/Debug/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": {
+    "mtime": 1787934753.4418907,
+    "seen": 1788011091.2153788,
+    "ast_hash": "8479efdf06e2d26e053d27ffa6964185",
+    "semantic_hash": "8479efdf06e2d26e053d27ffa6964185"
+  },
+  "src/NotesAndFileBackend.Core/obj/Debug/net10.0/NewsAndVulBackend.Core.AssemblyInfo.cs": {
+    "mtime": 1787934753.546495,
+    "seen": 1788011091.2153797,
+    "ast_hash": "d9262ef233928ae33d351705b95fcb4b",
+    "semantic_hash": "d9262ef233928ae33d351705b95fcb4b"
+  },
+  "src/NotesAndFileBackend.Core/obj/Debug/net10.0/NewsAndVulBackend.Core.GlobalUsings.g.cs": {
+    "mtime": 1787934753.1626165,
+    "seen": 1788011091.2153807,
+    "ast_hash": "9706b2dbf69f7db452e8b0d5baf54dcf",
+    "semantic_hash": "9706b2dbf69f7db452e8b0d5baf54dcf"
+  },
+  "src/NotesAndFileBackend.Core/obj/Debug/net10.0/NotesAndFileBackend.Core.AssemblyInfo.cs": {
+    "mtime": 1787939890.6387353,
+    "seen": 1788011091.2153819,
+    "ast_hash": "94ef97c535fbf07e005ba35e5b6e3d43",
+    "semantic_hash": "94ef97c535fbf07e005ba35e5b6e3d43"
+  },
+  "src/NotesAndFileBackend.Core/obj/Debug/net10.0/NotesAndFileBackend.Core.GlobalUsings.g.cs": {
+    "mtime": 1787936524.9974537,
+    "seen": 1788011091.2153826,
+    "ast_hash": "9706b2dbf69f7db452e8b0d5baf54dcf",
+    "semantic_hash": "9706b2dbf69f7db452e8b0d5baf54dcf"
+  },
+  "src/NotesAndFileBackend.Core/obj/Debug/net10.0/NotesAndFileBackend.Core.sourcelink.json": {
+    "mtime": 1787939890.7116106,
+    "seen": 1788011091.2153835,
+    "ast_hash": "aa09ac4184852d72e3b80f386978af0f",
+    "semantic_hash": "aa09ac4184852d72e3b80f386978af0f"
+  },
+  "src/NotesAndFileBackend.Core/obj/NewsAndVulBackend.Core.csproj.nuget.dgspec.json": {
+    "mtime": 1787934553.376474,
+    "seen": 1788011091.2153845,
+    "ast_hash": "11a101a6a74227a8110a9cdb1e33c562",
+    "semantic_hash": "11a101a6a74227a8110a9cdb1e33c562"
+  },
+  "src/NotesAndFileBackend.Core/obj/NotesAndFileBackend.Core.csproj.nuget.dgspec.json": {
+    "mtime": 1787936521.920729,
+    "seen": 1788011091.2153854,
+    "ast_hash": "287cd550042fc00564604310e788287c",
+    "semantic_hash": "287cd550042fc00564604310e788287c"
+  },
+  "src/NotesAndFileBackend.Core/obj/project.assets.json": {
+    "mtime": 1787936521.8743894,
+    "seen": 1788011091.2153864,
+    "ast_hash": "41e7eaff087ec384b4d54a2ad28cb3c2",
+    "semantic_hash": "41e7eaff087ec384b4d54a2ad28cb3c2"
+  },
+  "src/NotesAndFileBackend.Infrastructure/Class1.cs": {
+    "mtime": 1787936516.5474827,
+    "seen": 1788011091.215387,
+    "ast_hash": "3e1e5bc22fa2f9d0f7423151c584c768",
+    "semantic_hash": "3e1e5bc22fa2f9d0f7423151c584c768"
+  },
+  "src/NotesAndFileBackend.Infrastructure/Data/AppDbContext.cs": {
+    "mtime": 1787936516.5559604,
+    "seen": 1788011091.215388,
+    "ast_hash": "2055378cedaf73988ef4b6ddf87e6b44",
+    "semantic_hash": "2055378cedaf73988ef4b6ddf87e6b44"
+  },
+  "src/NotesAndFileBackend.Infrastructure/Migrations/20260828163344_InitialCreate.Designer.cs": {
+    "mtime": 1787936516.5625105,
+    "seen": 1788011091.2153893,
+    "ast_hash": "1ed7f3384d11819aed9b42e9f5f50c9c",
+    "semantic_hash": "1ed7f3384d11819aed9b42e9f5f50c9c"
+  },
+  "src/NotesAndFileBackend.Infrastructure/Migrations/20260828163344_InitialCreate.cs": {
+    "mtime": 1787936516.5584824,
+    "seen": 1788011091.2153902,
+    "ast_hash": "8183f0dc4c68ee8b996de611773165b1",
+    "semantic_hash": "8183f0dc4c68ee8b996de611773165b1"
+  },
+  "src/NotesAndFileBackend.Infrastructure/Migrations/AppDbContextModelSnapshot.cs": {
+    "mtime": 1787936516.5645094,
+    "seen": 1788011091.215391,
+    "ast_hash": "88befb2cf61de98c17d5cf90a673061f",
+    "semantic_hash": "88befb2cf61de98c17d5cf90a673061f"
+  },
+  "src/NotesAndFileBackend.Infrastructure/NotesAndFileBackend.Infrastructure.csproj": {
+    "mtime": 1787936516.5499969,
+    "seen": 1788011091.215392,
+    "ast_hash": "b0043f2c0ce71a0725f2ad6718e74c5c",
+    "semantic_hash": "b0043f2c0ce71a0725f2ad6718e74c5c"
+  },
+  "src/NotesAndFileBackend.Infrastructure/Services/S3StorageService.cs": {
+    "mtime": 1787957192.3329666,
+    "seen": 1788011091.215393,
+    "ast_hash": "39b3dee9eb8fce818425ceebda6797d4",
+    "semantic_hash": "39b3dee9eb8fce818425ceebda6797d4"
+  },
+  "src/NotesAndFileBackend.Infrastructure/Services/TokenService.cs": {
+    "mtime": 1787941034.9715998,
+    "seen": 1788011091.2153938,
+    "ast_hash": "90359f0be4abc4dc9a454e2bd71746eb",
+    "semantic_hash": "90359f0be4abc4dc9a454e2bd71746eb"
+  },
+  "src/NotesAndFileBackend.Infrastructure/bin/Debug/net10.0/NewsAndVulBackend.Infrastructure.deps.json": {
+    "mtime": 1787935041.2840638,
+    "seen": 1788011091.2153947,
+    "ast_hash": "cbf31bfc5ea0df9e866822a9001f1635",
+    "semantic_hash": "cbf31bfc5ea0df9e866822a9001f1635"
+  },
+  "src/NotesAndFileBackend.Infrastructure/bin/Debug/net10.0/NotesAndFileBackend.Infrastructure.deps.json": {
+    "mtime": 1787936538.566364,
+    "seen": 1788011091.2153957,
+    "ast_hash": "876ac83c9052963b736306b89ae7d3a3",
+    "semantic_hash": "876ac83c9052963b736306b89ae7d3a3"
+  },
+  "src/NotesAndFileBackend.Infrastructure/obj/Debug/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.cs": {
+    "mtime": 1787934759.1565466,
+    "seen": 1788011091.2153966,
+    "ast_hash": "8479efdf06e2d26e053d27ffa6964185",
+    "semantic_hash": "8479efdf06e2d26e053d27ffa6964185"
+  },
+  "src/NotesAndFileBackend.Infrastructure/obj/Debug/net10.0/NewsAndVulBackend.Infrastructure.AssemblyInfo.cs": {
+    "mtime": 1787934759.2697499,
+    "seen": 1788011091.2153974,
+    "ast_hash": "f196682670eb728e9d6737adf6970f20",
+    "semantic_hash": "f196682670eb728e9d6737adf6970f20"
+  },
+  "src/NotesAndFileBackend.Infrastructure/obj/Debug/net10.0/NewsAndVulBackend.Infrastructure.GlobalUsings.g.cs": {
+    "mtime": 1787934753.1834314,
+    "seen": 1788011091.2153983,
+    "ast_hash": "9706b2dbf69f7db452e8b0d5baf54dcf",
+    "semantic_hash": "9706b2dbf69f7db452e8b0d5baf54dcf"
+  },
+  "src/NotesAndFileBackend.Infrastructure/obj/Debug/net10.0/NotesAndFileBackend.Infrastructure.AssemblyInfo.cs": {
+    "mtime": 1787939897.045847,
+    "seen": 1788011091.2153995,
+    "ast_hash": "1eda6d3820dae3e00593e0c6a7308b3d",
+    "semantic_hash": "1eda6d3820dae3e00593e0c6a7308b3d"
+  },
+  "src/NotesAndFileBackend.Infrastructure/obj/Debug/net10.0/NotesAndFileBackend.Infrastructure.GlobalUsings.g.cs": {
+    "mtime": 1787936525.2825732,
+    "seen": 1788011091.2154012,
+    "ast_hash": "9706b2dbf69f7db452e8b0d5baf54dcf",
+    "semantic_hash": "9706b2dbf69f7db452e8b0d5baf54dcf"
+  },
+  "src/NotesAndFileBackend.Infrastructure/obj/Debug/net10.0/NotesAndFileBackend.Infrastructure.sourcelink.json": {
+    "mtime": 1787939897.1186173,
+    "seen": 1788011091.2154021,
+    "ast_hash": "aa09ac4184852d72e3b80f386978af0f",
+    "semantic_hash": "aa09ac4184852d72e3b80f386978af0f"
+  },
+  "src/NotesAndFileBackend.Infrastructure/obj/NewsAndVulBackend.Infrastructure.csproj.nuget.dgspec.json": {
+    "mtime": 1787935020.7697792,
+    "seen": 1788011091.2154033,
+    "ast_hash": "2aaab8c3462b3c35ed0b1d5b91dd8f44",
+    "semantic_hash": "2aaab8c3462b3c35ed0b1d5b91dd8f44"
+  },
+  "src/NotesAndFileBackend.Infrastructure/obj/NotesAndFileBackend.Infrastructure.csproj.nuget.dgspec.json": {
+    "mtime": 1787936524.1134908,
+    "seen": 1788011091.2154043,
+    "ast_hash": "5c9cffe253725c6b2012eb264930e319",
+    "semantic_hash": "5c9cffe253725c6b2012eb264930e319"
+  },
+  "src/NotesAndFileBackend.Infrastructure/obj/project.assets.json": {
+    "mtime": 1787936524.0973628,
+    "seen": 1788011091.215405,
+    "ast_hash": "0f30f4a74ff79205112322d2990bb1a4",
+    "semantic_hash": "0f30f4a74ff79205112322d2990bb1a4"
+  }
+}

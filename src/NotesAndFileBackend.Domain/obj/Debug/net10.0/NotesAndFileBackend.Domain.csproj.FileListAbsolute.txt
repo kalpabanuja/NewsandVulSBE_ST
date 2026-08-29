@@ -1,0 +1,12 @@
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Domain\bin\Debug\net10.0\NotesAndFileBackend.Domain.deps.json
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Domain\bin\Debug\net10.0\NotesAndFileBackend.Domain.dll
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Domain\bin\Debug\net10.0\NotesAndFileBackend.Domain.pdb
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Domain\obj\Debug\net10.0\NotesAndFileBackend.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Domain\obj\Debug\net10.0\NotesAndFileBackend.Domain.AssemblyInfoInputs.cache
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Domain\obj\Debug\net10.0\NotesAndFileBackend.Domain.AssemblyInfo.cs
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Domain\obj\Debug\net10.0\NotesAndFileBackend.Domain.csproj.CoreCompileInputs.cache
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Domain\obj\Debug\net10.0\NotesAndFileBackend.Domain.sourcelink.json
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Domain\obj\Debug\net10.0\NotesAndFileBackend.Domain.dll
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Domain\obj\Debug\net10.0\refint\NotesAndFileBackend.Domain.dll
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Domain\obj\Debug\net10.0\NotesAndFileBackend.Domain.pdb
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Domain\obj\Debug\net10.0\ref\NotesAndFileBackend.Domain.dll

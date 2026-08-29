@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using NotesAndFileBackend.Core.Entities;
+using NotesAndFileBackend.Domain.Entities;
 using NotesAndFileBackend.Infrastructure.Data;
 
 namespace NotesAndFileBackend.Api.Services;
@@ -66,3 +66,4 @@ public static class AdminSeeder
         }
     }
 }
+

@@ -1,7 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\NotesAndFileBackend.Core\NotesAndFileBackend.Core.csproj" />
+    <ProjectReference Include="..\NotesAndFileBackend.Application\NotesAndFileBackend.Application.csproj" />
+    <ProjectReference Include="..\NotesAndFileBackend.Domain\NotesAndFileBackend.Domain.csproj" />
+    <ProjectReference Include="..\NotesAndFileBackend.Contracts\NotesAndFileBackend.Contracts.csproj" />
   </ItemGroup>
 
   <ItemGroup>

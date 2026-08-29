@@ -390,14 +390,38 @@
           }
         }
       },
-      "NotesAndFileBackend.Core/1.0.0": {
+      "NotesAndFileBackend.Application/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "dependencies": {
+          "NotesAndFileBackend.Contracts": "1.0.0",
+          "NotesAndFileBackend.Domain": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/NotesAndFileBackend.Application.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/NotesAndFileBackend.Application.dll": {}
+        }
+      },
+      "NotesAndFileBackend.Contracts/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v10.0",
         "compile": {
-          "bin/placeholder/NotesAndFileBackend.Core.dll": {}
+          "bin/placeholder/NotesAndFileBackend.Contracts.dll": {}
         },
         "runtime": {
-          "bin/placeholder/NotesAndFileBackend.Core.dll": {}
+          "bin/placeholder/NotesAndFileBackend.Contracts.dll": {}
+        }
+      },
+      "NotesAndFileBackend.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "compile": {
+          "bin/placeholder/NotesAndFileBackend.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/NotesAndFileBackend.Domain.dll": {}
         }
       }
     }
@@ -1032,17 +1056,29 @@
         "system.identitymodel.tokens.jwt.nuspec"
       ]
     },
-    "NotesAndFileBackend.Core/1.0.0": {
+    "NotesAndFileBackend.Application/1.0.0": {
       "type": "project",
-      "path": "../NotesAndFileBackend.Core/NotesAndFileBackend.Core.csproj",
-      "msbuildProject": "../NotesAndFileBackend.Core/NotesAndFileBackend.Core.csproj"
+      "path": "../NotesAndFileBackend.Application/NotesAndFileBackend.Application.csproj",
+      "msbuildProject": "../NotesAndFileBackend.Application/NotesAndFileBackend.Application.csproj"
+    },
+    "NotesAndFileBackend.Contracts/1.0.0": {
+      "type": "project",
+      "path": "../NotesAndFileBackend.Contracts/NotesAndFileBackend.Contracts.csproj",
+      "msbuildProject": "../NotesAndFileBackend.Contracts/NotesAndFileBackend.Contracts.csproj"
+    },
+    "NotesAndFileBackend.Domain/1.0.0": {
+      "type": "project",
+      "path": "../NotesAndFileBackend.Domain/NotesAndFileBackend.Domain.csproj",
+      "msbuildProject": "../NotesAndFileBackend.Domain/NotesAndFileBackend.Domain.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net10.0": [
       "AWSSDK.S3 >= 4.0.102.4",
       "Microsoft.Extensions.Configuration.Abstractions >= 10.0.11",
-      "NotesAndFileBackend.Core >= 1.0.0",
+      "NotesAndFileBackend.Application >= 1.0.0",
+      "NotesAndFileBackend.Contracts >= 1.0.0",
+      "NotesAndFileBackend.Domain >= 1.0.0",
       "Npgsql.EntityFrameworkCore.PostgreSQL >= 10.0.3",
       "System.IdentityModel.Tokens.Jwt >= 8.22.0"
     ]
@@ -1074,8 +1110,14 @@
           "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {
-            "C:\\Users\\wickr\\Documents\\.net\\NewsandVulSBE_ST\\src\\NotesAndFileBackend.Core\\NotesAndFileBackend.Core.csproj": {
-              "projectPath": "C:\\Users\\wickr\\Documents\\.net\\NewsandVulSBE_ST\\src\\NotesAndFileBackend.Core\\NotesAndFileBackend.Core.csproj"
+            "C:\\Users\\wickr\\Documents\\.net\\NewsandVulSBE_ST\\src\\NotesAndFileBackend.Application\\NotesAndFileBackend.Application.csproj": {
+              "projectPath": "C:\\Users\\wickr\\Documents\\.net\\NewsandVulSBE_ST\\src\\NotesAndFileBackend.Application\\NotesAndFileBackend.Application.csproj"
+            },
+            "C:\\Users\\wickr\\Documents\\.net\\NewsandVulSBE_ST\\src\\NotesAndFileBackend.Contracts\\NotesAndFileBackend.Contracts.csproj": {
+              "projectPath": "C:\\Users\\wickr\\Documents\\.net\\NewsandVulSBE_ST\\src\\NotesAndFileBackend.Contracts\\NotesAndFileBackend.Contracts.csproj"
+            },
+            "C:\\Users\\wickr\\Documents\\.net\\NewsandVulSBE_ST\\src\\NotesAndFileBackend.Domain\\NotesAndFileBackend.Domain.csproj": {
+              "projectPath": "C:\\Users\\wickr\\Documents\\.net\\NewsandVulSBE_ST\\src\\NotesAndFileBackend.Domain\\NotesAndFileBackend.Domain.csproj"
             }
           }
         }

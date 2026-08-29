@@ -108,9 +108,7 @@ C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Api\bin\D
 C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Api\bin\Debug\net10.0\tr\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
 C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Api\bin\Debug\net10.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
 C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Api\bin\Debug\net10.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
-C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Api\bin\Debug\net10.0\NotesAndFileBackend.Core.dll
 C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Api\bin\Debug\net10.0\NotesAndFileBackend.Infrastructure.dll
-C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Api\bin\Debug\net10.0\NotesAndFileBackend.Core.pdb
 C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Api\bin\Debug\net10.0\NotesAndFileBackend.Infrastructure.pdb
 C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Api\obj\Debug\net10.0\NotesAndFileBackend.Api.csproj.AssemblyReference.cache
 C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Api\obj\Debug\net10.0\rpswa.dswa.cache.json
@@ -136,3 +134,14 @@ C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Api\obj\D
 C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Api\obj\Debug\net10.0\NotesAndFileBackend.Api.pdb
 C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Api\obj\Debug\net10.0\NotesAndFileBackend.Api.genruntimeconfig.cache
 C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Api\obj\Debug\net10.0\ref\NotesAndFileBackend.Api.dll
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Api\bin\Debug\net10.0\NotesAndFileBackend.Application.dll
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Api\bin\Debug\net10.0\NotesAndFileBackend.Contracts.dll
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Api\bin\Debug\net10.0\NotesAndFileBackend.Domain.dll
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Api\bin\Debug\net10.0\NotesAndFileBackend.Application.pdb
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Api\bin\Debug\net10.0\NotesAndFileBackend.Contracts.pdb
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Api\bin\Debug\net10.0\NotesAndFileBackend.Domain.pdb
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Api\bin\Debug\net10.0\BCrypt-Net-Next.dll
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Api\bin\Debug\net10.0\FluentValidation.dll
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Api\bin\Debug\net10.0\FluentValidation.AspNetCore.dll
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Api\bin\Debug\net10.0\FluentValidation.DependencyInjectionExtensions.dll
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Api\bin\Debug\net10.0\Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore.dll

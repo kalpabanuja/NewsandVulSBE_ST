@@ -3,8 +3,8 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using NotesAndFileBackend.Core.Entities;
-using NotesAndFileBackend.Core.Interfaces;
+using NotesAndFileBackend.Domain.Entities;
+using NotesAndFileBackend.Application.Interfaces;
 
 namespace NotesAndFileBackend.Infrastructure.Services;
 

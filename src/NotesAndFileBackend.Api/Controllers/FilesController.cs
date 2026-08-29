@@ -2,8 +2,8 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using NotesAndFileBackend.Core.Entities;
-using NotesAndFileBackend.Core.Interfaces;
+using NotesAndFileBackend.Domain.Entities;
+using NotesAndFileBackend.Application.Interfaces;
 using NotesAndFileBackend.Infrastructure.Data;
 
 namespace NotesAndFileBackend.Api.Controllers;
@@ -34,7 +34,7 @@ public class FilesController : ControllerBase
 
     private Guid GetCurrentDeviceId()
     {
-        var claim = User.FindFirst("deviceId");
+        var claim = User.FindFirst("DeviceId");
         return claim != null ? Guid.Parse(claim.Value) : Guid.Empty;
     }
 
@@ -48,12 +48,12 @@ public class FilesController : ControllerBase
             return BadRequest(new { error = new { code = "INVALID_FILE", message = "File is empty or not provided." } });
         }
 
-        var userId = GetCurrentUserId();
-        var deviceId = GetCurrentDeviceId();
+        var UserId = GetCurrentUserId();
+        var DeviceId = GetCurrentDeviceId();
 
         // Check Quotas
         var userFiles = await _context.Files
-            .Where(f => f.OwnerUserId == userId && f.Status != "DELETED")
+            .Where(f => f.OwnerUserId == UserId && f.Status != "DELETED")
             .ToListAsync();
 
         if (userFiles.Count >= MAX_FILE_COUNT)
@@ -69,8 +69,8 @@ public class FilesController : ControllerBase
 
         var storedFile = new StoredFile
         {
-            OwnerUserId = userId,
-            OwnerDeviceId = deviceId,
+            OwnerUserId = UserId,
+            OwnerDeviceId = DeviceId,
             OriginalFilename = file.FileName,
             MimeType = file.ContentType,
             Extension = Path.GetExtension(file.FileName),
@@ -89,7 +89,7 @@ public class FilesController : ControllerBase
             await _context.SaveChangesAsync();
             
             // Audit Log
-            _context.AuditEvents.Add(new AuditEvent { UserId = userId, DeviceId = deviceId, EventType = "file.uploaded", ResourceType = "file", ResourceId = storedFile.Id.ToString() });
+            _context.AuditEvents.Add(new AuditEvent { UserId = UserId, DeviceId = DeviceId, EventType = "file.uploaded", ResourceType = "file", ResourceId = storedFile.Id.ToString() });
             await _context.SaveChangesAsync();
 
             return Ok(storedFile);
@@ -105,11 +105,11 @@ public class FilesController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> ListFiles([FromQuery] string? search, [FromQuery] string? sortBy = "date", [FromQuery] string? sortOrder = "desc")
     {
-        var userId = GetCurrentUserId();
+        var UserId = GetCurrentUserId();
         
         var query = _context.Files
             .Include(f => f.PublicShares.Where(s => s.RevokedAt == null))
-            .Where(f => f.OwnerUserId == userId && f.Status == "ACTIVE");
+            .Where(f => f.OwnerUserId == UserId && f.Status == "ACTIVE");
 
         // Apply Search
         if (!string.IsNullOrWhiteSpace(search))
@@ -137,10 +137,10 @@ public class FilesController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetFile(Guid id)
     {
-        var userId = GetCurrentUserId();
+        var UserId = GetCurrentUserId();
         var file = await _context.Files
             .Include(f => f.PublicShares.Where(s => s.RevokedAt == null))
-            .FirstOrDefaultAsync(f => f.Id == id && f.OwnerUserId == userId && f.Status == "ACTIVE");
+            .FirstOrDefaultAsync(f => f.Id == id && f.OwnerUserId == UserId && f.Status == "ACTIVE");
         
         if (file == null) return NotFound();
         
@@ -150,8 +150,8 @@ public class FilesController : ControllerBase
     [HttpGet("{id}/download")]
     public async Task<IActionResult> DownloadFile(Guid id)
     {
-        var userId = GetCurrentUserId();
-        var file = await _context.Files.FirstOrDefaultAsync(f => f.Id == id && f.OwnerUserId == userId && f.Status == "ACTIVE");
+        var UserId = GetCurrentUserId();
+        var file = await _context.Files.FirstOrDefaultAsync(f => f.Id == id && f.OwnerUserId == UserId && f.Status == "ACTIVE");
         
         if (file == null) return NotFound();
         
@@ -162,8 +162,8 @@ public class FilesController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteFile(Guid id)
     {
-        var userId = GetCurrentUserId();
-        var file = await _context.Files.FirstOrDefaultAsync(f => f.Id == id && f.OwnerUserId == userId && f.Status == "ACTIVE");
+        var UserId = GetCurrentUserId();
+        var file = await _context.Files.FirstOrDefaultAsync(f => f.Id == id && f.OwnerUserId == UserId && f.Status == "ACTIVE");
         
         if (file == null) return NotFound();
 
@@ -171,7 +171,7 @@ public class FilesController : ControllerBase
         file.DeletedAt = DateTime.UtcNow;
         
         // Audit log
-        _context.AuditEvents.Add(new AuditEvent { UserId = userId, EventType = "file.deleted", ResourceType = "file", ResourceId = file.Id.ToString() });
+        _context.AuditEvents.Add(new AuditEvent { UserId = UserId, EventType = "file.deleted", ResourceType = "file", ResourceId = file.Id.ToString() });
         
         await _context.SaveChangesAsync();
 
@@ -191,8 +191,8 @@ public class FilesController : ControllerBase
     [HttpPost("{id}/share")]
     public async Task<IActionResult> ShareFile(Guid id, [FromBody] NotesAndFileBackend.Api.DTOs.CreateShareRequest request)
     {
-        var userId = GetCurrentUserId();
-        var file = await _context.Files.FirstOrDefaultAsync(f => f.Id == id && f.OwnerUserId == userId && f.Status == "ACTIVE");
+        var UserId = GetCurrentUserId();
+        var file = await _context.Files.FirstOrDefaultAsync(f => f.Id == id && f.OwnerUserId == UserId && f.Status == "ACTIVE");
         
         if (file == null) return NotFound();
 
@@ -202,14 +202,14 @@ public class FilesController : ControllerBase
         {
             FileId = file.Id,
             TokenHash = token, // Store raw token for now, in prod you might hash it if high security
-            CreatedByUserId = userId,
+            CreatedByUserId = UserId,
             ExpiresAt = request.ExpiresInHours.HasValue ? DateTime.UtcNow.AddHours(request.ExpiresInHours.Value) : null
         };
 
         _context.PublicFileShares.Add(share);
         
         // Audit log
-        _context.AuditEvents.Add(new AuditEvent { UserId = userId, EventType = "file.shared", ResourceType = "file", ResourceId = file.Id.ToString() });
+        _context.AuditEvents.Add(new AuditEvent { UserId = UserId, EventType = "file.shared", ResourceType = "file", ResourceId = file.Id.ToString() });
 
         await _context.SaveChangesAsync();
 
@@ -227,18 +227,21 @@ public class FilesController : ControllerBase
     [HttpDelete("{id}/share/{shareId}")]
     public async Task<IActionResult> RevokeFileShare(Guid id, Guid shareId)
     {
-        var userId = GetCurrentUserId();
-        var share = await _context.PublicFileShares.FirstOrDefaultAsync(s => s.Id == shareId && s.FileId == id && s.CreatedByUserId == userId && s.RevokedAt == null);
+        var UserId = GetCurrentUserId();
+        var share = await _context.PublicFileShares.FirstOrDefaultAsync(s => s.Id == shareId && s.FileId == id && s.CreatedByUserId == UserId && s.RevokedAt == null);
         
         if (share == null) return NotFound();
 
         share.RevokedAt = DateTime.UtcNow;
         
         // Audit log
-        _context.AuditEvents.Add(new AuditEvent { UserId = userId, EventType = "file.share_revoked", ResourceType = "file", ResourceId = id.ToString() });
+        _context.AuditEvents.Add(new AuditEvent { UserId = UserId, EventType = "file.share_revoked", ResourceType = "file", ResourceId = id.ToString() });
 
         await _context.SaveChangesAsync();
         
         return NoContent();
     }
 }
+
+
+

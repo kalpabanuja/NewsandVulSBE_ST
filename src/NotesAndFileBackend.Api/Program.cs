@@ -3,17 +3,75 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NotesAndFileBackend.Api.Services;
-using NotesAndFileBackend.Core.Interfaces;
+using NotesAndFileBackend.Api.Filters;
+using NotesAndFileBackend.Application.Interfaces;
 using NotesAndFileBackend.Infrastructure.Data;
 using NotesAndFileBackend.Infrastructure.Services;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
+using NotesAndFileBackend.Api.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configure Kestrel Size Limits (25MB max for imports)
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.Limits.MaxRequestBodySize = 25 * 1024 * 1024; // 25 MB
+});
+
 // Add services to the container.
+// Memory Cache for Idempotency
+builder.Services.AddMemoryCache();
+builder.Services.AddScoped<IdempotencyFilterAttribute>();
+
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
 });
+
+// Add FluentValidation
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+
+// Add Standardized RFC 7807 ProblemDetails
+builder.Services.AddProblemDetails();
+
+// Add HealthChecks
+builder.Services.AddHealthChecks()
+    .AddCheck("live", () => Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult.Healthy())
+    .AddDbContextCheck<AppDbContext>("ready");
+
+// Add CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("StrictPolicy", policy =>
+    {
+        policy.WithOrigins("https://your-domain.example") // Adjust for production
+              .AllowAnyHeader()
+              .WithMethods("GET", "POST", "PUT", "DELETE");
+    });
+});
+
+// Add Rate Limiting
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter("GlobalPolicy", opt =>
+    {
+        opt.Window = TimeSpan.FromMinutes(1);
+        opt.PermitLimit = 100;
+        opt.QueueLimit = 2;
+    });
+    
+    options.AddFixedWindowLimiter("StrictPolicy", opt =>
+    {
+        opt.Window = TimeSpan.FromMinutes(1);
+        opt.PermitLimit = 10;
+        opt.QueueLimit = 0;
+    });
+});
+
 builder.Services.AddOpenApi();
 
 // Configure Forwarded Headers for Nginx reverse proxy (so Request.Scheme correctly shows 'https')
@@ -32,6 +90,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Register Services
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IStorageService, S3StorageService>();
+builder.Services.AddScoped<NotesAndFileBackend.Application.Services.ICommandGenerator, NotesAndFileBackend.Application.Services.CommandGeneratorService>();
+builder.Services.AddScoped<NotesAndFileBackend.Api.Services.IImportExportService, NotesAndFileBackend.Api.Services.ImportExportService>();
 
 // Register Background Services
 builder.Services.AddHostedService<ExpirationCleanupService>();
@@ -57,6 +117,13 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 app.UseForwardedHeaders();
 
+// Add Correlation ID first so it covers all other middleware
+app.UseMiddleware<CorrelationIdMiddleware>();
+
+app.UseExceptionHandler(); // Maps exceptions to ProblemDetails
+
+app.UseMiddleware<SecurityHeadersMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -64,11 +131,20 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors("StrictPolicy");
+
+app.UseRateLimiter();
+
 // Use authentication and authorization
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+app.MapControllers().RequireRateLimiting("GlobalPolicy");
+
+// Map Health Checks
+app.MapHealthChecks("/health/live");
+app.MapHealthChecks("/health/ready");
+
 
 // --- SIMPLE UI DASHBOARD ---
 app.MapGet("/", () => 
@@ -221,3 +297,4 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.Run();
+

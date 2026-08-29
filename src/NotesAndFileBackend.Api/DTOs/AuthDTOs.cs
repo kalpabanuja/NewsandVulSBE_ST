@@ -24,3 +24,4 @@ public class AuthResponse
     public Guid UserId { get; set; }
     public Guid DeviceId { get; set; }
 }
+

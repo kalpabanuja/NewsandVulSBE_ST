@@ -1,7 +1,12 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/NotesAndFileBackend.Api/NotesAndFileBackend.Api.csproj" />
-    <Project Path="src/NotesAndFileBackend.Core/NotesAndFileBackend.Core.csproj" />
+    <Project Path="src/NotesAndFileBackend.Application/NotesAndFileBackend.Application.csproj" />
+    <Project Path="src/NotesAndFileBackend.Contracts/NotesAndFileBackend.Contracts.csproj" />
+    <Project Path="src/NotesAndFileBackend.Domain/NotesAndFileBackend.Domain.csproj" />
     <Project Path="src/NotesAndFileBackend.Infrastructure/NotesAndFileBackend.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/NotesAndFileBackend.UnitTests/NotesAndFileBackend.UnitTests.csproj" />
   </Folder>
 </Solution>

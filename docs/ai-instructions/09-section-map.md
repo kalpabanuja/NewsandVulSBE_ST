@@ -1,0 +1,121 @@
+# Original Section → Split File Map
+
+Some cross-cutting sections intentionally appear in more than one agent pack because they are implementation contracts consumed by both backend and client agents.
+
+- Section 2: 01-foundation-architecture.md
+- Section 3: 01-foundation-architecture.md, 03-notes-search-crud.md
+- Section 4: 01-foundation-architecture.md
+- Section 5: 02-database-persistence.md
+- Section 6: 02-database-persistence.md
+- Section 7: 02-database-persistence.md
+- Section 8: 02-database-persistence.md
+- Section 9: 02-database-persistence.md
+- Section 10: 02-database-persistence.md
+- Section 11: 02-database-persistence.md
+- Section 12: 02-database-persistence.md
+- Section 13: 02-database-persistence.md
+- Section 14: 03-notes-search-crud.md
+- Section 15: 03-notes-search-crud.md
+- Section 16: 03-notes-search-crud.md
+- Section 17: 03-notes-search-crud.md
+- Section 18: 05-sharing-import-export.md
+- Section 19: 05-sharing-import-export.md
+- Section 20: 05-sharing-import-export.md
+- Section 21: 05-sharing-import-export.md
+- Section 22: 05-sharing-import-export.md
+- Section 23: 05-sharing-import-export.md
+- Section 24: 05-sharing-import-export.md
+- Section 25: 04-command-generator.md
+- Section 26: 04-command-generator.md
+- Section 27: 04-command-generator.md
+- Section 28: 04-command-generator.md
+- Section 29: 04-command-generator.md
+- Section 30: 04-command-generator.md
+- Section 31: 04-command-generator.md
+- Section 32: 04-command-generator.md
+- Section 33: 04-command-generator.md
+- Section 34: 04-command-generator.md
+- Section 35: 04-command-generator.md
+- Section 36: 04-command-generator.md
+- Section 37: 04-command-generator.md
+- Section 38: 04-command-generator.md
+- Section 39: 04-command-generator.md
+- Section 40: 04-command-generator.md
+- Section 41: 04-command-generator.md
+- Section 42: 06-api-security-integration.md, 07-maui-client.md
+- Section 43: 06-api-security-integration.md, 07-maui-client.md
+- Section 44: 06-api-security-integration.md, 07-maui-client.md
+- Section 45: 06-api-security-integration.md, 07-maui-client.md
+- Section 46: 06-api-security-integration.md
+- Section 47: 06-api-security-integration.md
+- Section 48: 06-api-security-integration.md
+- Section 49: 06-api-security-integration.md
+- Section 50: 02-database-persistence.md
+- Section 51: 02-database-persistence.md
+- Section 52: 02-database-persistence.md
+- Section 53: 02-database-persistence.md
+- Section 54: 02-database-persistence.md
+- Section 55: 02-database-persistence.md
+- Section 56: 08-testing-deployment-operations.md
+- Section 57: 08-testing-deployment-operations.md
+- Section 58: 08-testing-deployment-operations.md
+- Section 59: 08-testing-deployment-operations.md
+- Section 60: 06-api-security-integration.md
+- Section 61: 06-api-security-integration.md
+- Section 62: 06-api-security-integration.md
+- Section 63: 06-api-security-integration.md
+- Section 64: 06-api-security-integration.md
+- Section 65: 03-notes-search-crud.md, 07-maui-client.md
+- Section 66: 07-maui-client.md
+- Section 67: 07-maui-client.md
+- Section 68: 06-api-security-integration.md
+- Section 69: 06-api-security-integration.md
+- Section 70: 04-command-generator.md
+- Section 71: 02-database-persistence.md
+- Section 72: 06-api-security-integration.md, 08-testing-deployment-operations.md
+- Section 73: 06-api-security-integration.md, 08-testing-deployment-operations.md
+- Section 74: 06-api-security-integration.md
+- Section 75: 06-api-security-integration.md
+- Section 76: 08-testing-deployment-operations.md
+- Section 77: 08-testing-deployment-operations.md
+- Section 78: 04-command-generator.md
+- Section 79: 06-api-security-integration.md, 08-testing-deployment-operations.md
+- Section 80: 06-api-security-integration.md, 08-testing-deployment-operations.md
+- Section 81: 06-api-security-integration.md
+- Section 82: 06-api-security-integration.md
+- Section 83: 06-api-security-integration.md
+- Section 84: 06-api-security-integration.md
+- Section 85: 02-database-persistence.md
+- Section 86: 02-database-persistence.md, 03-notes-search-crud.md
+- Section 87: 02-database-persistence.md, 03-notes-search-crud.md
+- Section 88: 02-database-persistence.md, 03-notes-search-crud.md
+- Section 89: 03-notes-search-crud.md
+- Section 90: 03-notes-search-crud.md
+- Section 91: 03-notes-search-crud.md
+- Section 92: 03-notes-search-crud.md
+- Section 93: 02-database-persistence.md, 03-notes-search-crud.md
+- Section 94: 02-database-persistence.md
+- Section 95: 07-maui-client.md
+- Section 96: 07-maui-client.md
+- Section 97: 04-command-generator.md, 07-maui-client.md
+- Section 98: 04-command-generator.md, 07-maui-client.md
+- Section 99: 04-command-generator.md
+- Section 100: 05-sharing-import-export.md
+- Section 101: 05-sharing-import-export.md
+- Section 102: 06-api-security-integration.md
+- Section 103: 06-api-security-integration.md
+- Section 104: 06-api-security-integration.md
+- Section 105: 06-api-security-integration.md
+- Section 106: 08-testing-deployment-operations.md
+- Section 107: 08-testing-deployment-operations.md
+- Section 108: 08-testing-deployment-operations.md
+- Section 109: 08-testing-deployment-operations.md
+- Section 110: 08-testing-deployment-operations.md
+- Section 111: 08-testing-deployment-operations.md
+- Section 112: 06-api-security-integration.md
+- Section 113: 06-api-security-integration.md
+- Section 114: 06-api-security-integration.md
+- Section 115: 05-sharing-import-export.md
+- Section 116: 06-api-security-integration.md
+- Section 117: 08-testing-deployment-operations.md
+- Section 118: 08-testing-deployment-operations.md
