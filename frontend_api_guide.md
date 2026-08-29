@@ -81,6 +81,11 @@ Endpoints for user registration and authentication.
 ### List Files
 - **Method:** `GET /files`
 - **Description:** Retrieves all active files owned by the authenticated user.
+- **Query Parameters (Optional):**
+  - `search` (string): Filter files by name (e.g., `?search=vacation`).
+  - `sortBy` (string): Field to sort by. Options: `date` (default) or `size`.
+  - `sortOrder` (string): Sort direction. Options: `desc` (default, e.g., newest/largest first) or `asc`.
+  - *Example:* `GET /files?search=report&sortBy=size&sortOrder=desc`
 - **Response:** `200 OK` returns an array of `StoredFile` objects.
 
 ### Get File Metadata

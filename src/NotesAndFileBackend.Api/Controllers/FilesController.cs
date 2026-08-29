@@ -103,13 +103,33 @@ public class FilesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> ListFiles()
+    public async Task<IActionResult> ListFiles([FromQuery] string? search, [FromQuery] string? sortBy = "date", [FromQuery] string? sortOrder = "desc")
     {
         var userId = GetCurrentUserId();
-        var files = await _context.Files
+        
+        var query = _context.Files
             .Include(f => f.PublicShares.Where(s => s.RevokedAt == null))
-            .Where(f => f.OwnerUserId == userId && f.Status == "ACTIVE")
-            .ToListAsync();
+            .Where(f => f.OwnerUserId == userId && f.Status == "ACTIVE");
+
+        // Apply Search
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            query = query.Where(f => f.OriginalFilename.ToLower().Contains(search.ToLower()));
+        }
+
+        // Apply Sorting
+        bool isDesc = sortOrder?.ToLower() != "asc";
+
+        if (sortBy?.ToLower() == "size")
+        {
+            query = isDesc ? query.OrderByDescending(f => f.ByteSize) : query.OrderBy(f => f.ByteSize);
+        }
+        else // default to date
+        {
+            query = isDesc ? query.OrderByDescending(f => f.CreatedAt) : query.OrderBy(f => f.CreatedAt);
+        }
+
+        var files = await query.ToListAsync();
             
         return Ok(files);
     }

@@ -1,5 +1,7 @@
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NotesAndFileBackend.Api.DTOs;
@@ -125,5 +127,40 @@ public class AuthController : ControllerBase
             UserId = user.Id,
             DeviceId = device.Id
         });
+    }
+
+    [Authorize]
+    [HttpPut("profile")]
+    public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileRequest request)
+    {
+        var claim = User.FindFirst(ClaimTypes.NameIdentifier);
+        if (claim == null || !Guid.TryParse(claim.Value, out var userId))
+            return Unauthorized();
+            
+        var user = await _context.Users.FindAsync(userId);
+        if (user == null)
+            return NotFound();
+            
+        bool changed = false;
+        
+        if (!string.IsNullOrWhiteSpace(request.DisplayName) && user.DisplayName != request.DisplayName)
+        {
+            user.DisplayName = request.DisplayName;
+            changed = true;
+        }
+        
+        if (!string.IsNullOrWhiteSpace(request.Password))
+        {
+            user.PasswordHash = HashPassword(request.Password);
+            changed = true;
+        }
+        
+        if (changed)
+        {
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+        }
+        
+        return Ok();
     }
 }
