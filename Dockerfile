@@ -9,7 +9,6 @@ COPY src/NotesAndFileBackend.Application/*.csproj src/NotesAndFileBackend.Applic
 COPY src/NotesAndFileBackend.Contracts/*.csproj src/NotesAndFileBackend.Contracts/
 COPY src/NotesAndFileBackend.Domain/*.csproj src/NotesAndFileBackend.Domain/
 COPY src/NotesAndFileBackend.Infrastructure/*.csproj src/NotesAndFileBackend.Infrastructure/
-COPY tests/NotesAndFileBackend.UnitTests/*.csproj tests/NotesAndFileBackend.UnitTests/
 RUN dotnet restore
 
 # Copy all source code and build
@@ -18,7 +17,7 @@ WORKDIR /source/src/NotesAndFileBackend.Api
 RUN dotnet publish -c Release -o /app
 
 # Serve stage
-FROM mcr.microsoft.com/dotnet/aspnet:10.0
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine
 WORKDIR /app
 COPY --from=build /app ./
 EXPOSE 8080
