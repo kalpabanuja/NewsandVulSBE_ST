@@ -267,6 +267,10 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            // Back-fill NormalizedEmail from Email before creating the unique index.
+            // Without this, all existing users get DEFAULT '' which immediately causes a duplicate-key violation.
+            migrationBuilder.Sql("UPDATE \"Users\" SET \"NormalizedEmail\" = UPPER(\"Email\") WHERE \"NormalizedEmail\" = '';");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Users_NormalizedEmail",
                 table: "Users",
