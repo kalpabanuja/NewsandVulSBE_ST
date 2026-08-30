@@ -9,7 +9,7 @@ COPY src/NotesAndFileBackend.Application/*.csproj src/NotesAndFileBackend.Applic
 COPY src/NotesAndFileBackend.Contracts/*.csproj src/NotesAndFileBackend.Contracts/
 COPY src/NotesAndFileBackend.Domain/*.csproj src/NotesAndFileBackend.Domain/
 COPY src/NotesAndFileBackend.Infrastructure/*.csproj src/NotesAndFileBackend.Infrastructure/
-RUN dotnet restore
+RUN dotnet restore src/NotesAndFileBackend.Api/NotesAndFileBackend.Api.csproj
 
 # Copy all source code and build
 COPY src/ src/
