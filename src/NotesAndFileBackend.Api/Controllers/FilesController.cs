@@ -34,7 +34,7 @@ public class FilesController : ControllerBase
 
     private Guid GetCurrentDeviceId()
     {
-        var claim = User.FindFirst("DeviceId");
+        var claim = User.FindFirst("deviceId");
         return claim != null ? Guid.Parse(claim.Value) : Guid.Empty;
     }
 

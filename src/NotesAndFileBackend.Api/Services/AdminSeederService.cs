@@ -2,7 +2,6 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NotesAndFileBackend.Domain.Entities;
 using NotesAndFileBackend.Infrastructure.Data;
@@ -49,6 +48,7 @@ public static class AdminSeeder
             var adminUser = new User
             {
                 Email = adminEmail,
+                NormalizedEmail = adminEmail.ToUpperInvariant(),
                 DisplayName = "Admin",
                 PasswordHash = HashPassword(password),
                 Status = "ACTIVE"
