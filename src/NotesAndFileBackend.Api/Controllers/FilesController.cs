@@ -106,31 +106,42 @@ public class FilesController : ControllerBase
     public async Task<IActionResult> ListFiles([FromQuery] string? search, [FromQuery] string? sortBy = "date", [FromQuery] string? sortOrder = "desc")
     {
         var UserId = GetCurrentUserId();
-        
-        var query = _context.Files
-            .Include(f => f.PublicShares.Where(s => s.RevokedAt == null))
-            .Where(f => f.OwnerUserId == UserId && f.Status == "ACTIVE");
 
         // Apply Search
-        if (!string.IsNullOrWhiteSpace(search))
-        {
-            query = query.Where(f => f.OriginalFilename.ToLower().Contains(search.ToLower()));
-        }
-
-        // Apply Sorting
         bool isDesc = sortOrder?.ToLower() != "asc";
 
-        if (sortBy?.ToLower() == "size")
-        {
-            query = isDesc ? query.OrderByDescending(f => f.ByteSize) : query.OrderBy(f => f.ByteSize);
-        }
-        else // default to date
-        {
-            query = isDesc ? query.OrderByDescending(f => f.CreatedAt) : query.OrderBy(f => f.CreatedAt);
-        }
+        var query = _context.Files
+            .Where(f => f.OwnerUserId == UserId && f.Status == "ACTIVE");
 
-        var files = await query.ToListAsync();
-            
+        if (!string.IsNullOrWhiteSpace(search))
+            query = query.Where(f => f.OriginalFilename.ToLower().Contains(search.ToLower()));
+
+        // Project to a DTO before materialising — avoids serialising unloaded nav properties
+        var filesQuery = query.Select(f => new
+        {
+            f.Id,
+            f.OriginalFilename,
+            f.MimeType,
+            f.Extension,
+            f.ByteSize,
+            f.Status,
+            f.StorageBackend,
+            f.RetentionExpiresAt,
+            f.CreatedAt,
+            f.UpdatedAt,
+            PublicShares = f.PublicShares
+                .Where(s => s.RevokedAt == null)
+                .Select(s => new { s.Id, s.TokenHash, s.ExpiresAt, s.AccessCount })
+        });
+
+        var files = isDesc
+            ? (sortBy?.ToLower() == "size"
+                ? await filesQuery.OrderByDescending(f => f.ByteSize).ToListAsync()
+                : await filesQuery.OrderByDescending(f => f.CreatedAt).ToListAsync())
+            : (sortBy?.ToLower() == "size"
+                ? await filesQuery.OrderBy(f => f.ByteSize).ToListAsync()
+                : await filesQuery.OrderBy(f => f.CreatedAt).ToListAsync());
+
         return Ok(files);
     }
     
@@ -139,11 +150,27 @@ public class FilesController : ControllerBase
     {
         var UserId = GetCurrentUserId();
         var file = await _context.Files
-            .Include(f => f.PublicShares.Where(s => s.RevokedAt == null))
-            .FirstOrDefaultAsync(f => f.Id == id && f.OwnerUserId == UserId && f.Status == "ACTIVE");
-        
+            .Where(f => f.Id == id && f.OwnerUserId == UserId && f.Status == "ACTIVE")
+            .Select(f => new
+            {
+                f.Id,
+                f.OriginalFilename,
+                f.MimeType,
+                f.Extension,
+                f.ByteSize,
+                f.Status,
+                f.StorageBackend,
+                f.RetentionExpiresAt,
+                f.CreatedAt,
+                f.UpdatedAt,
+                PublicShares = f.PublicShares
+                    .Where(s => s.RevokedAt == null)
+                    .Select(s => new { s.Id, s.TokenHash, s.ExpiresAt, s.AccessCount })
+            })
+            .FirstOrDefaultAsync();
+
         if (file == null) return NotFound();
-        
+
         return Ok(file);
     }
     
