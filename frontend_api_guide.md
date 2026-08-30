@@ -227,3 +227,45 @@ The API strictly uses `application/problem+json` for validation and domain error
 - **Method:** `GET /public/notes/{token}`
 - **Query Params:** `pwd` (if password-protected)
 - **Response:** Returns the read-only Note representation for unauthenticated rendering.
+
+---
+
+## 6. Files Management (`/files`)
+
+### Upload File
+- **Method:** `POST /files/upload`
+- **Description:** Uploads a file (up to 20GB). Enforces user quotas.
+- **Request Body:** `multipart/form-data` containing the key `file`.
+- **Response (200 OK):**
+  ```json
+  {
+    "id": "uuid",
+    "originalFilename": "report.pdf",
+    "mimeType": "application/pdf",
+    "extension": ".pdf",
+    "byteSize": 1048576,
+    "status": "ACTIVE",
+    "storageBackend": "LOCAL",
+    "retentionExpiresAt": null,
+    "createdAt": "2026-08-30T...",
+    "updatedAt": "2026-08-30T...",
+    "publicShares": []
+  }
+  ```
+
+### List Files
+- **Method:** `GET /files`
+- **Query Params:** `search (string)`, `sortBy (date|size)`, `sortOrder (asc|desc)`
+- **Response (200 OK):** Array of File DTOs (same format as upload response).
+
+### Get File Metadata
+- **Method:** `GET /files/{id}`
+- **Response (200 OK):** Single File DTO.
+
+### Download File
+- **Method:** `GET /files/{id}/download`
+- **Response (200 OK):** Raw file stream (e.g. `application/pdf`).
+
+### Delete File
+- **Method:** `DELETE /files/{id}`
+- **Response (204 No Content)**
