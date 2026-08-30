@@ -49,6 +49,7 @@ public static class AdminSeeder
             var adminUser = new User
             {
                 Email = adminEmail,
+                NormalizedEmail = adminEmail.ToUpperInvariant(),
                 DisplayName = "Admin",
                 PasswordHash = HashPassword(password),
                 Status = "ACTIVE"

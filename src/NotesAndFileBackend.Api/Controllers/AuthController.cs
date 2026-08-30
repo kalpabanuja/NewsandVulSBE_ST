@@ -45,6 +45,7 @@ public class AuthController : ControllerBase
         var user = new User
         {
             Email = request.Email,
+            NormalizedEmail = request.Email.ToUpperInvariant(),
             DisplayName = request.DisplayName,
             PasswordHash = HashPassword(request.Password),
             Status = "ACTIVE"
