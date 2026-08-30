@@ -19,11 +19,13 @@ services:
 
   postgres:
     image: postgres:15-alpine
+    ports:
+      - "5433:5432"
     environment:
       POSTGRES_USER: prod_user
       POSTGRES_PASSWORD: SuperSecurePassword!
       POSTGRES_DB: backend_db
-    # We do NOT expose ports here to keep the DB internal and prevent conflicts with your other Postgres instance
+    # We expose port 5433 externally to prevent conflicts with your other Postgres instance on port 5432
     volumes:
       - postgres_data_prod:/var/lib/postgresql/data
     restart: unless-stopped
@@ -31,7 +33,6 @@ services:
   postgres-backup:
     image: prodrigestivill/postgres-backup-local
     restart: always
-    user: postgres:postgres 
     volumes:
       - postgres_backups_prod:/backups
     depends_on:
