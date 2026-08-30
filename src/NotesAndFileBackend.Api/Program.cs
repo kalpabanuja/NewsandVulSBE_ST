@@ -124,6 +124,9 @@ app.UseExceptionHandler(); // Maps exceptions to ProblemDetails
 
 app.UseMiddleware<SecurityHeadersMiddleware>();
 
+// Validate minimum client version early in the pipeline
+app.UseMiddleware<ClientVersionValidationMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
