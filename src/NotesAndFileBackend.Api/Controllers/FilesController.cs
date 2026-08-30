@@ -92,7 +92,20 @@ public class FilesController : ControllerBase
             _context.AuditEvents.Add(new AuditEvent { UserId = UserId, DeviceId = DeviceId, EventType = "file.uploaded", ResourceType = "file", ResourceId = storedFile.Id.ToString() });
             await _context.SaveChangesAsync();
 
-            return Ok(storedFile);
+            return Ok(new
+            {
+                storedFile.Id,
+                storedFile.OriginalFilename,
+                storedFile.MimeType,
+                storedFile.Extension,
+                storedFile.ByteSize,
+                storedFile.Status,
+                storedFile.StorageBackend,
+                storedFile.RetentionExpiresAt,
+                storedFile.CreatedAt,
+                storedFile.UpdatedAt,
+                PublicShares = new object[] { } // New file has no shares yet
+            });
         }
         catch (Exception ex)
         {
