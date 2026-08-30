@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   api:
     build: 
@@ -11,10 +9,16 @@ services:
       - JwtSettings__Secret=YOUR_VERY_SECURE_LONG_RANDOM_SECRET_KEY_HERE_12345!
       - JwtSettings__Issuer=NotesAndFileBackend
       - JwtSettings__Audience=NotesAndFileBackend.Users
+      # MinIO / S3-compatible storage
+      - Storage__ServiceUrl=http://minio:9000
+      - Storage__AccessKey=minioadmin
+      - Storage__SecretKey=minioadmin
+      - Storage__BucketName=notesandfile-bucket
     ports:
-      - "5001:8080" # Maps the container's internal port to port 5001 on the host to avoid conflict
+      - "5001:8080"
     depends_on:
       - postgres
+      - minio
     restart: unless-stopped
 
   postgres:
@@ -23,11 +27,28 @@ services:
       POSTGRES_USER: prod_user
       POSTGRES_PASSWORD: SuperSecurePassword!
       POSTGRES_DB: backend_db
-    # We do NOT expose ports here to keep the DB internal and prevent conflicts with your other Postgres instance
     volumes:
       - postgres_data_prod:/var/lib/postgresql/data
     restart: unless-stopped
-    
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    volumes:
+      - minio_data:/data
+    # Port 9001 exposes the MinIO web console — remove if you don't need it
+    ports:
+      - "9001:9001"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   postgres-backup:
     image: prodrigestivill/postgres-backup-local
     restart: always
@@ -49,3 +70,4 @@ services:
 
 volumes:
   postgres_data_prod:
+  minio_data:
