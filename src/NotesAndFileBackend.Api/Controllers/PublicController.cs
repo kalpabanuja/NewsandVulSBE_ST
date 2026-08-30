@@ -47,7 +47,7 @@ public class PublicController : ControllerBase
     }
 
     [HttpGet("Notes/{token}")]
-    public async Task<IActionResult> GetSharedNote(string token, [FromHeader(Name = "X-Share-Password")] string? password, CancellationToken ct)
+    public async Task<IActionResult> GetSharedNote(string token, [FromHeader(Name = "X-Share-Password")] string? headerPassword, [FromQuery(Name = "pwd")] string? queryPassword, CancellationToken ct)
     {
         var share = await _context.PublicNoteShares
             .Include(s => s.Note)
@@ -62,13 +62,45 @@ public class PublicController : ControllerBase
         if (share.MaxViews.HasValue && share.ViewCount >= share.MaxViews.Value)
             return NotFound(new { error = new { message = "Share link has reached its maximum view limit." } });
 
+        var password = headerPassword ?? queryPassword;
         if (!string.IsNullOrWhiteSpace(share.PasswordHash))
         {
-            if (string.IsNullOrWhiteSpace(password))
-                return Unauthorized(new { error = new { message = "This share is password protected. Provide X-Share-Password header." } });
-            
-            if (!BCrypt.Net.BCrypt.Verify(password, share.PasswordHash))
-                return Unauthorized(new { error = new { message = "Invalid password." } });
+            if (string.IsNullOrWhiteSpace(password) || !BCrypt.Net.BCrypt.Verify(password, share.PasswordHash))
+            {
+                // If requested by a web browser, show a beautiful HTML password form
+                if (Request.Headers["Accept"].ToString().Contains("text/html"))
+                {
+                    var promptHtml = $@"
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Password Protected Note</title>
+    <style>
+        body {{ font-family: system-ui, -apple-system, sans-serif; max-width: 400px; margin: 100px auto; text-align: center; color: #333; background: #f9fafb; }}
+        .card {{ background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #e5e7eb; }}
+        input {{ padding: 12px; font-size: 1rem; width: 100%; box-sizing: border-box; margin: 15px 0; border: 1px solid #d1d5db; border-radius: 6px; outline: none; }}
+        input:focus {{ border-color: #0284c7; box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1); }}
+        button {{ padding: 12px; font-size: 1rem; background: #0ea5e9; color: white; border: none; border-radius: 6px; width: 100%; cursor: pointer; font-weight: 600; transition: background 0.2s; }}
+        button:hover {{ background: #0284c7; }}
+    </style>
+</head>
+<body>
+    <div class='card'>
+        <svg style='width:48px;height:48px;color:#0ea5e9;margin-bottom:10px;' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z'></path></svg>
+        <h2 style='margin-top:0;'>Protected Note</h2>
+        <p style='color:#666;font-size:0.9rem;'>This note is secured. Please enter the password to unlock it.</p>
+        <form method='GET'>
+            <input type='password' name='pwd' placeholder='Enter password' required autofocus />
+            <button type='submit'>Unlock Note</button>
+        </form>
+    </div>
+</body>
+</html>";
+                    return Content(promptHtml, "text/html", System.Text.Encoding.UTF8);
+                }
+                // Otherwise, return standard API JSON Error
+                return Unauthorized(new { error = new { message = "Invalid or missing password." } });
+            }
         }
 
         // Update stats
