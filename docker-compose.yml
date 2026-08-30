@@ -14,7 +14,10 @@ services:
     ports:
       - "5001:8080" # Maps the container's internal port to port 5001 on the host to avoid conflict
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+    security_opt:
+      - seccomp:unconfined
     restart: unless-stopped
 
   postgres:
@@ -26,6 +29,11 @@ services:
     # We do NOT expose ports here to keep the DB internal and prevent conflicts with your other Postgres instance
     volumes:
       - postgres_data_prod:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U prod_user -d backend_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     restart: unless-stopped
     
   postgres-backup:
