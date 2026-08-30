@@ -102,6 +102,33 @@ public class PublicController : ControllerBase
             Response.Headers.Append("X-Robots-Tag", "noindex, nofollow");
         }
 
+        // If a web browser opens the link, return a styled HTML page
+        if (Request.Headers["Accept"].ToString().Contains("text/html"))
+        {
+            var html = $@"
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{System.Net.WebUtility.HtmlEncode(share.Note.Title)}</title>
+    <style>
+        body {{ font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 2rem; color: #333; background: #fff; }}
+        h1 {{ border-bottom: 2px solid #eaeaea; padding-bottom: 0.5rem; color: #111; }}
+        .summary {{ font-size: 1.2rem; color: #666; margin-bottom: 2rem; font-style: italic; }}
+        .content {{ background: #f9fafb; padding: 1.5rem; border-radius: 8px; white-space: pre-wrap; word-wrap: break-word; font-family: monospace; font-size: 0.95rem; border: 1px solid #e5e7eb; }}
+        .meta {{ margin-top: 3rem; font-size: 0.9rem; color: #888; border-top: 1px solid #eaeaea; padding-top: 1rem; }}
+    </style>
+</head>
+<body>
+    <h1>{System.Net.WebUtility.HtmlEncode(share.Note.Title)}</h1>
+    <div class='summary'>{System.Net.WebUtility.HtmlEncode(share.Note.Summary)}</div>
+    <div class='content'>{System.Net.WebUtility.HtmlEncode(contentJsonb)}</div>
+    <div class='meta'>Shared securely via ThreatIntel &bull; Last updated: {share.Note.UpdatedAt:yyyy-MM-dd HH:mm}</div>
+</body>
+</html>";
+            return Content(html, "text/html", System.Text.Encoding.UTF8);
+        }
+
+        // Otherwise, return standard JSON (for APIs)
         return Ok(dto);
     }
 }
