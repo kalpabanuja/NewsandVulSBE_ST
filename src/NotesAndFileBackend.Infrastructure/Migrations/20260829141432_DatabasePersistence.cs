@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -107,13 +107,7 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
                 oldClrType: typeof(string),
                 oldType: "text");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "ContentJsonb",
-                table: "Notes",
-                type: "jsonb",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "text");
+            migrationBuilder.Sql("ALTER TABLE \"Notes\" ALTER COLUMN \"ContentJsonb\" TYPE jsonb USING \"ContentJsonb\"::jsonb;");
 
             migrationBuilder.AddColumn<Guid>(
                 name: "CategoryId",
@@ -289,11 +283,8 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
                 table: "Notes",
                 column: "CreatedByUserId");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Notes_SearchText",
-                table: "Notes",
-                column: "SearchText")
-                .Annotation("Npgsql:IndexMethod", "GIN");
+            migrationBuilder.Sql("CREATE EXTENSION IF NOT EXISTS pg_trgm;");
+            migrationBuilder.Sql("CREATE INDEX \"IX_Notes_SearchText\" ON \"Notes\" USING gin (\"SearchText\" gin_trgm_ops);");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Notes_UpdatedByUserId",

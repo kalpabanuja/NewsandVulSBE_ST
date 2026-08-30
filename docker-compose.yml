@@ -33,7 +33,7 @@ services:
     restart: always
     user: postgres:postgres 
     volumes:
-      - /var/opt/pgbackups:/backups
+      - postgres_backups_prod:/backups
     depends_on:
       - postgres
     environment:
@@ -49,3 +49,4 @@ services:
 
 volumes:
   postgres_data_prod:
+  postgres_backups_prod:
