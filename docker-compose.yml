@@ -31,7 +31,6 @@ services:
   postgres-backup:
     image: prodrigestivill/postgres-backup-local
     restart: always
-    user: postgres:postgres 
     volumes:
       - /var/opt/pgbackups:/backups
     depends_on:
