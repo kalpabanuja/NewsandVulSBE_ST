@@ -294,5 +294,16 @@ app.MapGet("/", () =>
 var startupLogger = app.Services.GetRequiredService<ILogger<Program>>();
 await AdminSeeder.SeedAsync(app.Services, startupLogger);
 
+// If RESET_ADMIN_PASSWORD=true is set, reset the admin password, log it, then exit.
+// This lets you recover a lost admin password without touching the database directly.
+// Usage: set the env var, restart the container, read logs for the new password, then remove the env var.
+if (string.Equals(Environment.GetEnvironmentVariable("RESET_ADMIN_PASSWORD"), "true", StringComparison.OrdinalIgnoreCase))
+{
+    startupLogger.LogWarning("RESET_ADMIN_PASSWORD=true detected. Resetting admin password...");
+    await AdminSeeder.ResetPasswordAsync(app.Services, startupLogger);
+    startupLogger.LogWarning("Password reset complete. Remove RESET_ADMIN_PASSWORD from env vars and restart.");
+    return; // Exit — don't start the server, just log the new password.
+}
+
 app.Run();
 

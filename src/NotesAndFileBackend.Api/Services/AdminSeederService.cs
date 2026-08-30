@@ -65,5 +65,32 @@ public static class AdminSeeder
             logger.LogWarning("=================================================");
         }
     }
-}
 
+    /// <summary>
+    /// Force-resets the admin password and logs the new one. Call this when the original password is lost.
+    /// </summary>
+    public static async Task ResetPasswordAsync(IServiceProvider serviceProvider, ILogger logger)
+    {
+        using var scope = serviceProvider.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+        var adminEmail = "admin@notesandfile.local";
+        var admin = await context.Users.FirstOrDefaultAsync(u => u.Email == adminEmail);
+        if (admin is null)
+        {
+            logger.LogError("Admin user not found. Run SeedAsync first.");
+            return;
+        }
+
+        var newPassword = GenerateRandomPassword();
+        admin.PasswordHash = HashPassword(newPassword);
+        await context.SaveChangesAsync();
+
+        logger.LogWarning("=================================================");
+        logger.LogWarning("ADMIN PASSWORD HAS BEEN RESET");
+        logger.LogWarning($"Email: {adminEmail}");
+        logger.LogWarning($"New Password: {newPassword}");
+        logger.LogWarning("Please copy this password. It will not be shown again.");
+        logger.LogWarning("=================================================");
+    }
+}

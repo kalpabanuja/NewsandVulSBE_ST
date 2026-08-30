@@ -18,9 +18,14 @@ public class SecurityHeadersMiddleware
         context.Response.Headers.Append("X-Frame-Options", "DENY");
         context.Response.Headers.Append("X-XSS-Protection", "1; mode=block");
         context.Response.Headers.Append("Referrer-Policy", "strict-origin-when-cross-origin");
-        
-        // Basic Content-Security-Policy (adjust as needed for specific endpoints or UI integration)
-        context.Response.Headers.Append("Content-Security-Policy", "default-src 'self'; frame-ancestors 'none';");
+
+        // The dashboard page (/) uses inline <script> and <style> tags, so it needs a relaxed CSP.
+        // All other routes (API, health checks, etc.) get the strict policy.
+        var csp = context.Request.Path == "/"
+            ? "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; frame-ancestors 'none';"
+            : "default-src 'self'; frame-ancestors 'none';";
+
+        context.Response.Headers.Append("Content-Security-Policy", csp);
 
         // Strict-Transport-Security (HSTS) is typically handled by app.UseHsts(), but we can enforce it strictly here.
         if (context.Request.IsHttps)
