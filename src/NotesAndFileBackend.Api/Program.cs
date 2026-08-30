@@ -290,13 +290,12 @@ app.MapGet("/", () =>
 });
 
 // Run migrations and seeder synchronously before handling requests or background tasks
-// using (var scope = app.Services.CreateScope())
-// {
-//     var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-//     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-//     await dbContext.Database.MigrateAsync();
-//     await AdminSeeder.SeedAsync(scope.ServiceProvider, logger);
-// }
+using (var scope = app.Services.CreateScope())
+{
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    // MigrateAsync is handled safely inside SeedAsync
+    await AdminSeeder.SeedAsync(app.Services, logger);
+}
 
 app.Run();
 
