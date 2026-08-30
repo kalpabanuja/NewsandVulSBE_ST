@@ -17,7 +17,7 @@ WORKDIR /source/src/NotesAndFileBackend.Api
 RUN dotnet publish -c Release -o /app
 
 # Serve stage
-FROM mcr.microsoft.com/dotnet/aspnet:10.0
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine
 WORKDIR /app
 COPY --from=build /app ./
 EXPOSE 8080
