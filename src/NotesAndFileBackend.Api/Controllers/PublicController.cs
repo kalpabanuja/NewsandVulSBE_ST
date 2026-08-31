@@ -195,6 +195,8 @@ public class PublicController : ControllerBase
     ul.style-disc  { list-style-type: disc; }
     ul.style-circle{ list-style-type: circle; }
     ul.style-square{ list-style-type: square; }
+    ul.style-dash  { list-style-type: none; padding-left: 1.5rem; }
+    ul.style-dash li::before { content: '-'; display: inline-block; width: 1rem; margin-left: -1rem; }
     ol { list-style-type: decimal; }
     ul.checklist { list-style: none; padding-left: 0; }
     ul.checklist li { display: flex; align-items: center; gap: .5rem; }
@@ -202,7 +204,8 @@ public class PublicController : ControllerBase
     hr.divider-singleLine { border: none; border-top: 1px solid #d1d5db; margin: 1.5rem 0; }
     hr.divider-dots { border: none; text-align: center; margin: 1.5rem 0; color: #9ca3af; }
     hr.divider-dots::after { content: '• • •'; }
-    hr.divider-breakLines { border: none; border-top: 3px double #d1d5db; margin: 1.5rem 0; }
+    hr.divider-breakLines { border: none; border-top: 3px dashed #d1d5db; margin: 1.5rem 0; }
+    hr.divider-doubleLine { border: none; border-top: 3px double #d1d5db; margin: 1.5rem 0; }
     hr.divider-space { border: none; margin: 2.5rem 0; }
     .code-block { position: relative; border-radius: 8px; margin: 1rem 0; overflow: hidden; }
     .code-block pre { margin: 0; padding: 1.25rem 1rem; overflow-x: auto; font-family: 'Fira Code', monospace, monospace; font-size: 0.9rem; white-space: pre; }
@@ -286,7 +289,7 @@ public class PublicController : ControllerBase
     private static string RenderBulletList(JsonElement block)
     {
         var style = block.TryGetProperty("style", out var sp) ? sp.GetString() ?? "disc" : "disc";
-        var allowedStyles = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "disc", "circle", "square" };
+        var allowedStyles = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "disc", "circle", "square", "dash" };
         if (!allowedStyles.Contains(style)) style = "disc";
         var sb = new StringBuilder($"  <ul class='style-{Encode(style)}'>\n");
         if (block.TryGetProperty("items", out var items) && items.ValueKind == JsonValueKind.Array)
@@ -336,7 +339,7 @@ public class PublicController : ControllerBase
     private static string RenderDivider(JsonElement block)
     {
         var style = block.TryGetProperty("style", out var sp) ? sp.GetString() ?? "singleLine" : "singleLine";
-        var allowedStyles = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "singleLine", "dots", "breakLines", "space" };
+        var allowedStyles = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "singleLine", "dots", "breakLines", "space", "doubleLine" };
         if (!allowedStyles.Contains(style)) style = "singleLine";
         return $"  <hr class='divider-{Encode(style)}'>";
     }

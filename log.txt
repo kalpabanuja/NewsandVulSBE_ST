@@ -1,0 +1,268 @@
+api-1  |           FROM "NoteTags" AS n1
+api-1  |           INNER JOIN "Tags" AS t ON n1."TagId" = t."Id"
+api-1  |       ) AS s0 ON s."Id" = s0."NoteId"
+api-1  |       ORDER BY s."Id", s."Id0", n0."Id", p0."Id", s0."NoteId", s0."TagId"
+api-1  | info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+api-1  |       Executed DbCommand (7ms) [Parameters=[@id='?' (DbType = Guid), @userId='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+api-1  |       SELECT s."Id", s."CategoryId", s."ContentJsonb", s."CreatedAt", s."CreatedByUserId", s."DeletedAt", s."DeviceId", s."IsArchived", s."IsDeleted", s."IsFavorite", s."IsPinned", s."SearchText", s."Slug", s."Status", s."Summary", s."Title", s."ToolName", s."UpdatedAt", s."UpdatedByUserId", s."UserId", s."Version", s."Visibility", s."Id0", n0."Id", n0."AttachmentType", n0."BlockId", n0."ByteSize", n0."Checksum", n0."CreatedAt", n0."DisplayName", n0."DurationSeconds", n0."Filename", n0."Height", n0."MimeType", n0."NoteId", n0."ObjectKey", n0."OwnerUserId", n0."ThumbnailObjectKey", n0."UpdatedAt", n0."Width", p0."Id", p0."AllowIndexing", p0."CreatedAt", p0."CreatedByUserId", p0."ExpiresAt", p0."LastAccessedAt", p0."MaxViews", p0."NoteId", p0."PasswordHash", p0."RevokedAt", p0."TokenHash", p0."UpdatedAt", p0."ViewCount", s0."NoteId", s0."TagId", s0."Id", s0."CreatedAt", s0."Name", s0."Normalized", s0."UpdatedAt", s0."UserId", s."CreatedAt0", s."Description", s."Name", s."Slug0", s."SortOrder", s."UpdatedAt0", s."UserId0"
+api-1  |       FROM (
+api-1  |           SELECT n."Id", n."CategoryId", n."ContentJsonb", n."CreatedAt", n."CreatedByUserId", n."DeletedAt", n."DeviceId", n."IsArchived", n."IsDeleted", n."IsFavorite", n."IsPinned", n."SearchText", n."Slug", n."Status", n."Summary", n."Title", n."ToolName", n."UpdatedAt", n."UpdatedByUserId", n."UserId", n."Version", n."Visibility", c."Id" AS "Id0", c."CreatedAt" AS "CreatedAt0", c."Description", c."Name", c."Slug" AS "Slug0", c."SortOrder", c."UpdatedAt" AS "UpdatedAt0", c."UserId" AS "UserId0"
+api-1  |           FROM "Notes" AS n
+api-1  |           LEFT JOIN "Categories" AS c ON n."CategoryId" = c."Id"
+api-1  |           WHERE n."Id" = @id AND n."UserId" = @userId AND NOT (n."IsDeleted")
+api-1  |           LIMIT 1
+api-1  |       ) AS s
+api-1  |       LEFT JOIN "NoteAttachments" AS n0 ON s."Id" = n0."NoteId"
+api-1  |       LEFT JOIN (
+api-1  |           SELECT p."Id", p."AllowIndexing", p."CreatedAt", p."CreatedByUserId", p."ExpiresAt", p."LastAccessedAt", p."MaxViews", p."NoteId", p."PasswordHash", p."RevokedAt", p."TokenHash", p."UpdatedAt", p."ViewCount"
+api-1  |           FROM "PublicNoteShares" AS p
+api-1  |           WHERE p."RevokedAt" IS NULL
+api-1  |       ) AS p0 ON s."Id" = p0."NoteId"
+api-1  |       LEFT JOIN (
+api-1  |           SELECT n1."NoteId", n1."TagId", t."Id", t."CreatedAt", t."Name", t."Normalized", t."UpdatedAt", t."UserId"
+api-1  |           FROM "NoteTags" AS n1
+api-1  |           INNER JOIN "Tags" AS t ON n1."TagId" = t."Id"
+api-1  |       ) AS s0 ON s."Id" = s0."NoteId"
+api-1  |       ORDER BY s."Id", s."Id0", n0."Id", p0."Id", s0."NoteId", s0."TagId"
+api-1  | info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+api-1  |       Executed DbCommand (1ms) [Parameters=[@userId='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+api-1  |       SELECT c."Id", c."Name", c."Description", c."SortOrder", c."CreatedAt"
+api-1  |       FROM "Categories" AS c
+api-1  |       WHERE c."UserId" = @userId
+api-1  |       ORDER BY c."Name"
+api-1  | info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+api-1  |       Executed DbCommand (2ms) [Parameters=[@userId='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+api-1  |       SELECT c."Id", c."Name", c."Description", c."SortOrder", c."CreatedAt"
+api-1  |       FROM "Categories" AS c
+api-1  |       WHERE c."UserId" = @userId
+api-1  |       ORDER BY c."Name"
+api-1  | info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+api-1  |       Executed DbCommand (1ms) [Parameters=[@userId='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+api-1  |       SELECT c."Id", c."Name", c."Description", c."SortOrder", c."CreatedAt"
+api-1  |       FROM "Categories" AS c
+api-1  |       WHERE c."UserId" = @userId
+api-1  |       ORDER BY c."Name"
+api-1  | info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+api-1  |       Executed DbCommand (7ms) [Parameters=[@id='?' (DbType = Guid), @userId='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+api-1  |       SELECT s."Id", s."CategoryId", s."ContentJsonb", s."CreatedAt", s."CreatedByUserId", s."DeletedAt", s."DeviceId", s."IsArchived", s."IsDeleted", s."IsFavorite", s."IsPinned", s."SearchText", s."Slug", s."Status", s."Summary", s."Title", s."ToolName", s."UpdatedAt", s."UpdatedByUserId", s."UserId", s."Version", s."Visibility", s."Id0", n0."Id", n0."AttachmentType", n0."BlockId", n0."ByteSize", n0."Checksum", n0."CreatedAt", n0."DisplayName", n0."DurationSeconds", n0."Filename", n0."Height", n0."MimeType", n0."NoteId", n0."ObjectKey", n0."OwnerUserId", n0."ThumbnailObjectKey", n0."UpdatedAt", n0."Width", p0."Id", p0."AllowIndexing", p0."CreatedAt", p0."CreatedByUserId", p0."ExpiresAt", p0."LastAccessedAt", p0."MaxViews", p0."NoteId", p0."PasswordHash", p0."RevokedAt", p0."TokenHash", p0."UpdatedAt", p0."ViewCount", s0."NoteId", s0."TagId", s0."Id", s0."CreatedAt", s0."Name", s0."Normalized", s0."UpdatedAt", s0."UserId", s."CreatedAt0", s."Description", s."Name", s."Slug0", s."SortOrder", s."UpdatedAt0", s."UserId0"
+api-1  |       FROM (
+api-1  |           SELECT n."Id", n."CategoryId", n."ContentJsonb", n."CreatedAt", n."CreatedByUserId", n."DeletedAt", n."DeviceId", n."IsArchived", n."IsDeleted", n."IsFavorite", n."IsPinned", n."SearchText", n."Slug", n."Status", n."Summary", n."Title", n."ToolName", n."UpdatedAt", n."UpdatedByUserId", n."UserId", n."Version", n."Visibility", c."Id" AS "Id0", c."CreatedAt" AS "CreatedAt0", c."Description", c."Name", c."Slug" AS "Slug0", c."SortOrder", c."UpdatedAt" AS "UpdatedAt0", c."UserId" AS "UserId0"
+api-1  |           FROM "Notes" AS n
+api-1  |           LEFT JOIN "Categories" AS c ON n."CategoryId" = c."Id"
+api-1  |           WHERE n."Id" = @id AND n."UserId" = @userId AND NOT (n."IsDeleted")
+api-1  |           LIMIT 1
+api-1  |       ) AS s
+api-1  |       LEFT JOIN "NoteAttachments" AS n0 ON s."Id" = n0."NoteId"
+api-1  |       LEFT JOIN (
+api-1  |           SELECT p."Id", p."AllowIndexing", p."CreatedAt", p."CreatedByUserId", p."ExpiresAt", p."LastAccessedAt", p."MaxViews", p."NoteId", p."PasswordHash", p."RevokedAt", p."TokenHash", p."UpdatedAt", p."ViewCount"
+api-1  |           FROM "PublicNoteShares" AS p
+api-1  |           WHERE p."RevokedAt" IS NULL
+api-1  |       ) AS p0 ON s."Id" = p0."NoteId"
+api-1  |       LEFT JOIN (
+api-1  |           SELECT n1."NoteId", n1."TagId", t."Id", t."CreatedAt", t."Name", t."Normalized", t."UpdatedAt", t."UserId"
+api-1  |           FROM "NoteTags" AS n1
+api-1  |           INNER JOIN "Tags" AS t ON n1."TagId" = t."Id"
+api-1  |       ) AS s0 ON s."Id" = s0."NoteId"
+api-1  |       ORDER BY s."Id", s."Id0", n0."Id", p0."Id", s0."NoteId", s0."TagId"
+api-1  | info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+api-1  |       Executed DbCommand (5ms) [Parameters=[@id='?' (DbType = Guid), @userId='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+api-1  |       SELECT n1."Id", n1."CategoryId", n1."ContentJsonb", n1."CreatedAt", n1."CreatedByUserId", n1."DeletedAt", n1."DeviceId", n1."IsArchived", n1."IsDeleted", n1."IsFavorite", n1."IsPinned", n1."SearchText", n1."Slug", n1."Status", n1."Summary", n1."Title", n1."ToolName", n1."UpdatedAt", n1."UpdatedByUserId", n1."UserId", n1."Version", n1."Visibility", n0."NoteId", n0."TagId"
+api-1  |       FROM (
+api-1  |           SELECT n."Id", n."CategoryId", n."ContentJsonb", n."CreatedAt", n."CreatedByUserId", n."DeletedAt", n."DeviceId", n."IsArchived", n."IsDeleted", n."IsFavorite", n."IsPinned", n."SearchText", n."Slug", n."Status", n."Summary", n."Title", n."ToolName", n."UpdatedAt", n."UpdatedByUserId", n."UserId", n."Version", n."Visibility"
+api-1  |           FROM "Notes" AS n
+api-1  |           WHERE n."Id" = @id AND n."UserId" = @userId AND NOT (n."IsDeleted")
+api-1  |           LIMIT 1
+api-1  |       ) AS n1
+api-1  |       LEFT JOIN "NoteTags" AS n0 ON n1."Id" = n0."NoteId"
+api-1  |       ORDER BY n1."Id", n0."NoteId"
+api-1  | info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+api-1  |       Executed DbCommand (19ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = DateTime), @p2='?' (DbType = Guid), @p3='?', @p4='?', @p5='?', @p6='?', @p7='?', @p8='?' (DbType = DateTime), @p9='?' (DbType = Guid), @p10='?' (DbType = Guid), @p11='?' (DbType = Object), @p12='?' (DbType = DateTime), @p13='?' (DbType = Guid), @p14='?' (DbType = Guid), @p15='?', @p16='?', @p17='?' (DbType = DateTime), @p18='?' (DbType = Int32), @p40='?' (DbType = Guid), @p19='?' (DbType = Guid), @p20='?' (DbType = Object), @p21='?' (DbType = DateTime), @p22='?' (DbType = Guid), @p23='?' (DbType = DateTime), @p24='?' (DbType = Guid), @p25='?' (DbType = Boolean), @p26='?' (DbType = Boolean), @p27='?' (DbType = Boolean), @p28='?' (DbType = Boolean), @p29='?', @p30='?', @p31='?', @p32='?', @p33='?', @p34='?', @p35='?' (DbType = DateTime), @p36='?' (DbType = Guid), @p37='?' (DbType = Guid), @p38='?' (DbType = Int32), @p41='?' (DbType = Int32), @p39='?'], CommandType='Text', CommandTimeout='30']
+api-1  |       INSERT INTO "AuditEvents" ("Id", "CreatedAt", "DeviceId", "EventType", "IpHash", "MetadataJson", "ResourceId", "ResourceType", "UpdatedAt", "UserId")
+api-1  |       VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+api-1  |       INSERT INTO "NoteRevisions" ("Id", "ContentJsonb", "CreatedAt", "EditedByUserId", "NoteId", "Summary", "Title", "UpdatedAt", "Version")
+api-1  |       VALUES (@p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18);
+api-1  |       UPDATE "Notes" SET "CategoryId" = @p19, "ContentJsonb" = @p20, "CreatedAt" = @p21, "CreatedByUserId" = @p22, "DeletedAt" = @p23, "DeviceId" = @p24, "IsArchived" = @p25, "IsDeleted" = @p26, "IsFavorite" = @p27, "IsPinned" = @p28, "SearchText" = @p29, "Slug" = @p30, "Status" = @p31, "Summary" = @p32, "Title" = @p33, "ToolName" = @p34, "UpdatedAt" = @p35, "UpdatedByUserId" = @p36, "UserId" = @p37, "Version" = @p38, "Visibility" = @p39
+api-1  |       WHERE "Id" = @p40 AND "Version" = @p41;
+api-1  | info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+api-1  |       Executed DbCommand (2ms) [Parameters=[@userId='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+api-1  |       SELECT c."Id", c."Name", c."Description", c."SortOrder", c."CreatedAt"
+api-1  |       FROM "Categories" AS c
+api-1  |       WHERE c."UserId" = @userId
+api-1  |       ORDER BY c."Name"
+api-1  | info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+api-1  |       Executed DbCommand (4ms) [Parameters=[@userId='?' (DbType = Guid), @p2='?' (DbType = Int32), @p='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+api-1  |       SELECT n0."Id", n0."Title", n0."Summary", c."Name", c."Id", s."Name", s."NoteId", s."TagId", s."Id", n0."ToolName", n0."IsFavorite", n0."IsPinned", n0."IsArchived", n0."UpdatedAt"
+api-1  |       FROM (
+api-1  |           SELECT n."Id", n."CategoryId", n."IsArchived", n."IsFavorite", n."IsPinned", n."Summary", n."Title", n."ToolName", n."UpdatedAt"
+api-1  |           FROM "Notes" AS n
+api-1  |           WHERE n."UserId" = @userId AND NOT (n."IsDeleted") AND NOT (n."IsArchived")
+api-1  |           ORDER BY n."UpdatedAt" DESC
+api-1  |           LIMIT @p2 OFFSET @p
+api-1  |       ) AS n0
+api-1  |       LEFT JOIN "Categories" AS c ON n0."CategoryId" = c."Id"
+api-1  |       LEFT JOIN (
+api-1  |           SELECT t."Name", n1."NoteId", n1."TagId", t."Id"
+api-1  |           FROM "NoteTags" AS n1
+api-1  |           INNER JOIN "Tags" AS t ON n1."TagId" = t."Id"
+api-1  |       ) AS s ON n0."Id" = s."NoteId"
+api-1  |       ORDER BY n0."UpdatedAt" DESC, n0."Id", c."Id", s."NoteId", s."TagId"
+api-1  | info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+api-1  |       Executed DbCommand (6ms) [Parameters=[@id='?' (DbType = Guid), @userId='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+api-1  |       SELECT s."Id", s."CategoryId", s."ContentJsonb", s."CreatedAt", s."CreatedByUserId", s."DeletedAt", s."DeviceId", s."IsArchived", s."IsDeleted", s."IsFavorite", s."IsPinned", s."SearchText", s."Slug", s."Status", s."Summary", s."Title", s."ToolName", s."UpdatedAt", s."UpdatedByUserId", s."UserId", s."Version", s."Visibility", s."Id0", n0."Id", n0."AttachmentType", n0."BlockId", n0."ByteSize", n0."Checksum", n0."CreatedAt", n0."DisplayName", n0."DurationSeconds", n0."Filename", n0."Height", n0."MimeType", n0."NoteId", n0."ObjectKey", n0."OwnerUserId", n0."ThumbnailObjectKey", n0."UpdatedAt", n0."Width", p0."Id", p0."AllowIndexing", p0."CreatedAt", p0."CreatedByUserId", p0."ExpiresAt", p0."LastAccessedAt", p0."MaxViews", p0."NoteId", p0."PasswordHash", p0."RevokedAt", p0."TokenHash", p0."UpdatedAt", p0."ViewCount", s0."NoteId", s0."TagId", s0."Id", s0."CreatedAt", s0."Name", s0."Normalized", s0."UpdatedAt", s0."UserId", s."CreatedAt0", s."Description", s."Name", s."Slug0", s."SortOrder", s."UpdatedAt0", s."UserId0"
+api-1  |       FROM (
+api-1  |           SELECT n."Id", n."CategoryId", n."ContentJsonb", n."CreatedAt", n."CreatedByUserId", n."DeletedAt", n."DeviceId", n."IsArchived", n."IsDeleted", n."IsFavorite", n."IsPinned", n."SearchText", n."Slug", n."Status", n."Summary", n."Title", n."ToolName", n."UpdatedAt", n."UpdatedByUserId", n."UserId", n."Version", n."Visibility", c."Id" AS "Id0", c."CreatedAt" AS "CreatedAt0", c."Description", c."Name", c."Slug" AS "Slug0", c."SortOrder", c."UpdatedAt" AS "UpdatedAt0", c."UserId" AS "UserId0"
+api-1  |           FROM "Notes" AS n
+api-1  |           LEFT JOIN "Categories" AS c ON n."CategoryId" = c."Id"
+api-1  |           WHERE n."Id" = @id AND n."UserId" = @userId AND NOT (n."IsDeleted")
+api-1  |           LIMIT 1
+api-1  |       ) AS s
+api-1  |       LEFT JOIN "NoteAttachments" AS n0 ON s."Id" = n0."NoteId"
+api-1  |       LEFT JOIN (
+api-1  |           SELECT p."Id", p."AllowIndexing", p."CreatedAt", p."CreatedByUserId", p."ExpiresAt", p."LastAccessedAt", p."MaxViews", p."NoteId", p."PasswordHash", p."RevokedAt", p."TokenHash", p."UpdatedAt", p."ViewCount"
+api-1  |           FROM "PublicNoteShares" AS p
+api-1  |           WHERE p."RevokedAt" IS NULL
+api-1  |       ) AS p0 ON s."Id" = p0."NoteId"
+api-1  |       LEFT JOIN (
+api-1  |           SELECT n1."NoteId", n1."TagId", t."Id", t."CreatedAt", t."Name", t."Normalized", t."UpdatedAt", t."UserId"
+api-1  |           FROM "NoteTags" AS n1
+api-1  |           INNER JOIN "Tags" AS t ON n1."TagId" = t."Id"
+api-1  |       ) AS s0 ON s."Id" = s0."NoteId"
+api-1  |       ORDER BY s."Id", s."Id0", n0."Id", p0."Id", s0."NoteId", s0."TagId"
+api-1  | info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+api-1  |       Executed DbCommand (5ms) [Parameters=[@id='?' (DbType = Guid), @userId='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+api-1  |       SELECT s."Id", s."CategoryId", s."ContentJsonb", s."CreatedAt", s."CreatedByUserId", s."DeletedAt", s."DeviceId", s."IsArchived", s."IsDeleted", s."IsFavorite", s."IsPinned", s."SearchText", s."Slug", s."Status", s."Summary", s."Title", s."ToolName", s."UpdatedAt", s."UpdatedByUserId", s."UserId", s."Version", s."Visibility", s."Id0", n0."Id", n0."AttachmentType", n0."BlockId", n0."ByteSize", n0."Checksum", n0."CreatedAt", n0."DisplayName", n0."DurationSeconds", n0."Filename", n0."Height", n0."MimeType", n0."NoteId", n0."ObjectKey", n0."OwnerUserId", n0."ThumbnailObjectKey", n0."UpdatedAt", n0."Width", p0."Id", p0."AllowIndexing", p0."CreatedAt", p0."CreatedByUserId", p0."ExpiresAt", p0."LastAccessedAt", p0."MaxViews", p0."NoteId", p0."PasswordHash", p0."RevokedAt", p0."TokenHash", p0."UpdatedAt", p0."ViewCount", s0."NoteId", s0."TagId", s0."Id", s0."CreatedAt", s0."Name", s0."Normalized", s0."UpdatedAt", s0."UserId", s."CreatedAt0", s."Description", s."Name", s."Slug0", s."SortOrder", s."UpdatedAt0", s."UserId0"
+api-1  |       FROM (
+api-1  |           SELECT n."Id", n."CategoryId", n."ContentJsonb", n."CreatedAt", n."CreatedByUserId", n."DeletedAt", n."DeviceId", n."IsArchived", n."IsDeleted", n."IsFavorite", n."IsPinned", n."SearchText", n."Slug", n."Status", n."Summary", n."Title", n."ToolName", n."UpdatedAt", n."UpdatedByUserId", n."UserId", n."Version", n."Visibility", c."Id" AS "Id0", c."CreatedAt" AS "CreatedAt0", c."Description", c."Name", c."Slug" AS "Slug0", c."SortOrder", c."UpdatedAt" AS "UpdatedAt0", c."UserId" AS "UserId0"
+api-1  |           FROM "Notes" AS n
+api-1  |           LEFT JOIN "Categories" AS c ON n."CategoryId" = c."Id"
+api-1  |           WHERE n."Id" = @id AND n."UserId" = @userId AND NOT (n."IsDeleted")
+api-1  |           LIMIT 1
+api-1  |       ) AS s
+api-1  |       LEFT JOIN "NoteAttachments" AS n0 ON s."Id" = n0."NoteId"
+api-1  |       LEFT JOIN (
+api-1  |           SELECT p."Id", p."AllowIndexing", p."CreatedAt", p."CreatedByUserId", p."ExpiresAt", p."LastAccessedAt", p."MaxViews", p."NoteId", p."PasswordHash", p."RevokedAt", p."TokenHash", p."UpdatedAt", p."ViewCount"
+api-1  |           FROM "PublicNoteShares" AS p
+api-1  |           WHERE p."RevokedAt" IS NULL
+api-1  |       ) AS p0 ON s."Id" = p0."NoteId"
+api-1  |       LEFT JOIN (
+api-1  |           SELECT n1."NoteId", n1."TagId", t."Id", t."CreatedAt", t."Name", t."Normalized", t."UpdatedAt", t."UserId"
+api-1  |           FROM "NoteTags" AS n1
+api-1  |           INNER JOIN "Tags" AS t ON n1."TagId" = t."Id"
+api-1  |       ) AS s0 ON s."Id" = s0."NoteId"
+api-1  |       ORDER BY s."Id", s."Id0", n0."Id", p0."Id", s0."NoteId", s0."TagId"
+api-1  | info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+api-1  |       Executed DbCommand (1ms) [Parameters=[@userId='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+api-1  |       SELECT c."Id", c."Name", c."Description", c."SortOrder", c."CreatedAt"
+api-1  |       FROM "Categories" AS c
+api-1  |       WHERE c."UserId" = @userId
+api-1  |       ORDER BY c."Name"
+api-1  | info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+api-1  |       Executed DbCommand (1ms) [Parameters=[@userId='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+api-1  |       SELECT c."Id", c."Name", c."Description", c."SortOrder", c."CreatedAt"
+api-1  |       FROM "Categories" AS c
+api-1  |       WHERE c."UserId" = @userId
+api-1  |       ORDER BY c."Name"
+api-1  | info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+api-1  |       Executed DbCommand (8ms) [Parameters=[@userId='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+api-1  |       SELECT c."Id", c."Name", c."Description", c."SortOrder", c."CreatedAt"
+api-1  |       FROM "Categories" AS c
+api-1  |       WHERE c."UserId" = @userId
+api-1  |       ORDER BY c."Name"
+api-1  | info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+api-1  |       Executed DbCommand (19ms) [Parameters=[@id='?' (DbType = Guid), @userId='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+api-1  |       SELECT s."Id", s."CategoryId", s."ContentJsonb", s."CreatedAt", s."CreatedByUserId", s."DeletedAt", s."DeviceId", s."IsArchived", s."IsDeleted", s."IsFavorite", s."IsPinned", s."SearchText", s."Slug", s."Status", s."Summary", s."Title", s."ToolName", s."UpdatedAt", s."UpdatedByUserId", s."UserId", s."Version", s."Visibility", s."Id0", n0."Id", n0."AttachmentType", n0."BlockId", n0."ByteSize", n0."Checksum", n0."CreatedAt", n0."DisplayName", n0."DurationSeconds", n0."Filename", n0."Height", n0."MimeType", n0."NoteId", n0."ObjectKey", n0."OwnerUserId", n0."ThumbnailObjectKey", n0."UpdatedAt", n0."Width", p0."Id", p0."AllowIndexing", p0."CreatedAt", p0."CreatedByUserId", p0."ExpiresAt", p0."LastAccessedAt", p0."MaxViews", p0."NoteId", p0."PasswordHash", p0."RevokedAt", p0."TokenHash", p0."UpdatedAt", p0."ViewCount", s0."NoteId", s0."TagId", s0."Id", s0."CreatedAt", s0."Name", s0."Normalized", s0."UpdatedAt", s0."UserId", s."CreatedAt0", s."Description", s."Name", s."Slug0", s."SortOrder", s."UpdatedAt0", s."UserId0"
+api-1  |       FROM (
+api-1  |           SELECT n."Id", n."CategoryId", n."ContentJsonb", n."CreatedAt", n."CreatedByUserId", n."DeletedAt", n."DeviceId", n."IsArchived", n."IsDeleted", n."IsFavorite", n."IsPinned", n."SearchText", n."Slug", n."Status", n."Summary", n."Title", n."ToolName", n."UpdatedAt", n."UpdatedByUserId", n."UserId", n."Version", n."Visibility", c."Id" AS "Id0", c."CreatedAt" AS "CreatedAt0", c."Description", c."Name", c."Slug" AS "Slug0", c."SortOrder", c."UpdatedAt" AS "UpdatedAt0", c."UserId" AS "UserId0"
+api-1  |           FROM "Notes" AS n
+api-1  |           LEFT JOIN "Categories" AS c ON n."CategoryId" = c."Id"
+api-1  |           WHERE n."Id" = @id AND n."UserId" = @userId AND NOT (n."IsDeleted")
+api-1  |           LIMIT 1
+api-1  |       ) AS s
+api-1  |       LEFT JOIN "NoteAttachments" AS n0 ON s."Id" = n0."NoteId"
+api-1  |       LEFT JOIN (
+api-1  |           SELECT p."Id", p."AllowIndexing", p."CreatedAt", p."CreatedByUserId", p."ExpiresAt", p."LastAccessedAt", p."MaxViews", p."NoteId", p."PasswordHash", p."RevokedAt", p."TokenHash", p."UpdatedAt", p."ViewCount"
+api-1  |           FROM "PublicNoteShares" AS p
+api-1  |           WHERE p."RevokedAt" IS NULL
+api-1  |       ) AS p0 ON s."Id" = p0."NoteId"
+api-1  |       LEFT JOIN (
+api-1  |           SELECT n1."NoteId", n1."TagId", t."Id", t."CreatedAt", t."Name", t."Normalized", t."UpdatedAt", t."UserId"
+api-1  |           FROM "NoteTags" AS n1
+api-1  |           INNER JOIN "Tags" AS t ON n1."TagId" = t."Id"
+api-1  |       ) AS s0 ON s."Id" = s0."NoteId"
+api-1  |       ORDER BY s."Id", s."Id0", n0."Id", p0."Id", s0."NoteId", s0."TagId"
+api-1  | info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+api-1  |       Executed DbCommand (14ms) [Parameters=[@id='?' (DbType = Guid), @userId='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+api-1  |       SELECT n1."Id", n1."CategoryId", n1."ContentJsonb", n1."CreatedAt", n1."CreatedByUserId", n1."DeletedAt", n1."DeviceId", n1."IsArchived", n1."IsDeleted", n1."IsFavorite", n1."IsPinned", n1."SearchText", n1."Slug", n1."Status", n1."Summary", n1."Title", n1."ToolName", n1."UpdatedAt", n1."UpdatedByUserId", n1."UserId", n1."Version", n1."Visibility", n0."NoteId", n0."TagId"
+api-1  |       FROM (
+api-1  |           SELECT n."Id", n."CategoryId", n."ContentJsonb", n."CreatedAt", n."CreatedByUserId", n."DeletedAt", n."DeviceId", n."IsArchived", n."IsDeleted", n."IsFavorite", n."IsPinned", n."SearchText", n."Slug", n."Status", n."Summary", n."Title", n."ToolName", n."UpdatedAt", n."UpdatedByUserId", n."UserId", n."Version", n."Visibility"
+api-1  |           FROM "Notes" AS n
+api-1  |           WHERE n."Id" = @id AND n."UserId" = @userId AND NOT (n."IsDeleted")
+api-1  |           LIMIT 1
+api-1  |       ) AS n1
+api-1  |       LEFT JOIN "NoteTags" AS n0 ON n1."Id" = n0."NoteId"
+api-1  |       ORDER BY n1."Id", n0."NoteId"
+api-1  | info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+api-1  |       Executed DbCommand (10ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = DateTime), @p2='?' (DbType = Guid), @p3='?', @p4='?', @p5='?', @p6='?', @p7='?', @p8='?' (DbType = DateTime), @p9='?' (DbType = Guid), @p10='?' (DbType = Guid), @p11='?' (DbType = Object), @p12='?' (DbType = DateTime), @p13='?' (DbType = Guid), @p14='?' (DbType = Guid), @p15='?', @p16='?', @p17='?' (DbType = DateTime), @p18='?' (DbType = Int32), @p40='?' (DbType = Guid), @p19='?' (DbType = Guid), @p20='?' (DbType = Object), @p21='?' (DbType = DateTime), @p22='?' (DbType = Guid), @p23='?' (DbType = DateTime), @p24='?' (DbType = Guid), @p25='?' (DbType = Boolean), @p26='?' (DbType = Boolean), @p27='?' (DbType = Boolean), @p28='?' (DbType = Boolean), @p29='?', @p30='?', @p31='?', @p32='?', @p33='?', @p34='?', @p35='?' (DbType = DateTime), @p36='?' (DbType = Guid), @p37='?' (DbType = Guid), @p38='?' (DbType = Int32), @p41='?' (DbType = Int32), @p39='?'], CommandType='Text', CommandTimeout='30']
+api-1  |       INSERT INTO "AuditEvents" ("Id", "CreatedAt", "DeviceId", "EventType", "IpHash", "MetadataJson", "ResourceId", "ResourceType", "UpdatedAt", "UserId")
+api-1  |       VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+api-1  |       INSERT INTO "NoteRevisions" ("Id", "ContentJsonb", "CreatedAt", "EditedByUserId", "NoteId", "Summary", "Title", "UpdatedAt", "Version")
+api-1  |       VALUES (@p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18);
+api-1  |       UPDATE "Notes" SET "CategoryId" = @p19, "ContentJsonb" = @p20, "CreatedAt" = @p21, "CreatedByUserId" = @p22, "DeletedAt" = @p23, "DeviceId" = @p24, "IsArchived" = @p25, "IsDeleted" = @p26, "IsFavorite" = @p27, "IsPinned" = @p28, "SearchText" = @p29, "Slug" = @p30, "Status" = @p31, "Summary" = @p32, "Title" = @p33, "ToolName" = @p34, "UpdatedAt" = @p35, "UpdatedByUserId" = @p36, "UserId" = @p37, "Version" = @p38, "Visibility" = @p39
+api-1  |       WHERE "Id" = @p40 AND "Version" = @p41;
+api-1  | info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+api-1  |       Executed DbCommand (4ms) [Parameters=[@id='?' (DbType = Guid), @userId='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+api-1  |       SELECT n1."Id", n1."CategoryId", n1."ContentJsonb", n1."CreatedAt", n1."CreatedByUserId", n1."DeletedAt", n1."DeviceId", n1."IsArchived", n1."IsDeleted", n1."IsFavorite", n1."IsPinned", n1."SearchText", n1."Slug", n1."Status", n1."Summary", n1."Title", n1."ToolName", n1."UpdatedAt", n1."UpdatedByUserId", n1."UserId", n1."Version", n1."Visibility", n0."NoteId", n0."TagId"
+api-1  |       FROM (
+api-1  |           SELECT n."Id", n."CategoryId", n."ContentJsonb", n."CreatedAt", n."CreatedByUserId", n."DeletedAt", n."DeviceId", n."IsArchived", n."IsDeleted", n."IsFavorite", n."IsPinned", n."SearchText", n."Slug", n."Status", n."Summary", n."Title", n."ToolName", n."UpdatedAt", n."UpdatedByUserId", n."UserId", n."Version", n."Visibility"
+api-1  |           FROM "Notes" AS n
+api-1  |           WHERE n."Id" = @id AND n."UserId" = @userId AND NOT (n."IsDeleted")
+api-1  |           LIMIT 1
+api-1  |       ) AS n1
+api-1  |       LEFT JOIN "NoteTags" AS n0 ON n1."Id" = n0."NoteId"
+api-1  |       ORDER BY n1."Id", n0."NoteId"
+api-1  | info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+api-1  |       Executed DbCommand (3ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = DateTime), @p2='?' (DbType = Guid), @p3='?', @p4='?', @p5='?', @p6='?', @p7='?', @p8='?' (DbType = DateTime), @p9='?' (DbType = Guid), @p10='?' (DbType = Guid), @p11='?' (DbType = Object), @p12='?' (DbType = DateTime), @p13='?' (DbType = Guid), @p14='?' (DbType = Guid), @p15='?', @p16='?', @p17='?' (DbType = DateTime), @p18='?' (DbType = Int32), @p40='?' (DbType = Guid), @p19='?' (DbType = Guid), @p20='?' (DbType = Object), @p21='?' (DbType = DateTime), @p22='?' (DbType = Guid), @p23='?' (DbType = DateTime), @p24='?' (DbType = Guid), @p25='?' (DbType = Boolean), @p26='?' (DbType = Boolean), @p27='?' (DbType = Boolean), @p28='?' (DbType = Boolean), @p29='?', @p30='?', @p31='?', @p32='?', @p33='?', @p34='?', @p35='?' (DbType = DateTime), @p36='?' (DbType = Guid), @p37='?' (DbType = Guid), @p38='?' (DbType = Int32), @p41='?' (DbType = Int32), @p39='?'], CommandType='Text', CommandTimeout='30']
+api-1  |       INSERT INTO "AuditEvents" ("Id", "CreatedAt", "DeviceId", "EventType", "IpHash", "MetadataJson", "ResourceId", "ResourceType", "UpdatedAt", "UserId")
+api-1  |       VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+api-1  |       INSERT INTO "NoteRevisions" ("Id", "ContentJsonb", "CreatedAt", "EditedByUserId", "NoteId", "Summary", "Title", "UpdatedAt", "Version")
+api-1  |       VALUES (@p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18);
+api-1  |       UPDATE "Notes" SET "CategoryId" = @p19, "ContentJsonb" = @p20, "CreatedAt" = @p21, "CreatedByUserId" = @p22, "DeletedAt" = @p23, "DeviceId" = @p24, "IsArchived" = @p25, "IsDeleted" = @p26, "IsFavorite" = @p27, "IsPinned" = @p28, "SearchText" = @p29, "Slug" = @p30, "Status" = @p31, "Summary" = @p32, "Title" = @p33, "ToolName" = @p34, "UpdatedAt" = @p35, "UpdatedByUserId" = @p36, "UserId" = @p37, "Version" = @p38, "Visibility" = @p39
+api-1  |       WHERE "Id" = @p40 AND "Version" = @p41;
+api-1  | info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+api-1  |       Executed DbCommand (2ms) [Parameters=[@id='?' (DbType = Guid), @userId='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+api-1  |       SELECT n1."Id", n1."CategoryId", n1."ContentJsonb", n1."CreatedAt", n1."CreatedByUserId", n1."DeletedAt", n1."DeviceId", n1."IsArchived", n1."IsDeleted", n1."IsFavorite", n1."IsPinned", n1."SearchText", n1."Slug", n1."Status", n1."Summary", n1."Title", n1."ToolName", n1."UpdatedAt", n1."UpdatedByUserId", n1."UserId", n1."Version", n1."Visibility", n0."NoteId", n0."TagId"
+api-1  |       FROM (
+api-1  |           SELECT n."Id", n."CategoryId", n."ContentJsonb", n."CreatedAt", n."CreatedByUserId", n."DeletedAt", n."DeviceId", n."IsArchived", n."IsDeleted", n."IsFavorite", n."IsPinned", n."SearchText", n."Slug", n."Status", n."Summary", n."Title", n."ToolName", n."UpdatedAt", n."UpdatedByUserId", n."UserId", n."Version", n."Visibility"
+api-1  |           FROM "Notes" AS n
+api-1  |           WHERE n."Id" = @id AND n."UserId" = @userId AND NOT (n."IsDeleted")
+api-1  |           LIMIT 1
+api-1  |       ) AS n1
+api-1  |       LEFT JOIN "NoteTags" AS n0 ON n1."Id" = n0."NoteId"
+api-1  |       ORDER BY n1."Id", n0."NoteId"
+api-1  | info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+api-1  |       Executed DbCommand (2ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = DateTime), @p2='?' (DbType = Guid), @p3='?', @p4='?', @p5='?', @p6='?', @p7='?', @p8='?' (DbType = DateTime), @p9='?' (DbType = Guid), @p10='?' (DbType = Guid), @p11='?' (DbType = Object), @p12='?' (DbType = DateTime), @p13='?' (DbType = Guid), @p14='?' (DbType = Guid), @p15='?', @p16='?', @p17='?' (DbType = DateTime), @p18='?' (DbType = Int32), @p40='?' (DbType = Guid), @p19='?' (DbType = Guid), @p20='?' (DbType = Object), @p21='?' (DbType = DateTime), @p22='?' (DbType = Guid), @p23='?' (DbType = DateTime), @p24='?' (DbType = Guid), @p25='?' (DbType = Boolean), @p26='?' (DbType = Boolean), @p27='?' (DbType = Boolean), @p28='?' (DbType = Boolean), @p29='?', @p30='?', @p31='?', @p32='?', @p33='?', @p34='?', @p35='?' (DbType = DateTime), @p36='?' (DbType = Guid), @p37='?' (DbType = Guid), @p38='?' (DbType = Int32), @p41='?' (DbType = Int32), @p39='?'], CommandType='Text', CommandTimeout='30']
+api-1  |       INSERT INTO "AuditEvents" ("Id", "CreatedAt", "DeviceId", "EventType", "IpHash", "MetadataJson", "ResourceId", "ResourceType", "UpdatedAt", "UserId")
+api-1  |       VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+api-1  |       INSERT INTO "NoteRevisions" ("Id", "ContentJsonb", "CreatedAt", "EditedByUserId", "NoteId", "Summary", "Title", "UpdatedAt", "Version")
+api-1  |       VALUES (@p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18);
+api-1  |       UPDATE "Notes" SET "CategoryId" = @p19, "ContentJsonb" = @p20, "CreatedAt" = @p21, "CreatedByUserId" = @p22, "DeletedAt" = @p23, "DeviceId" = @p24, "IsArchived" = @p25, "IsDeleted" = @p26, "IsFavorite" = @p27, "IsPinned" = @p28, "SearchText" = @p29, "Slug" = @p30, "Status" = @p31, "Summary" = @p32, "Title" = @p33, "ToolName" = @p34, "UpdatedAt" = @p35, "UpdatedByUserId" = @p36, "UserId" = @p37, "Version" = @p38, "Visibility" = @p39
+api-1  |       WHERE "Id" = @p40 AND "Version" = @p41;
+api-1  | info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+api-1  |       Executed DbCommand (3ms) [Parameters=[@id='?' (DbType = Guid), @userId='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+api-1  |       SELECT n1."Id", n1."CategoryId", n1."ContentJsonb", n1."CreatedAt", n1."CreatedByUserId", n1."DeletedAt", n1."DeviceId", n1."IsArchived", n1."IsDeleted", n1."IsFavorite", n1."IsPinned", n1."SearchText", n1."Slug", n1."Status", n1."Summary", n1."Title", n1."ToolName", n1."UpdatedAt", n1."UpdatedByUserId", n1."UserId", n1."Version", n1."Visibility", n0."NoteId", n0."TagId"
+api-1  |       FROM (
+api-1  |           SELECT n."Id", n."CategoryId", n."ContentJsonb", n."CreatedAt", n."CreatedByUserId", n."DeletedAt", n."DeviceId", n."IsArchived", n."IsDeleted", n."IsFavorite", n."IsPinned", n."SearchText", n."Slug", n."Status", n."Summary", n."Title", n."ToolName", n."UpdatedAt", n."UpdatedByUserId", n."UserId", n."Version", n."Visibility"
+api-1  |           FROM "Notes" AS n
+api-1  |           WHERE n."Id" = @id AND n."UserId" = @userId AND NOT (n."IsDeleted")
+api-1  |           LIMIT 1
+api-1  |       ) AS n1
+api-1  |       LEFT JOIN "NoteTags" AS n0 ON n1."Id" = n0."NoteId"
+api-1  |       ORDER BY n1."Id", n0."NoteId"
+api-1  | info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+api-1  |       Executed DbCommand (4ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = DateTime), @p2='?' (DbType = Guid), @p3='?', @p4='?', @p5='?', @p6='?', @p7='?', @p8='?' (DbType = DateTime), @p9='?' (DbType = Guid), @p10='?' (DbType = Guid), @p11='?' (DbType = Object), @p12='?' (DbType = DateTime), @p13='?' (DbType = Guid), @p14='?' (DbType = Guid), @p15='?', @p16='?', @p17='?' (DbType = DateTime), @p18='?' (DbType = Int32), @p40='?' (DbType = Guid), @p19='?' (DbType = Guid), @p20='?' (DbType = Object), @p21='?' (DbType = DateTime), @p22='?' (DbType = Guid), @p23='?' (DbType = DateTime), @p24='?' (DbType = Guid), @p25='?' (DbType = Boolean), @p26='?' (DbType = Boolean), @p27='?' (DbType = Boolean), @p28='?' (DbType = Boolean), @p29='?', @p30='?', @p31='?', @p32='?', @p33='?', @p34='?', @p35='?' (DbType = DateTime), @p36='?' (DbType = Guid), @p37='?' (DbType = Guid), @p38='?' (DbType = Int32), @p41='?' (DbType = Int32), @p39='?'], CommandType='Text', CommandTimeout='30']
+api-1  |       INSERT INTO "AuditEvents" ("Id", "CreatedAt", "DeviceId", "EventType", "IpHash", "MetadataJson", "ResourceId", "ResourceType", "UpdatedAt", "UserId")
+api-1  |       VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+api-1  |       INSERT INTO "NoteRevisions" ("Id", "ContentJsonb", "CreatedAt", "EditedByUserId", "NoteId", "Summary", "Title", "UpdatedAt", "Version")
+api-1  |       VALUES (@p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18);
+api-1  |       UPDATE "Notes" SET "CategoryId" = @p19, "ContentJsonb" = @p20, "CreatedAt" = @p21, "CreatedByUserId" = @p22, "DeletedAt" = @p23, "DeviceId" = @p24, "IsArchived" = @p25, "IsDeleted" = @p26, "IsFavorite" = @p27, "IsPinned" = @p28, "SearchText" = @p29, "Slug" = @p30, "Status" = @p31, "Summary" = @p32, "Title" = @p33, "ToolName" = @p34, "UpdatedAt" = @p35, "UpdatedByUserId" = @p36, "UserId" = @p37, "Version" = @p38, "Visibility" = @p39
+api-1  |       WHERE "Id" = @p40 AND "Version" = @p41;

@@ -18,12 +18,12 @@ public static class NoteContentValidator
 
     private static readonly HashSet<string> AllowedBulletStyles = new(StringComparer.OrdinalIgnoreCase)
     {
-        "disc", "circle", "square"
+        "disc", "circle", "square", "dash"
     };
 
     private static readonly HashSet<string> AllowedDividerStyles = new(StringComparer.OrdinalIgnoreCase)
     {
-        "singleLine", "dots", "breakLines", "space"
+        "singleLine", "dots", "breakLines", "space", "doubleLine"
     };
 
     private static readonly HashSet<string> AllowedUrlSchemes = new(StringComparer.OrdinalIgnoreCase)
