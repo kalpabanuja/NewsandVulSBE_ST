@@ -67,6 +67,12 @@ public static class NoteContentValidator
         {
             var root = doc.RootElement;
 
+            if (root.ValueKind != JsonValueKind.Object)
+            {
+                errors.Add(new ValidationError("content", "invalid_type", "Content must be a JSON object."));
+                return errors;
+            }
+
             if (!root.TryGetProperty("blocks", out var blocksEl) || blocksEl.ValueKind != JsonValueKind.Array)
             {
                 errors.Add(new ValidationError("content.blocks", "required", "Content must have a 'blocks' array."));
@@ -81,10 +87,10 @@ public static class NoteContentValidator
                 var prefix = $"content.blocks[{idx}]";
 
                 // Validate block ID uniqueness
-                var blockId = block.TryGetProperty("id", out var idProp) ? idProp.GetString() : null;
+                var blockId = block.TryGetProperty("id", out var idProp) && idProp.ValueKind == JsonValueKind.String ? idProp.GetString() : null;
                 if (string.IsNullOrWhiteSpace(blockId))
                 {
-                    errors.Add(new ValidationError($"{prefix}.id", "required", "Each block must have a non-empty 'id'."));
+                    errors.Add(new ValidationError($"{prefix}.id", "required", "Each block must have a non-empty string 'id'."));
                 }
                 else if (!seenIds.Add(blockId))
                 {
@@ -92,10 +98,10 @@ public static class NoteContentValidator
                 }
 
                 // Validate block type
-                var blockType = block.TryGetProperty("type", out var typeProp) ? typeProp.GetString() : null;
+                var blockType = block.TryGetProperty("type", out var typeProp) && typeProp.ValueKind == JsonValueKind.String ? typeProp.GetString() : null;
                 if (string.IsNullOrWhiteSpace(blockType))
                 {
-                    errors.Add(new ValidationError($"{prefix}.type", "required", "Each block must have a 'type'."));
+                    errors.Add(new ValidationError($"{prefix}.type", "required", "Each block must have a string 'type'."));
                     idx++;
                     continue;
                 }
@@ -169,7 +175,7 @@ public static class NoteContentValidator
 
     private static void ValidateBulletListBlock(JsonElement block, string prefix, List<ValidationError> errors)
     {
-        if (block.TryGetProperty("style", out var styleProp))
+        if (block.TryGetProperty("style", out var styleProp) && styleProp.ValueKind == JsonValueKind.String)
         {
             var style = styleProp.GetString();
             if (!string.IsNullOrEmpty(style) && !AllowedBulletStyles.Contains(style))
@@ -182,7 +188,7 @@ public static class NoteContentValidator
 
     private static void ValidateDividerBlock(JsonElement block, string prefix, List<ValidationError> errors)
     {
-        if (block.TryGetProperty("style", out var styleProp))
+        if (block.TryGetProperty("style", out var styleProp) && styleProp.ValueKind == JsonValueKind.String)
         {
             var style = styleProp.GetString();
             if (!string.IsNullOrEmpty(style) && !AllowedDividerStyles.Contains(style))
@@ -195,9 +201,9 @@ public static class NoteContentValidator
 
     private static void ValidateLinkBlock(JsonElement block, string prefix, List<ValidationError> errors)
     {
-        if (!block.TryGetProperty("url", out var urlProp) || string.IsNullOrWhiteSpace(urlProp.GetString()))
+        if (!block.TryGetProperty("url", out var urlProp) || urlProp.ValueKind != JsonValueKind.String || string.IsNullOrWhiteSpace(urlProp.GetString()))
         {
-            errors.Add(new ValidationError($"{prefix}.url", "required", "Link block must have a 'url'."));
+            errors.Add(new ValidationError($"{prefix}.url", "required", "Link block must have a non-empty string 'url'."));
             return;
         }
 
@@ -232,7 +238,7 @@ public static class NoteContentValidator
         // Validate optional UI backgroundColor
         if (block.TryGetProperty("ui", out var uiProp) && uiProp.ValueKind == JsonValueKind.Object)
         {
-            if (uiProp.TryGetProperty("backgroundColor", out var colorProp))
+            if (uiProp.TryGetProperty("backgroundColor", out var colorProp) && colorProp.ValueKind == JsonValueKind.String)
             {
                 var color = colorProp.GetString();
                 if (!string.IsNullOrEmpty(color) && !HexColorRegex.IsMatch(color))
@@ -248,10 +254,11 @@ public static class NoteContentValidator
     {
         // Attachment blocks must reference an attachmentId — not a raw storage URL
         if (!block.TryGetProperty("attachmentId", out var attIdProp) ||
+            attIdProp.ValueKind != JsonValueKind.String ||
             string.IsNullOrWhiteSpace(attIdProp.GetString()))
         {
             errors.Add(new ValidationError($"{prefix}.attachmentId", "required",
-                $"{blockType} block must reference an 'attachmentId'."));
+                $"{blockType} block must reference a string 'attachmentId'."));
         }
     }
 
