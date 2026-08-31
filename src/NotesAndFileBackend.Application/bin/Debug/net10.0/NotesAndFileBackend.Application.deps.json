@@ -8,11 +8,31 @@
     ".NETCoreApp,Version=v10.0": {
       "NotesAndFileBackend.Application/1.0.0": {
         "dependencies": {
+          "Jint": "3.1.2",
           "NotesAndFileBackend.Contracts": "1.0.0",
           "NotesAndFileBackend.Domain": "1.0.0"
         },
         "runtime": {
           "NotesAndFileBackend.Application.dll": {}
+        }
+      },
+      "Esprima/3.0.5": {
+        "runtime": {
+          "lib/netstandard2.1/Esprima.dll": {
+            "assemblyVersion": "3.0.5.0",
+            "fileVersion": "3.0.5.0"
+          }
+        }
+      },
+      "Jint/3.1.2": {
+        "dependencies": {
+          "Esprima": "3.0.5"
+        },
+        "runtime": {
+          "lib/net8.0/Jint.dll": {
+            "assemblyVersion": "3.1.2.0",
+            "fileVersion": "3.1.0.0"
+          }
         }
       },
       "NotesAndFileBackend.Contracts/1.0.0": {
@@ -38,6 +58,20 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "Esprima/3.0.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-yJrbImpXdJAwKoa0FOgK3JV4wuOPHhKI1vWmNepJD5U/t6ENwEr0FX6gl06rIxxKbVGrKCd8JMmm7rieT/4dIw==",
+      "path": "esprima/3.0.5",
+      "hashPath": "esprima.3.0.5.nupkg.sha512"
+    },
+    "Jint/3.1.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Wt9DWcs2RIEKrSiNOOIppxN8MkrONv0K9csGerwtO3eaggPoxYpmx7HFp6ph7Nqd+wg7cTHcgnUzpQJ4SHuEaA==",
+      "path": "jint/3.1.2",
+      "hashPath": "jint.3.1.2.nupkg.sha512"
     },
     "NotesAndFileBackend.Contracts/1.0.0": {
       "type": "project",

@@ -39,6 +39,25 @@
           }
         }
       },
+      "Esprima/3.0.5": {
+        "runtime": {
+          "lib/netstandard2.1/Esprima.dll": {
+            "assemblyVersion": "3.0.5.0",
+            "fileVersion": "3.0.5.0"
+          }
+        }
+      },
+      "Jint/3.1.2": {
+        "dependencies": {
+          "Esprima": "3.0.5"
+        },
+        "runtime": {
+          "lib/net8.0/Jint.dll": {
+            "assemblyVersion": "3.1.2.0",
+            "fileVersion": "3.1.0.0"
+          }
+        }
+      },
       "Microsoft.Bcl.Cryptography/10.0.2": {
         "runtime": {
           "lib/net10.0/Microsoft.Bcl.Cryptography.dll": {
@@ -263,6 +282,7 @@
       },
       "NotesAndFileBackend.Application/1.0.0": {
         "dependencies": {
+          "Jint": "3.1.2",
           "NotesAndFileBackend.Contracts": "1.0.0",
           "NotesAndFileBackend.Domain": "1.0.0"
         },
@@ -310,6 +330,20 @@
       "sha512": "sha512-rfUhmzlQifO7Uk3AErPweV1FbwZYI+OuogPjfS/7mbVKVWCYYCLkkLozh2mS/qaHPNGPGFeSFAR1NbWnQyd2pQ==",
       "path": "awssdk.s3/4.0.102.4",
       "hashPath": "awssdk.s3.4.0.102.4.nupkg.sha512"
+    },
+    "Esprima/3.0.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-yJrbImpXdJAwKoa0FOgK3JV4wuOPHhKI1vWmNepJD5U/t6ENwEr0FX6gl06rIxxKbVGrKCd8JMmm7rieT/4dIw==",
+      "path": "esprima/3.0.5",
+      "hashPath": "esprima.3.0.5.nupkg.sha512"
+    },
+    "Jint/3.1.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Wt9DWcs2RIEKrSiNOOIppxN8MkrONv0K9csGerwtO3eaggPoxYpmx7HFp6ph7Nqd+wg7cTHcgnUzpQJ4SHuEaA==",
+      "path": "jint/3.1.2",
+      "hashPath": "jint.3.1.2.nupkg.sha512"
     },
     "Microsoft.Bcl.Cryptography/10.0.2": {
       "type": "package",

@@ -40,6 +40,19 @@
           "lib/net10.0/BCrypt-Net-Next.dll": {}
         }
       },
+      "Esprima/3.0.5": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.1/Esprima.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.1/Esprima.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "FluentValidation/11.11.0": {
         "type": "package",
         "compile": {
@@ -98,6 +111,22 @@
         },
         "runtime": {
           "lib/net6.0/Humanizer.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Jint/3.1.2": {
+        "type": "package",
+        "dependencies": {
+          "Esprima": "3.0.5"
+        },
+        "compile": {
+          "lib/net8.0/Jint.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Jint.dll": {
             "related": ".xml"
           }
         }
@@ -935,6 +964,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v10.0",
         "dependencies": {
+          "Jint": "3.1.2",
           "NotesAndFileBackend.Contracts": "1.0.0",
           "NotesAndFileBackend.Domain": "1.0.0"
         },
@@ -1058,6 +1088,24 @@
         "readme.md"
       ]
     },
+    "Esprima/3.0.5": {
+      "sha512": "yJrbImpXdJAwKoa0FOgK3JV4wuOPHhKI1vWmNepJD5U/t6ENwEr0FX6gl06rIxxKbVGrKCd8JMmm7rieT/4dIw==",
+      "type": "package",
+      "path": "esprima/3.0.5",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "esprima.3.0.5.nupkg.sha512",
+        "esprima.nuspec",
+        "lib/net462/Esprima.dll",
+        "lib/net462/Esprima.xml",
+        "lib/netstandard2.0/Esprima.dll",
+        "lib/netstandard2.0/Esprima.xml",
+        "lib/netstandard2.1/Esprima.dll",
+        "lib/netstandard2.1/Esprima.xml"
+      ]
+    },
     "FluentValidation/11.11.0": {
       "sha512": "cyIVdQBwSipxWG8MA3Rqox7iNbUNUTK5bfJi9tIdm4CAfH71Oo5ABLP4/QyrUwuakqpUEPGtE43BDddvEehuYw==",
       "type": "package",
@@ -1135,6 +1183,28 @@
         "lib/netstandard2.0/Humanizer.dll",
         "lib/netstandard2.0/Humanizer.xml",
         "logo.png"
+      ]
+    },
+    "Jint/3.1.2": {
+      "sha512": "Wt9DWcs2RIEKrSiNOOIppxN8MkrONv0K9csGerwtO3eaggPoxYpmx7HFp6ph7Nqd+wg7cTHcgnUzpQJ4SHuEaA==",
+      "type": "package",
+      "path": "jint/3.1.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "jint.3.1.2.nupkg.sha512",
+        "jint.nuspec",
+        "lib/net462/Jint.dll",
+        "lib/net462/Jint.xml",
+        "lib/net6.0/Jint.dll",
+        "lib/net6.0/Jint.xml",
+        "lib/net8.0/Jint.dll",
+        "lib/net8.0/Jint.xml",
+        "lib/netstandard2.0/Jint.dll",
+        "lib/netstandard2.0/Jint.xml",
+        "lib/netstandard2.1/Jint.dll",
+        "lib/netstandard2.1/Jint.xml"
       ]
     },
     "Microsoft.AspNetCore.Authentication.JwtBearer/10.0.11": {

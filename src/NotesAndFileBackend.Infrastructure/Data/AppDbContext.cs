@@ -145,6 +145,30 @@ public class AppDbContext : DbContext
             entity.Property(nl => nl.BlockId).HasMaxLength(100);
         });
 
+        // NoteAttachment
+        modelBuilder.Entity<NoteAttachment>(entity =>
+        {
+            entity.Property(a => a.AttachmentType).HasMaxLength(20).IsRequired();
+            entity.Property(a => a.DisplayName).HasMaxLength(255);
+            entity.Property(a => a.Filename).HasMaxLength(255).IsRequired();
+            entity.Property(a => a.MimeType).HasMaxLength(120).IsRequired();
+            entity.Property(a => a.ObjectKey).HasMaxLength(500).IsRequired();
+            entity.Property(a => a.Checksum).HasMaxLength(64);
+
+            entity.HasOne(a => a.Note)
+                .WithMany(n => n.Attachments)
+                .HasForeignKey(a => a.NoteId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(a => a.OwnerUser)
+                .WithMany()
+                .HasForeignKey(a => a.OwnerUserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasIndex(a => a.NoteId);
+            entity.HasIndex(a => a.OwnerUserId);
+        });
+
         // Shares
         modelBuilder.Entity<PublicFileShare>()
             .HasIndex(p => p.TokenHash)

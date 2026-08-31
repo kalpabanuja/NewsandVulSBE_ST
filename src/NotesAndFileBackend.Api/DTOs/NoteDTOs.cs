@@ -12,6 +12,8 @@ public class CreateNoteRequest
     public JsonElement Content { get; set; }
     public bool IsPinned { get; set; }
     public bool IsFavorite { get; set; }
+    /// <summary>PRIVATE or PUBLIC</summary>
+    public string Visibility { get; set; } = "PRIVATE";
 }
 
 public class UpdateNoteRequest
@@ -26,6 +28,8 @@ public class UpdateNoteRequest
     public bool IsFavorite { get; set; }
     public bool IsArchived { get; set; }
     public int Version { get; set; }
+    /// <summary>PRIVATE or PUBLIC</summary>
+    public string Visibility { get; set; } = "PRIVATE";
 }
 
 public class NoteBlockDto

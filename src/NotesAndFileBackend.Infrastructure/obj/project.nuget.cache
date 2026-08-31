@@ -1,11 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "FJ7JAzljCY8=",
+  "dgSpecHash": "e2rjfrhH6jw=",
   "success": true,
   "projectFilePath": "C:\\Users\\wickr\\Documents\\.net\\NewsandVulSBE_ST\\src\\NotesAndFileBackend.Infrastructure\\NotesAndFileBackend.Infrastructure.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\wickr\\.nuget\\packages\\awssdk.core\\4.0.102.1\\awssdk.core.4.0.102.1.nupkg.sha512",
     "C:\\Users\\wickr\\.nuget\\packages\\awssdk.s3\\4.0.102.4\\awssdk.s3.4.0.102.4.nupkg.sha512",
+    "C:\\Users\\wickr\\.nuget\\packages\\esprima\\3.0.5\\esprima.3.0.5.nupkg.sha512",
+    "C:\\Users\\wickr\\.nuget\\packages\\jint\\3.1.2\\jint.3.1.2.nupkg.sha512",
     "C:\\Users\\wickr\\.nuget\\packages\\microsoft.bcl.cryptography\\10.0.2\\microsoft.bcl.cryptography.10.0.2.nupkg.sha512",
     "C:\\Users\\wickr\\.nuget\\packages\\microsoft.entityframeworkcore\\10.0.4\\microsoft.entityframeworkcore.10.0.4.nupkg.sha512",
     "C:\\Users\\wickr\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\10.0.4\\microsoft.entityframeworkcore.abstractions.10.0.4.nupkg.sha512",

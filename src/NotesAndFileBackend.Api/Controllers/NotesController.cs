@@ -82,7 +82,18 @@ public class NotesController : ControllerBase
         var userId = GetCurrentUserId();
         var deviceId = GetCurrentDeviceId();
 
-        var contentJson = request.Content.ValueKind != JsonValueKind.Undefined ? request.Content.GetRawText() : "{\"version\": 1, \"blocks\": []}";
+        // Validate visibility value
+        var visibility = request.Visibility?.ToUpperInvariant();
+        if (visibility != "PRIVATE" && visibility != "PUBLIC")
+            return BadRequest(new { errors = new[] { new { field = "visibility", code = "invalid_visibility", message = "Visibility must be PRIVATE or PUBLIC." } } });
+
+        var contentJson = request.Content.ValueKind != JsonValueKind.Undefined ? request.Content.GetRawText() : "{\"version\": 2, \"blocks\": []}";
+
+        // Validate block content
+        var contentErrors = NoteContentValidator.Validate(contentJson);
+        if (contentErrors.Count > 0)
+            return BadRequest(new { errors = contentErrors.Select(e => new { field = e.Field, code = e.Code, message = e.Message }) });
+
         var searchText = NoteTextExtractor.ExtractText(contentJson) + " " + request.Title + " " + request.Summary;
 
         var note = new Note
@@ -100,6 +111,7 @@ public class NotesController : ControllerBase
             SearchText = searchText,
             IsPinned = request.IsPinned,
             IsFavorite = request.IsFavorite,
+            Visibility = visibility,
             Version = 1,
             NoteTags = await ResolveTagsAsync(userId, request.Tags)
         };
@@ -175,6 +187,7 @@ public class NotesController : ControllerBase
             note.Title,
             note.Summary,
             note.Slug,
+            note.Visibility,
             note.CategoryId,
             Category = note.Category?.Name,
             Tags = note.NoteTags.Select(nt => nt.Tag.Name).ToList(),
@@ -207,7 +220,20 @@ public class NotesController : ControllerBase
             return Conflict(new { error = new { code = "CONFLICT", message = "Note has been modified by another client." } });
         }
 
-        // Save Revision
+        // Validate visibility
+        var visibility = request.Visibility?.ToUpperInvariant();
+        if (visibility != "PRIVATE" && visibility != "PUBLIC")
+            return BadRequest(new { errors = new[] { new { field = "visibility", code = "invalid_visibility", message = "Visibility must be PRIVATE or PUBLIC." } } });
+
+        // Validate block content
+        var contentJson = request.Content.ValueKind != JsonValueKind.Undefined ? request.Content.GetRawText() : note.ContentJsonb;
+        var contentErrors = NoteContentValidator.Validate(contentJson);
+        if (contentErrors.Count > 0)
+            return BadRequest(new { errors = contentErrors.Select(e => new { field = e.Field, code = e.Code, message = e.Message }) });
+
+        var searchText = NoteTextExtractor.ExtractText(contentJson) + " " + request.Title + " " + request.Summary;
+
+        // Save Revision before updating
         var revision = new NoteRevision
         {
             NoteId = note.Id,
@@ -219,10 +245,6 @@ public class NotesController : ControllerBase
         };
         _context.NoteRevisions.Add(revision);
 
-        // Update Properties
-        var contentJson = request.Content.ValueKind != JsonValueKind.Undefined ? request.Content.GetRawText() : note.ContentJsonb;
-        var searchText = NoteTextExtractor.ExtractText(contentJson) + " " + request.Title + " " + request.Summary;
-
         note.Title = request.Title;
         note.Summary = request.Summary;
         note.CategoryId = request.CategoryId;
@@ -232,6 +254,14 @@ public class NotesController : ControllerBase
         note.IsPinned = request.IsPinned;
         note.IsFavorite = request.IsFavorite;
         note.IsArchived = request.IsArchived;
+        
+        // Visibility change — emit audit event if changed
+        if (note.Visibility != visibility)
+        {
+            note.Visibility = visibility;
+            _context.AuditEvents.Add(new AuditEvent { UserId = userId, EventType = "note.visibility_changed", ResourceType = "note", ResourceId = note.Id.ToString() });
+        }
+        
         note.Version++;
         note.UpdatedAt = DateTime.UtcNow;
         note.UpdatedByUserId = userId;

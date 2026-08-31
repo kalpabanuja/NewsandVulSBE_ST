@@ -2,6 +2,35 @@
   "version": 4,
   "targets": {
     "net10.0": {
+      "Esprima/3.0.5": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.1/Esprima.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.1/Esprima.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Jint/3.1.2": {
+        "type": "package",
+        "dependencies": {
+          "Esprima": "3.0.5"
+        },
+        "compile": {
+          "lib/net8.0/Jint.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Jint.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "NotesAndFileBackend.Contracts/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v10.0",
@@ -25,6 +54,46 @@
     }
   },
   "libraries": {
+    "Esprima/3.0.5": {
+      "sha512": "yJrbImpXdJAwKoa0FOgK3JV4wuOPHhKI1vWmNepJD5U/t6ENwEr0FX6gl06rIxxKbVGrKCd8JMmm7rieT/4dIw==",
+      "type": "package",
+      "path": "esprima/3.0.5",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "esprima.3.0.5.nupkg.sha512",
+        "esprima.nuspec",
+        "lib/net462/Esprima.dll",
+        "lib/net462/Esprima.xml",
+        "lib/netstandard2.0/Esprima.dll",
+        "lib/netstandard2.0/Esprima.xml",
+        "lib/netstandard2.1/Esprima.dll",
+        "lib/netstandard2.1/Esprima.xml"
+      ]
+    },
+    "Jint/3.1.2": {
+      "sha512": "Wt9DWcs2RIEKrSiNOOIppxN8MkrONv0K9csGerwtO3eaggPoxYpmx7HFp6ph7Nqd+wg7cTHcgnUzpQJ4SHuEaA==",
+      "type": "package",
+      "path": "jint/3.1.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "jint.3.1.2.nupkg.sha512",
+        "jint.nuspec",
+        "lib/net462/Jint.dll",
+        "lib/net462/Jint.xml",
+        "lib/net6.0/Jint.dll",
+        "lib/net6.0/Jint.xml",
+        "lib/net8.0/Jint.dll",
+        "lib/net8.0/Jint.xml",
+        "lib/netstandard2.0/Jint.dll",
+        "lib/netstandard2.0/Jint.xml",
+        "lib/netstandard2.1/Jint.dll",
+        "lib/netstandard2.1/Jint.xml"
+      ]
+    },
     "NotesAndFileBackend.Contracts/1.0.0": {
       "type": "project",
       "path": "../NotesAndFileBackend.Contracts/NotesAndFileBackend.Contracts.csproj",
@@ -38,6 +107,7 @@
   },
   "projectFileDependencyGroups": {
     "net10.0": [
+      "Jint >= 3.1.2",
       "NotesAndFileBackend.Contracts >= 1.0.0",
       "NotesAndFileBackend.Domain >= 1.0.0"
     ]
@@ -94,6 +164,12 @@
       "net10.0": {
         "framework": "net10.0",
         "targetAlias": "net10.0",
+        "dependencies": {
+          "Jint": {
+            "target": "Package",
+            "version": "[3.1.2, )"
+          }
+        },
         "imports": [
           "net461",
           "net462",

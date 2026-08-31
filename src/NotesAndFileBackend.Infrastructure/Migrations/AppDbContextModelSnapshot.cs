@@ -293,6 +293,11 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("AttachmentType")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
                     b.Property<Guid?>("BlockId")
                         .HasColumnType("uuid");
 
@@ -301,32 +306,58 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
 
                     b.Property<string>("Checksum")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<double?>("DurationSeconds")
+                        .HasColumnType("double precision");
+
                     b.Property<string>("Filename")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<int?>("Height")
+                        .HasColumnType("integer");
 
                     b.Property<string>("MimeType")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)");
 
                     b.Property<Guid>("NoteId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("ObjectKey")
                         .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<Guid>("OwnerUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ThumbnailObjectKey")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int?>("Width")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NoteId");
+
+                    b.HasIndex("OwnerUserId");
 
                     b.ToTable("NoteAttachments");
                 });
@@ -347,6 +378,10 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
                     b.Property<bool>("IsEnabled")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(150)
@@ -358,6 +393,9 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
                     b.Property<string>("SchemaJsonb")
                         .IsRequired()
                         .HasColumnType("jsonb");
+
+                    b.Property<string>("Script")
+                        .HasColumnType("text");
 
                     b.Property<string>("Template")
                         .IsRequired()
@@ -863,7 +901,15 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("NotesAndFileBackend.Domain.Entities.User", "OwnerUser")
+                        .WithMany()
+                        .HasForeignKey("OwnerUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Note");
+
+                    b.Navigation("OwnerUser");
                 });
 
             modelBuilder.Entity("NotesAndFileBackend.Domain.Entities.NoteCommandGenerator", b =>

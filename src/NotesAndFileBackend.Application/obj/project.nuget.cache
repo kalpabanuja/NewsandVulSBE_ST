@@ -1,8 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "rlVLFpFtb9U=",
+  "dgSpecHash": "geGG0pvbBu8=",
   "success": true,
   "projectFilePath": "C:\\Users\\wickr\\Documents\\.net\\NewsandVulSBE_ST\\src\\NotesAndFileBackend.Application\\NotesAndFileBackend.Application.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\wickr\\.nuget\\packages\\esprima\\3.0.5\\esprima.3.0.5.nupkg.sha512",
+    "C:\\Users\\wickr\\.nuget\\packages\\jint\\3.1.2\\jint.3.1.2.nupkg.sha512"
+  ],
   "logs": []
 }

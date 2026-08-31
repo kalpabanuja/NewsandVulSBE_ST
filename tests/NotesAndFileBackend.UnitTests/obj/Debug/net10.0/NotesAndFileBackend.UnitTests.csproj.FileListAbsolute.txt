@@ -136,3 +136,5 @@ C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\tests\NotesAndFileBackend.UnitTes
 C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\tests\NotesAndFileBackend.UnitTests\bin\Debug\net10.0\NotesAndFileBackend.Infrastructure.dll
 C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\tests\NotesAndFileBackend.UnitTests\bin\Debug\net10.0\NotesAndFileBackend.Api.pdb
 C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\tests\NotesAndFileBackend.UnitTests\bin\Debug\net10.0\NotesAndFileBackend.Infrastructure.pdb
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\tests\NotesAndFileBackend.UnitTests\bin\Debug\net10.0\Esprima.dll
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\tests\NotesAndFileBackend.UnitTests\bin\Debug\net10.0\Jint.dll

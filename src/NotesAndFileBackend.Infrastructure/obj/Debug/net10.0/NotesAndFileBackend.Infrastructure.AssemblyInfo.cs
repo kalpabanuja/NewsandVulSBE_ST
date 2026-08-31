@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("NotesAndFileBackend.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+edb7e8ee814d660fdedfe7f185c89f800720fcdd")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e53a576af6577591bc0d4b00314e61e3170299f6")]
 [assembly: System.Reflection.AssemblyProductAttribute("NotesAndFileBackend.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NotesAndFileBackend.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

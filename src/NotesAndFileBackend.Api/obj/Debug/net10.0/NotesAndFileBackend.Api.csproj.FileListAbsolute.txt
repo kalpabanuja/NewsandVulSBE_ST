@@ -145,3 +145,5 @@ C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Api\obj\D
 C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Api\obj\Debug\net10.0\NotesAndFileBackend.Api.pdb
 C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Api\obj\Debug\net10.0\NotesAndFileBackend.Api.genruntimeconfig.cache
 C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Api\obj\Debug\net10.0\ref\NotesAndFileBackend.Api.dll
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Api\bin\Debug\net10.0\Esprima.dll
+C:\Users\wickr\Documents\.net\NewsandVulSBE_ST\src\NotesAndFileBackend.Api\bin\Debug\net10.0\Jint.dll

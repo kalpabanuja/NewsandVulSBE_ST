@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "TOKwJUUvAIk=",
+  "dgSpecHash": "+ebGDEb6OUU=",
   "success": true,
   "projectFilePath": "C:\\Users\\wickr\\Documents\\.net\\NewsandVulSBE_ST\\tests\\NotesAndFileBackend.UnitTests\\NotesAndFileBackend.UnitTests.csproj",
   "expectedPackageFiles": [
@@ -8,9 +8,11 @@
     "C:\\Users\\wickr\\.nuget\\packages\\awssdk.s3\\4.0.102.4\\awssdk.s3.4.0.102.4.nupkg.sha512",
     "C:\\Users\\wickr\\.nuget\\packages\\bcrypt.net-next\\4.2.0\\bcrypt.net-next.4.2.0.nupkg.sha512",
     "C:\\Users\\wickr\\.nuget\\packages\\coverlet.collector\\6.0.4\\coverlet.collector.6.0.4.nupkg.sha512",
+    "C:\\Users\\wickr\\.nuget\\packages\\esprima\\3.0.5\\esprima.3.0.5.nupkg.sha512",
     "C:\\Users\\wickr\\.nuget\\packages\\fluentvalidation\\11.11.0\\fluentvalidation.11.11.0.nupkg.sha512",
     "C:\\Users\\wickr\\.nuget\\packages\\fluentvalidation.aspnetcore\\11.3.1\\fluentvalidation.aspnetcore.11.3.1.nupkg.sha512",
     "C:\\Users\\wickr\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\11.11.0\\fluentvalidation.dependencyinjectionextensions.11.11.0.nupkg.sha512",
+    "C:\\Users\\wickr\\.nuget\\packages\\jint\\3.1.2\\jint.3.1.2.nupkg.sha512",
     "C:\\Users\\wickr\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\10.0.11\\microsoft.aspnetcore.authentication.jwtbearer.10.0.11.nupkg.sha512",
     "C:\\Users\\wickr\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.11\\microsoft.aspnetcore.openapi.10.0.11.nupkg.sha512",
     "C:\\Users\\wickr\\.nuget\\packages\\microsoft.bcl.cryptography\\10.0.2\\microsoft.bcl.cryptography.10.0.2.nupkg.sha512",

@@ -49,6 +49,14 @@
           }
         }
       },
+      "Esprima/3.0.5": {
+        "runtime": {
+          "lib/netstandard2.1/Esprima.dll": {
+            "assemblyVersion": "3.0.5.0",
+            "fileVersion": "3.0.5.0"
+          }
+        }
+      },
       "FluentValidation/11.11.0": {
         "runtime": {
           "lib/net8.0/FluentValidation.dll": {
@@ -85,6 +93,17 @@
           "lib/net6.0/Humanizer.dll": {
             "assemblyVersion": "2.14.0.0",
             "fileVersion": "2.14.1.48190"
+          }
+        }
+      },
+      "Jint/3.1.2": {
+        "dependencies": {
+          "Esprima": "3.0.5"
+        },
+        "runtime": {
+          "lib/net8.0/Jint.dll": {
+            "assemblyVersion": "3.1.2.0",
+            "fileVersion": "3.1.0.0"
           }
         }
       },
@@ -669,6 +688,7 @@
       },
       "NotesAndFileBackend.Application/1.0.0": {
         "dependencies": {
+          "Jint": "3.1.2",
           "NotesAndFileBackend.Contracts": "1.0.0",
           "NotesAndFileBackend.Domain": "1.0.0"
         },
@@ -740,6 +760,13 @@
       "path": "bcrypt.net-next/4.2.0",
       "hashPath": "bcrypt.net-next.4.2.0.nupkg.sha512"
     },
+    "Esprima/3.0.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-yJrbImpXdJAwKoa0FOgK3JV4wuOPHhKI1vWmNepJD5U/t6ENwEr0FX6gl06rIxxKbVGrKCd8JMmm7rieT/4dIw==",
+      "path": "esprima/3.0.5",
+      "hashPath": "esprima.3.0.5.nupkg.sha512"
+    },
     "FluentValidation/11.11.0": {
       "type": "package",
       "serviceable": true,
@@ -767,6 +794,13 @@
       "sha512": "sha512-lQKvtaTDOXnoVJ20ibTuSIOf2i0uO0MPbDhd1jm238I+U/2ZnRENj0cktKZhtchBMtCUSRQ5v4xBCUbKNmyVMw==",
       "path": "humanizer.core/2.14.1",
       "hashPath": "humanizer.core.2.14.1.nupkg.sha512"
+    },
+    "Jint/3.1.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Wt9DWcs2RIEKrSiNOOIppxN8MkrONv0K9csGerwtO3eaggPoxYpmx7HFp6ph7Nqd+wg7cTHcgnUzpQJ4SHuEaA==",
+      "path": "jint/3.1.2",
+      "hashPath": "jint.3.1.2.nupkg.sha512"
     },
     "Microsoft.AspNetCore.Authentication.JwtBearer/10.0.11": {
       "type": "package",
