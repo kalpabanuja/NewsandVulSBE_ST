@@ -265,6 +265,7 @@ public class PublicController : ControllerBase
             "displayattachment" => "<!-- display attachment (inline preview) -->",
             "downloadattachment" => RenderDownloadAttachment(block),
             "commandgenerator" => RenderCommandGenerator(block),
+            "copycard" => RenderCopyCard(block),
             _ => $"<!-- unsupported block type: {Encode(blockType)} -->"
         };
     }
@@ -291,7 +292,10 @@ public class PublicController : ControllerBase
         if (block.TryGetProperty("items", out var items) && items.ValueKind == JsonValueKind.Array)
             foreach (var item in items.EnumerateArray())
             {
-                var text = item.TryGetProperty("text", out var tp) ? tp.GetString() ?? "" : "";
+                var text = "";
+                if (item.ValueKind == JsonValueKind.String) text = item.GetString() ?? "";
+                else if (item.ValueKind == JsonValueKind.Object && item.TryGetProperty("text", out var tp)) text = tp.GetString() ?? "";
+                
                 sb.AppendLine($"    <li>{Encode(text)}</li>");
             }
         sb.Append("  </ul>");
@@ -304,7 +308,10 @@ public class PublicController : ControllerBase
         if (block.TryGetProperty("items", out var items) && items.ValueKind == JsonValueKind.Array)
             foreach (var item in items.EnumerateArray())
             {
-                var text = item.TryGetProperty("text", out var tp) ? tp.GetString() ?? "" : "";
+                var text = "";
+                if (item.ValueKind == JsonValueKind.String) text = item.GetString() ?? "";
+                else if (item.ValueKind == JsonValueKind.Object && item.TryGetProperty("text", out var tp)) text = tp.GetString() ?? "";
+
                 sb.AppendLine($"    <li>{Encode(text)}</li>");
             }
         sb.Append("  </ol>");
@@ -387,6 +394,19 @@ public class PublicController : ControllerBase
     <strong>&#128736; {Encode(name)}</strong>
     {(string.IsNullOrEmpty(desc) ? "" : $"<p style='margin:.5rem 0 0;color:#374151;'>{Encode(desc)}</p>")}
     <p style='font-size:.8rem;color:#9ca3af;margin:.5rem 0 0;'>Open the app to use this generator.</p>
+  </div>";
+    }
+
+    private static string RenderCopyCard(JsonElement block)
+    {
+        var text = block.TryGetProperty("text", out var tp) ? tp.GetString() ?? "" : "";
+        var label = block.TryGetProperty("label", out var lp) ? lp.GetString() ?? "" : "";
+        var codeId = Guid.NewGuid().ToString("N")[..8];
+        
+        return $@"  <div style='border:1px solid #e5e7eb;border-radius:8px;padding:1rem;margin:.75rem 0;background:#faf5ff;position:relative;'>
+    {(string.IsNullOrEmpty(label) ? "" : $"<div style='font-size:.85rem;font-weight:600;color:#6b7280;margin-bottom:.5rem;'>{Encode(label)}</div>")}
+    <div id='{codeId}' style='font-family:monospace;word-break:break-all;padding-right:4rem;'>{Encode(text)}</div>
+    <button class='copy-btn' style='background:#9333ea;color:white;border:none;' onclick='copyCode(""{codeId}"")'>Copy</button>
   </div>";
     }
 
