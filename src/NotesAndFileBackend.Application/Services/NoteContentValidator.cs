@@ -154,13 +154,16 @@ public static class NoteContentValidator
                 "Heading level must be between 1 and 5."));
         }
 
-        if (!block.TryGetProperty("text", out var textProp) || string.IsNullOrWhiteSpace(textProp.GetString()))
+        if (block.TryGetProperty("text", out var textProp))
         {
-            errors.Add(new ValidationError($"{prefix}.text", "required", "Heading block must have non-empty 'text'."));
-        }
-        else if (textProp.GetString()!.Length > 300)
-        {
-            errors.Add(new ValidationError($"{prefix}.text", "too_long", "Heading text cannot exceed 300 characters."));
+            if (textProp.ValueKind != JsonValueKind.String)
+            {
+                errors.Add(new ValidationError($"{prefix}.text", "invalid_type", "Heading text must be a string."));
+            }
+            else if (textProp.GetString()?.Length > 300)
+            {
+                errors.Add(new ValidationError($"{prefix}.text", "too_long", "Heading text cannot exceed 300 characters."));
+            }
         }
     }
 
