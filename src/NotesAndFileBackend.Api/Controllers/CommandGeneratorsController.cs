@@ -182,19 +182,25 @@ public class CommandGeneratorsController : ControllerBase
     /// <summary>
     /// Test a generator with draft inputs. Uses the same Jint sandbox as production.
     /// Does NOT persist anything. Accepts an optional DraftScript override.
+    /// Supports {id}/test for existing generators or /test (with null id) for brand new unsaved ones.
     /// </summary>
-    [HttpPost("{id}/test")]
-    public async Task<IActionResult> TestCommandGenerator(Guid id, [FromBody] TestCommandGeneratorRequest request)
+    [HttpPost("test")]
+    [HttpPost("{id:guid}/test")]
+    public async Task<IActionResult> TestCommandGenerator(Guid? id, [FromBody] TestCommandGeneratorRequest request)
     {
         var userId = GetCurrentUserId();
 
-        var generator = await _context.NoteCommandGenerators
-            .Include(g => g.Note)
-            .FirstOrDefaultAsync(g => g.Id == id && g.Note != null && g.Note.UserId == userId && g.Note.IsDeleted == false);
+        NotesAndFileBackend.Domain.Entities.NoteCommandGenerator? generator = null;
+        if (id.HasValue && id.Value != Guid.Empty)
+        {
+            generator = await _context.NoteCommandGenerators
+                .Include(g => g.Note)
+                .FirstOrDefaultAsync(g => g.Id == id.Value && g.Note != null && g.Note.UserId == userId && g.Note.IsDeleted == false);
 
-        if (generator == null) return NotFound();
+            if (generator == null) return NotFound();
+        }
 
-        var scriptToTest = request.DraftScript ?? generator.Script ?? string.Empty;
+        var scriptToTest = request.DraftScript ?? generator?.Script ?? string.Empty;
 
         if (string.IsNullOrWhiteSpace(scriptToTest))
             return BadRequest(new { success = false, errors = new[] { "No script to test." } });

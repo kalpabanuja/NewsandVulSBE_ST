@@ -80,11 +80,12 @@ The API strictly uses `application/problem+json` for validation and domain error
     "category": "Networking",
     "tags": ["nmap"],
     "toolName": "nmap",
-    "contentJsonb": "{ \"blocks\": [...] }",
+    "contentJsonb": "{ \"version\": 2, \"blocks\": [...] }",
     "isPinned": false,
     "isFavorite": true,
     "isArchived": false,
     "version": 2,
+    "visibility": "PRIVATE",
     "createdAt": "...",
     "updatedAt": "...",
     "publicShares": [ { "id": "...", "tokenHash": "...", "expiresAt": "..." } ]
@@ -101,7 +102,8 @@ The API strictly uses `application/problem+json` for validation and domain error
     "categoryId": "uuid",
     "tags": ["tag1", "tag2"],
     "toolName": "custom",
-    "content": { "blocks": [] },
+    "content": { "version": 2, "blocks": [] },
+    "visibility": "PRIVATE",
     "isPinned": false,
     "isFavorite": false
   }
@@ -109,7 +111,7 @@ The API strictly uses `application/problem+json` for validation and domain error
 
 ### Update Note (Optimistic Concurrency)
 - **Method:** `PUT /notes/{id}`
-- **Description:** Updates the note. The `version` field must match the server's current version, otherwise `409 Conflict` is returned.
+- **Description:** Updates the note. The `version` field must match the server's current version, otherwise `409 Conflict` is returned. You can also specify `"visibility": "PRIVATE" | "PUBLIC"`.
 
 ### Duplicate Note
 - **Method:** `POST /notes/{id}/duplicate`
@@ -134,6 +136,39 @@ The API strictly uses `application/problem+json` for validation and domain error
 
 ---
 
+## 2.5 Note Attachments (`/note-attachments`)
+*Attachments specifically embedded inside a note's blocks.*
+
+### Upload Note Attachment
+- **Method:** `POST /note-attachments`
+- **Headers:** `Content-Type: multipart/form-data`
+- **Description:** Upload an attachment for a note. Max 10MB for downloadable files, configurable limit (default 50MB) for display (images/videos).
+- **Request Body:**
+  - `file`: The file payload
+  - `attachmentType`: `"Display"` or `"Downloadable"`
+  - `displayName`: Optional custom name
+- **Response (200 OK):**
+  ```json
+  {
+    "id": "uuid",
+    "attachmentType": "Display",
+    "displayName": "screenshot.png",
+    "mimeType": "image/png",
+    "sizeBytes": 102450
+  }
+  ```
+
+### Preview Display Attachment
+- **Method:** `GET /note-attachments/{id}/preview`
+- **Description:** Returns the raw byte stream of an image/video for inline display.
+
+### Download Attachment
+- **Method:** `GET /note-attachments/{id}/download`
+- **Description:** Returns the file with a `Content-Disposition: attachment` header forcing a safe download.
+
+
+---
+
 ## 3. Command Generators (`/command-generators`)
 
 ### Get Command Generator Schema
@@ -153,9 +188,13 @@ The API strictly uses `application/problem+json` for validation and domain error
         "required": true
       }
     ],
+    "language": "javascript",
+    "script": "return `nmap ${inputs.target}`;",
     "template": "nmap {target}"
   }
   ```
+
+*Note: `language` will be `"csharp_template"` for legacy generators using the `template` field, and `"javascript"` for new Jint generators using the `script` field.*
 
 ### Generate Command
 - **Method:** `POST /command-generators/{id}/generate`
@@ -177,6 +216,21 @@ The API strictly uses `application/problem+json` for validation and domain error
     "warnings": []
   }
   ```
+
+### Test Command Generator (Drafting)
+- **Method:** `POST /command-generators/{id}/test`
+- **Description:** Allows evaluating a drafted script via the Jint sandbox without saving it to the database. Useful for a live preview editor.
+- **Request Body:**
+  ```json
+  {
+    "script": "return `nmap ${inputs.target}`;",
+    "language": "javascript",
+    "values": {
+      "target": "192.168.1.1"
+    }
+  }
+  ```
+- **Response (200 OK):** Same response format as `/generate` (includes `success`, `command`, `errors`).
 
 ---
 
@@ -224,9 +278,11 @@ The API strictly uses `application/problem+json` for validation and domain error
 *No Authentication Required. Protected by `StrictPolicy` Rate Limiting.*
 
 ### View Shared Note
-- **Method:** `GET /public/notes/{token}`
+- **Method:** `GET /public/Notes/{token}`
 - **Query Params:** `pwd` (if password-protected)
-- **Response:** Returns the read-only Note representation for unauthenticated rendering.
+- **Content Negotiation:**
+  - If the client sends `Accept: text/html`, the backend will dynamically generate a beautiful HTML page rendering the note blocks, handling password prompts, and returning `410 Gone` if the token expired.
+  - If the client (like a MAUI app importer) sends `Accept: application/json`, it returns the raw API JSON representation.
 
 ---
 
