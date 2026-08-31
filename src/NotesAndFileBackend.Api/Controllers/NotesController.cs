@@ -33,10 +33,10 @@ public class NotesController : ControllerBase
         return claim != null ? Guid.Parse(claim.Value) : Guid.Empty;
     }
 
-    private Guid GetCurrentDeviceId()
+    private Guid? GetCurrentDeviceId()
     {
         var claim = User.FindFirst("deviceId");
-        return claim != null ? Guid.Parse(claim.Value) : Guid.Empty;
+        return claim != null && Guid.TryParse(claim.Value, out var id) ? id : null;
     }
 
     private async Task<List<NoteTag>> ResolveTagsAsync(Guid userId, List<string> tagNames)
