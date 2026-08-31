@@ -21,7 +21,7 @@ public class SecurityHeadersMiddleware
 
         // The dashboard page (/) uses inline <script> and <style> tags, so it needs a relaxed CSP.
         // All other routes (API, health checks, etc.) get the strict policy.
-        var csp = context.Request.Path == "/"
+        var csp = context.Request.Path == "/" || context.Request.Path.StartsWithSegments("/api/v1/public")
             ? "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; frame-ancestors 'none';"
             : "default-src 'self'; frame-ancestors 'none';";
 

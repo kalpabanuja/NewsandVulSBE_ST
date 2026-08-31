@@ -201,7 +201,6 @@ public class PublicController : ControllerBase
     ul.checklist { list-style: none; padding-left: 0; }
     ul.checklist li { display: flex; align-items: center; gap: .5rem; }
     ul.checklist li input[type=checkbox] { cursor: default; }
-    hr { border: none; border-top: 3px dashed #d1d5db; margin: 1.5rem 0; }
     hr.divider-singleLine { border: none; border-top: 1px solid #d1d5db; margin: 1.5rem 0; }
     hr.divider-dots { border: none; text-align: center; margin: 1.5rem 0; color: #9ca3af; }
     hr.divider-dots::after { content: '• • •'; }
@@ -246,6 +245,20 @@ public class PublicController : ControllerBase
 
         var updated = updatedAt.HasValue ? updatedAt.Value.ToString("yyyy-MM-dd HH:mm") : string.Empty;
         sb.AppendLine($"  <div class='meta-footer'>Shared securely via ThreatIntel &bull; Last updated: {Encode(updated)}</div>");
+        
+        // Add script for copy block functionality
+        sb.AppendLine(@"  <script>
+    function copyCode(id) {
+      var text = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(text).then(function() {
+        var btn = document.querySelector(`button[onclick='copyCode(""""${id}"""")']`);
+        var oldText = btn.innerText;
+        btn.innerText = 'Copied!';
+        setTimeout(function() { btn.innerText = oldText; }, 2000);
+      });
+    }
+  </script>");
+        
         sb.AppendLine("</body>");
         sb.AppendLine("</html>");
 
