@@ -13,7 +13,7 @@ public static class NoteContentValidator
     {
         "heading", "paragraph", "bulletList", "numberedList", "checkList",
         "divider", "link", "displayAttachment", "downloadAttachment",
-        "code", "commandGenerator"
+        "code", "commandGenerator", "copyCard"
     };
 
     private static readonly HashSet<string> AllowedBulletStyles = new(StringComparer.OrdinalIgnoreCase)
@@ -135,6 +135,9 @@ public static class NoteContentValidator
                     case "displayattachment":
                     case "downloadattachment":
                         ValidateAttachmentBlock(block, prefix, errors, blockType);
+                        break;
+                    case "copycard":
+                        ValidateCopyCardBlock(block, prefix, errors);
                         break;
                 }
 
@@ -259,6 +262,30 @@ public static class NoteContentValidator
         {
             errors.Add(new ValidationError($"{prefix}.attachmentId", "required",
                 $"{blockType} block must reference a string 'attachmentId'."));
+        }
+    }
+
+    private static void ValidateCopyCardBlock(JsonElement block, string prefix, List<ValidationError> errors)
+    {
+        // CopyCard must have a non-empty 'text' field — the content the user copies to clipboard.
+        if (!block.TryGetProperty("text", out var textProp) ||
+            textProp.ValueKind != JsonValueKind.String ||
+            string.IsNullOrWhiteSpace(textProp.GetString()))
+        {
+            errors.Add(new ValidationError($"{prefix}.text", "required",
+                "CopyCard block must have a non-empty string 'text' field."));
+        }
+        else if (textProp.GetString()!.Length > 5000)
+        {
+            errors.Add(new ValidationError($"{prefix}.text", "too_long",
+                "CopyCard text cannot exceed 5000 characters."));
+        }
+
+        // Optional label/title for the card
+        if (block.TryGetProperty("label", out var labelProp) && labelProp.ValueKind != JsonValueKind.String)
+        {
+            errors.Add(new ValidationError($"{prefix}.label", "invalid_type",
+                "CopyCard label must be a string if provided."));
         }
     }
 
