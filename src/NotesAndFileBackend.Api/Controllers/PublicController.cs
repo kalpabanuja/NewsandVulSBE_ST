@@ -201,6 +201,7 @@ public class PublicController : ControllerBase
     ul.checklist { list-style: none; padding-left: 0; }
     ul.checklist li { display: flex; align-items: center; gap: .5rem; }
     ul.checklist li input[type=checkbox] { cursor: default; }
+    hr { border: none; border-top: 3px dashed #d1d5db; margin: 1.5rem 0; }
     hr.divider-singleLine { border: none; border-top: 1px solid #d1d5db; margin: 1.5rem 0; }
     hr.divider-dots { border: none; text-align: center; margin: 1.5rem 0; color: #9ca3af; }
     hr.divider-dots::after { content: '• • •'; }
