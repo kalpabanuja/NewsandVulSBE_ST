@@ -116,7 +116,7 @@ public class PublicController : ControllerBase
 
         // Browser → render proper HTML
         if (Request.Headers["Accept"].ToString().Contains("text/html"))
-            return Content(BuildNoteHtml(share.Note.Title, share.Note.Summary, share.Note.UpdatedAt, contentJsonb, token), "text/html", Encoding.UTF8);
+            return Content(BuildNoteHtml(share.Note.Title, share.Note.Summary, share.Note.UpdatedAt, contentJsonb, token, password), "text/html", Encoding.UTF8);
 
         // API client → return JSON
         return Ok(dto);
@@ -214,7 +214,7 @@ public class PublicController : ControllerBase
 </body>
 </html>";
 
-    private static string BuildNoteHtml(string title, string summary, DateTime? updatedAt, string contentJsonb, string token)
+    private static string BuildNoteHtml(string title, string summary, DateTime? updatedAt, string contentJsonb, string token, string? password = null)
     {
         var sb = new StringBuilder();
 
@@ -273,7 +273,7 @@ public class PublicController : ControllerBase
             if (root.TryGetProperty("blocks", out var blocks) && blocks.ValueKind == JsonValueKind.Array)
             {
                 foreach (var block in blocks.EnumerateArray())
-                    sb.AppendLine(RenderBlock(block, token));
+                    sb.AppendLine(RenderBlock(block, token, password));
             }
         }
         catch
@@ -305,7 +305,7 @@ public class PublicController : ControllerBase
         return sb.ToString();
     }
 
-    private static string RenderBlock(JsonElement block, string token)
+    private static string RenderBlock(JsonElement block, string token, string? password = null)
     {
         if (!block.TryGetProperty("type", out var typeProp) || typeProp.ValueKind != JsonValueKind.String)
             return "<!-- invalid block -->";
@@ -323,8 +323,8 @@ public class PublicController : ControllerBase
             "divider" => RenderDivider(block),
             "link" => RenderLink(block),
             "code" => RenderCode(block),
-            "displayattachment" => RenderDisplayAttachment(block, token),
-            "downloadattachment" => RenderDownloadAttachment(block, token),
+            "displayattachment" => RenderDisplayAttachment(block, token, password),
+            "downloadattachment" => RenderDownloadAttachment(block, token, password),
             "commandgenerator" => RenderCommandGenerator(block),
             "copycard" => RenderCopyCard(block),
             _ => $"<!-- unsupported block type: {Encode(blockType)} -->"
@@ -443,7 +443,7 @@ public class PublicController : ControllerBase
   <script>function copyCode(id){{var el=document.getElementById(id);navigator.clipboard.writeText(el.innerText);}}</script>";
     }
 
-    private static string RenderDisplayAttachment(JsonElement block, string token)
+    private static string RenderDisplayAttachment(JsonElement block, string token, string? password = null)
     {
         if (!block.TryGetProperty("attachmentId", out var aid) || string.IsNullOrEmpty(aid.GetString()))
             return "<!-- display attachment (missing id) -->";
@@ -467,7 +467,8 @@ public class PublicController : ControllerBase
             if (mime != null && mime.StartsWith("video/")) isVideo = true;
         }
 
-        var url = $"/api/v1/public/Notes/{Encode(token)}/attachments/{Encode(attachmentId)}?inline=true";
+        var pwdParam = string.IsNullOrWhiteSpace(password) ? "" : $"&pwd={Uri.EscapeDataString(password)}";
+        var url = $"/api/v1/public/Notes/{Encode(token)}/attachments/{Encode(attachmentId)}?inline=true{pwdParam}";
 
         if (isVideo)
         {
@@ -488,7 +489,7 @@ public class PublicController : ControllerBase
         }
     }
 
-    private static string RenderDownloadAttachment(JsonElement block, string token)
+    private static string RenderDownloadAttachment(JsonElement block, string token, string? password = null)
     {
         string? displayName = null;
         if (block.TryGetProperty("displayName", out var prop) && prop.ValueKind == JsonValueKind.String) displayName = prop.GetString();
@@ -502,8 +503,9 @@ public class PublicController : ControllerBase
             return "<!-- download attachment (missing id) -->";
             
         var attachmentId = aid.GetString();
+        var pwdParam = string.IsNullOrWhiteSpace(password) ? "" : $"?pwd={Uri.EscapeDataString(password)}";
         
-        return $@"  <a href='/api/v1/public/Notes/{Encode(token)}/attachments/{Encode(attachmentId)}' class='file-card' style='text-decoration:none; color:inherit; display:flex;'>
+        return $@"  <a href='/api/v1/public/Notes/{Encode(token)}/attachments/{Encode(attachmentId)}{pwdParam}' class='file-card' style='text-decoration:none; color:inherit; display:flex;'>
     <div class='file-info'>
       <div class='file-name' style='text-decoration:underline;'>{Encode(displayName)}</div>
       <div class='file-size'>File attachment &bull; Click to download</div>
