@@ -238,16 +238,25 @@ public static class NoteContentValidator
             errors.Add(new ValidationError($"{prefix}.code", "required", "Code block must have a 'code' string."));
         }
 
-        // Validate optional UI backgroundColor
+        // Validate optional UI styling
         if (block.TryGetProperty("ui", out var uiProp) && uiProp.ValueKind == JsonValueKind.Object)
         {
-            if (uiProp.TryGetProperty("backgroundColor", out var colorProp) && colorProp.ValueKind == JsonValueKind.String)
+            if (uiProp.TryGetProperty("backgroundColor", out var bgColorProp) && bgColorProp.ValueKind == JsonValueKind.String)
             {
-                var color = colorProp.GetString();
+                var color = bgColorProp.GetString();
                 if (!string.IsNullOrEmpty(color) && !HexColorRegex.IsMatch(color))
                 {
                     errors.Add(new ValidationError($"{prefix}.ui.backgroundColor", "invalid_color",
                         "backgroundColor must be a valid hex color (#RGB, #RGBA, #RRGGBB, or #RRGGBBAA)."));
+                }
+            }
+            if (uiProp.TryGetProperty("textColor", out var textColorProp) && textColorProp.ValueKind == JsonValueKind.String)
+            {
+                var color = textColorProp.GetString();
+                if (!string.IsNullOrEmpty(color) && !HexColorRegex.IsMatch(color))
+                {
+                    errors.Add(new ValidationError($"{prefix}.ui.textColor", "invalid_color",
+                        "textColor must be a valid hex color (#RGB, #RGBA, #RRGGBB, or #RRGGBBAA)."));
                 }
             }
         }

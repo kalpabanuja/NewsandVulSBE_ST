@@ -416,20 +416,29 @@ public class PublicController : ControllerBase
         var code = block.TryGetProperty("code", out var cp) ? cp.GetString() ?? "" : "";
         var lang = block.TryGetProperty("language", out var lp) ? lp.GetString() ?? "" : "";
 
-        // Safe background color
+        // Safe styling
         var bgColor = "#1f2937"; // default dark
-        if (block.TryGetProperty("ui", out var uiEl) &&
-            uiEl.TryGetProperty("backgroundColor", out var colorProp))
+        var txtColor = "#f3f4f6"; // default light text
+        if (block.TryGetProperty("ui", out var uiEl))
         {
-            var candidate = colorProp.GetString() ?? "";
-            if (System.Text.RegularExpressions.Regex.IsMatch(candidate, @"^#([0-9A-Fa-f]{3,4}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$"))
-                bgColor = candidate;
+            if (uiEl.TryGetProperty("backgroundColor", out var colorProp))
+            {
+                var candidate = colorProp.GetString() ?? "";
+                if (System.Text.RegularExpressions.Regex.IsMatch(candidate, @"^#([0-9A-Fa-f]{3,4}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$"))
+                    bgColor = candidate;
+            }
+            if (uiEl.TryGetProperty("textColor", out var txtColorProp))
+            {
+                var candidate = txtColorProp.GetString() ?? "";
+                if (System.Text.RegularExpressions.Regex.IsMatch(candidate, @"^#([0-9A-Fa-f]{3,4}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$"))
+                    txtColor = candidate;
+            }
         }
 
         var codeId = Guid.NewGuid().ToString("N")[..8];
-        return $@"  <div class='code-block' style='background:{bgColor};'>
+        return $@"  <div class='code-block' style='background:{bgColor}; color:{txtColor};'>
     <button class='copy-btn' onclick='copyCode(""{codeId}"")'>Copy</button>
-    <pre id='{codeId}' data-lang='{Encode(lang)}'>{Encode(code)}</pre>
+    <pre id='{codeId}' data-lang='{Encode(lang)}' style='color:{txtColor};'>{Encode(code)}</pre>
   </div>
   <script>function copyCode(id){{var el=document.getElementById(id);navigator.clipboard.writeText(el.innerText);}}</script>";
     }
