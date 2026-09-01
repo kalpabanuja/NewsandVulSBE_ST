@@ -90,7 +90,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Register Services
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IStorageService, S3StorageService>();
-builder.Services.AddScoped<NotesAndFileBackend.Application.Services.ICommandGenerator, NotesAndFileBackend.Application.Services.CommandGeneratorService>();
+builder.Services.AddScoped<NotesAndFileBackend.Application.Services.IInteractiveToolService, NotesAndFileBackend.Infrastructure.Services.InteractiveToolService>();
 builder.Services.AddScoped<NotesAndFileBackend.Api.Services.IImportExportService, NotesAndFileBackend.Api.Services.ImportExportService>();
 
 // Register Background Services

@@ -27,7 +27,7 @@ public class AppDbContext : DbContext
     
     public DbSet<AuditEvent> AuditEvents { get; set; } = null!;
 
-    public DbSet<NoteCommandGenerator> NoteCommandGenerators { get; set; } = null!;
+    public DbSet<CustomInteractiveTool> CustomInteractiveTools { get; set; } = null!;
     public DbSet<NoteImportJob> NoteImportJobs { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -179,22 +179,47 @@ public class AppDbContext : DbContext
             entity.HasIndex(p => p.TokenHash).IsUnique();
             // Slug index requested in instructions (Wait, NoteShare uses TokenHash as slug. Let's index TokenHash, which is done.)
         });
-        modelBuilder.Entity<NoteCommandGenerator>(entity =>
+        modelBuilder.Entity<CustomInteractiveTool>(entity =>
         {
-            entity.ToTable("note_command_generators");
+            entity.ToTable("custom_interactive_tools");
             entity.HasKey(e => e.Id);
+
+            entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
+            entity.Property(e => e.Description).HasMaxLength(2048);
             
-            entity.Property(e => e.Name).IsRequired().HasMaxLength(150);
-            entity.Property(e => e.Description).HasMaxLength(1000);
-            entity.Property(e => e.ToolName).IsRequired().HasMaxLength(100);
-            entity.Property(e => e.Template).IsRequired();
+            entity.Property(e => e.HtmlSource).IsRequired();
+            entity.Property(e => e.CssSource).IsRequired();
+            entity.Property(e => e.JavascriptSource).IsRequired();
             
-            entity.Property(e => e.SchemaJsonb).HasColumnType("jsonb").IsRequired();
+            entity.Property(e => e.ContentHash).IsRequired().HasMaxLength(128);
+            entity.Property(e => e.ValidationStatus).IsRequired().HasMaxLength(40);
+            entity.Property(e => e.SecurityStatus).IsRequired().HasMaxLength(40);
             
             entity.HasOne(e => e.Note)
-                  .WithMany() // Note does not strictly need a collection of NoteCommandGenerators
+                  .WithMany()
                   .HasForeignKey(e => e.NoteId)
                   .OnDelete(DeleteBehavior.Cascade);
+                  
+            entity.HasOne(e => e.OwnerUser)
+                  .WithMany()
+                  .HasForeignKey(e => e.OwnerUserId)
+                  .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(e => e.CreatedByUser)
+                  .WithMany()
+                  .HasForeignKey(e => e.CreatedByUserId)
+                  .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(e => e.UpdatedByUser)
+                  .WithMany()
+                  .HasForeignKey(e => e.UpdatedByUserId)
+                  .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasIndex(e => e.NoteId);
+            entity.HasIndex(e => e.OwnerUserId);
+            entity.HasIndex(e => new { e.NoteId, e.IsDeleted });
+            entity.HasIndex(e => new { e.NoteId, e.Name });
+            entity.HasIndex(e => e.ContentHash);
         });
         modelBuilder.Entity<NoteImportJob>(entity =>
         {

@@ -102,6 +102,100 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("NotesAndFileBackend.Domain.Entities.CustomInteractiveTool", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("AssetVersion")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ContentHash")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("CssSource")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)");
+
+                    b.Property<string>("HtmlSource")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("JavascriptSource")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<Guid>("NoteId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("OwnerUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("SchemaVersion")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("SecurityStatus")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ValidationStatus")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContentHash");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("NoteId");
+
+                    b.HasIndex("OwnerUserId");
+
+                    b.HasIndex("UpdatedByUserId");
+
+                    b.HasIndex("NoteId", "IsDeleted");
+
+                    b.HasIndex("NoteId", "Name");
+
+                    b.ToTable("custom_interactive_tools", (string)null);
+                });
+
             modelBuilder.Entity("NotesAndFileBackend.Domain.Entities.Device", b =>
                 {
                     b.Property<Guid>("Id")
@@ -360,60 +454,6 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
                     b.HasIndex("OwnerUserId");
 
                     b.ToTable("NoteAttachments");
-                });
-
-            modelBuilder.Entity("NotesAndFileBackend.Domain.Entities.NoteCommandGenerator", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
-
-                    b.Property<bool>("IsEnabled")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Language")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("character varying(150)");
-
-                    b.Property<Guid>("NoteId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("SchemaJsonb")
-                        .IsRequired()
-                        .HasColumnType("jsonb");
-
-                    b.Property<string>("Script")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Template")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("ToolName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NoteId");
-
-                    b.ToTable("note_command_generators", (string)null);
                 });
 
             modelBuilder.Entity("NotesAndFileBackend.Domain.Entities.NoteImportJob", b =>
@@ -825,6 +865,41 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("NotesAndFileBackend.Domain.Entities.CustomInteractiveTool", b =>
+                {
+                    b.HasOne("NotesAndFileBackend.Domain.Entities.User", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("NotesAndFileBackend.Domain.Entities.Note", "Note")
+                        .WithMany()
+                        .HasForeignKey("NoteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NotesAndFileBackend.Domain.Entities.User", "OwnerUser")
+                        .WithMany()
+                        .HasForeignKey("OwnerUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("NotesAndFileBackend.Domain.Entities.User", "UpdatedByUser")
+                        .WithMany()
+                        .HasForeignKey("UpdatedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("Note");
+
+                    b.Navigation("OwnerUser");
+
+                    b.Navigation("UpdatedByUser");
+                });
+
             modelBuilder.Entity("NotesAndFileBackend.Domain.Entities.Device", b =>
                 {
                     b.HasOne("NotesAndFileBackend.Domain.Entities.User", "User")
@@ -910,17 +985,6 @@ namespace NotesAndFileBackend.Infrastructure.Migrations
                     b.Navigation("Note");
 
                     b.Navigation("OwnerUser");
-                });
-
-            modelBuilder.Entity("NotesAndFileBackend.Domain.Entities.NoteCommandGenerator", b =>
-                {
-                    b.HasOne("NotesAndFileBackend.Domain.Entities.Note", "Note")
-                        .WithMany()
-                        .HasForeignKey("NoteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Note");
                 });
 
             modelBuilder.Entity("NotesAndFileBackend.Domain.Entities.NoteImportJob", b =>

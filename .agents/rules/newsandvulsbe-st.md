@@ -4,61 +4,81 @@ trigger: always_on
 
 # AGENTS.md
 
-## Project Instructions
+## Purpose
 
-Before making any changes to this repository, read:
+This is an **existing backend**.
 
-```text
-docs/ai-instructions/00-master-index.md
-```
+Your job is to **modify, migrate, and improve the existing backend**. Do not rebuild it from scratch.
 
-The master index defines the project's architecture, implementation order, responsibilities, constraints, and references to the detailed instructions.
+## MUST
 
-### Detailed Instructions
+- Inspect the existing backend before changing anything.
+- Reuse existing .NET, PostgreSQL, EF Core, services, repositories, and API patterns.
+- Follow the `backend-interactive-tool-instructions/` files.
+- Use EF Core migrations for database changes.
+- Preserve existing note/data unless a migration explicitly handles it.
+- Enforce ownership on the backend.
+- Build and test after changes.
 
-The detailed implementation instructions are located in:
+## DO NOT
 
-```text
-docs/ai-instructions/
-```
+- Do not recreate the backend.
+- Do not reset/drop the production database.
+- Do not create a second implementation of the same feature.
+- Do not trust a client-supplied owner/user ID.
+- Do not expose database entities directly through the API.
+- Do not log HTML/CSS/JavaScript source.
+- Do not execute uploaded code during CRUD/import.
 
-Read the instruction file(s) relevant to the task before implementing anything.
+## New Interactive Tool
 
-Available instruction files:
-
-```text
-00-master-index.md
-01-foundation-architecture.md
-02-database-persistence.md
-03-notes-search-crud.md
-04-command-generator.md
-05-sharing-import-export.md
-06-api-security-integration.md
-07-maui-client.md
-08-testing-deployment-operations.md
-09-section-map.md
-```
-
-### Important
-
-* Follow the master index and relevant detailed instructions.
-* Inspect the existing code before making changes.
-* Do not unnecessarily rewrite or restructure existing code.
-* Preserve existing architecture and contracts unless the instructions explicitly require a change.
-* Treat security requirements as mandatory.
-* Do not introduce unnecessary technologies or architecture.
-* Implement tests for meaningful changes.
-* Verify builds and tests before declaring work complete.
-* If instructions conflict, stop and resolve the conflict using the master index and existing project structure rather than silently choosing an interpretation.
-
-### Source of Truth
-
-For implementation requirements, use:
+The old Command Generator system is being replaced with:
 
 ```text
-docs/ai-instructions/00-master-index.md
+Custom Interactive Tool
+ ├── ID
+ ├── Name
+ ├── Description
+ ├── HTML
+ ├── CSS
+ ├── JavaScript
+ └── Owner
 ```
 
-and the detailed instruction files referenced by it.
+Only the **note creator/tool owner** can:
 
-Do not attempt to duplicate the complete project specification inside this file.
+```text
+edit
+change code
+change metadata
+delete
+```
+
+Other users may only view/use it when permitted.
+
+## Instructions
+
+Start with:
+
+```text
+backend-interactive-tool-instructions/00-backend-interactive-tools-master-index.md
+```
+
+Then follow:
+
+```text
+01 → 02 → 03 → 04 → 05 → 06 → 07
+```
+
+## Workflow
+
+```text
+Inspect
+→ Reuse existing code
+→ Migrate/refactor
+→ Implement
+→ Build
+→ Test
+```
+
+Do not replace the existing backend.
