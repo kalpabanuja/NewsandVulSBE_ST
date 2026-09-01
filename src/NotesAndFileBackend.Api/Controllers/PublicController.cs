@@ -231,6 +231,7 @@ public class PublicController : ControllerBase
     .note-summary { color: #6b7280; font-size: 1.1rem; margin-bottom: 2rem; font-style: italic; }
     h1,h2,h3,h4,h5 { color: #111827; margin-top: 1.5rem; }
     p { margin: .75rem 0; }
+    li { white-space: pre-wrap; }
     ul.style-disc  { list-style-type: disc; }
     ul.style-circle{ list-style-type: circle; }
     ul.style-square{ list-style-type: square; }
