@@ -440,14 +440,54 @@ public class PublicController : ControllerBase
             return "<!-- display attachment (missing id) -->";
             
         var attachmentId = aid.GetString();
-        return $@"  <div style='text-align: center; margin: 1.5rem 0;'>
-    <img src='/api/v1/public/Notes/{Encode(token)}/attachments/{Encode(attachmentId)}?inline=true' style='max-width:100%; border-radius:8px;' loading='lazy' />
+        
+        string? filename = null;
+        if (block.TryGetProperty("fileName", out var prop) && prop.ValueKind == JsonValueKind.String) filename = prop.GetString();
+        if (string.IsNullOrWhiteSpace(filename) && block.TryGetProperty("filename", out prop) && prop.ValueKind == JsonValueKind.String) filename = prop.GetString();
+        if (string.IsNullOrWhiteSpace(filename) && block.TryGetProperty("name", out prop) && prop.ValueKind == JsonValueKind.String) filename = prop.GetString();
+        
+        bool isVideo = false;
+        if (filename != null) 
+        {
+            var ext = System.IO.Path.GetExtension(filename).ToLowerInvariant();
+            if (ext == ".mp4" || ext == ".webm" || ext == ".ogg" || ext == ".mov") isVideo = true;
+        }
+        if (block.TryGetProperty("mimeType", out prop) && prop.ValueKind == JsonValueKind.String)
+        {
+            var mime = prop.GetString()?.ToLowerInvariant();
+            if (mime != null && mime.StartsWith("video/")) isVideo = true;
+        }
+
+        var url = $"/api/v1/public/Notes/{Encode(token)}/attachments/{Encode(attachmentId)}?inline=true";
+
+        if (isVideo)
+        {
+            return $@"  <div style='text-align: center; margin: 1.5rem 0;'>
+    <video controls style='max-width:100%; border-radius:8px;' preload='metadata'>
+      <source src='{url}'>
+      Your browser does not support the video tag.
+    </video>
   </div>";
+        }
+        else
+        {
+            // If it's an image, we try to load it as an img. If it fails (e.g. it was actually a video and we didn't know),
+            // the onerror handler gracefully converts it into a video player!
+            return $@"  <div style='text-align: center; margin: 1.5rem 0;'>
+    <img src='{url}' style='max-width:100%; border-radius:8px;' loading='lazy' onerror=""this.onerror=null; this.outerHTML='<video controls style=\'max-width:100%; border-radius:8px;\' preload=\'metadata\'><source src=\''+this.src+'\'></video>';"" />
+  </div>";
+        }
     }
 
     private static string RenderDownloadAttachment(JsonElement block, string token)
     {
-        var displayName = block.TryGetProperty("displayName", out var dn) ? dn.GetString() ?? "Download" : "Download";
+        string? displayName = null;
+        if (block.TryGetProperty("displayName", out var prop) && prop.ValueKind == JsonValueKind.String) displayName = prop.GetString();
+        if (string.IsNullOrWhiteSpace(displayName) && block.TryGetProperty("fileName", out prop) && prop.ValueKind == JsonValueKind.String) displayName = prop.GetString();
+        if (string.IsNullOrWhiteSpace(displayName) && block.TryGetProperty("filename", out prop) && prop.ValueKind == JsonValueKind.String) displayName = prop.GetString();
+        if (string.IsNullOrWhiteSpace(displayName) && block.TryGetProperty("name", out prop) && prop.ValueKind == JsonValueKind.String) displayName = prop.GetString();
+        
+        if (string.IsNullOrWhiteSpace(displayName)) displayName = "Download Attachment";
         
         if (!block.TryGetProperty("attachmentId", out var aid) || string.IsNullOrEmpty(aid.GetString()))
             return "<!-- download attachment (missing id) -->";
