@@ -13,7 +13,7 @@ public static class NoteContentValidator
     {
         "heading", "paragraph", "bulletList", "numberedList", "checkList",
         "divider", "link", "displayAttachment", "downloadAttachment",
-        "code", "commandGenerator", "copyCard"
+        "code", "interactiveTool", "copyCard"
     };
 
     private static readonly HashSet<string> AllowedBulletStyles = new(StringComparer.OrdinalIgnoreCase)
