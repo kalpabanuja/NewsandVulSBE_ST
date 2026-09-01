@@ -116,10 +116,49 @@ public class PublicController : ControllerBase
 
         // Browser → render proper HTML
         if (Request.Headers["Accept"].ToString().Contains("text/html"))
-            return Content(BuildNoteHtml(share.Note.Title, share.Note.Summary, share.Note.UpdatedAt, contentJsonb), "text/html", Encoding.UTF8);
+            return Content(BuildNoteHtml(share.Note.Title, share.Note.Summary, share.Note.UpdatedAt, contentJsonb, token), "text/html", Encoding.UTF8);
 
         // API client → return JSON
         return Ok(dto);
+    }
+
+    [HttpGet("Notes/{token}/attachments/{attachmentId}")]
+    public async Task<IActionResult> GetSharedNoteAttachment(string token, Guid attachmentId, [FromHeader(Name = "X-Share-Password")] string? headerPassword, [FromQuery(Name = "pwd")] string? queryPassword, [FromQuery] bool inline, CancellationToken ct)
+    {
+        var share = await _context.PublicNoteShares
+            .Include(s => s.Note)
+            .FirstOrDefaultAsync(s => s.TokenHash == token, ct);
+
+        // Basic validation matching the note view
+        if (share == null || share.RevokedAt != null || share.Note.IsDeleted || (share.ExpiresAt.HasValue && share.ExpiresAt.Value < DateTime.UtcNow) || (share.MaxViews.HasValue && share.ViewCount >= share.MaxViews.Value))
+            return GoneResponse(Request);
+
+        // Password protection
+        var password = headerPassword ?? queryPassword;
+        if (!string.IsNullOrWhiteSpace(share.PasswordHash))
+        {
+            if (string.IsNullOrWhiteSpace(password) || !BCrypt.Net.BCrypt.Verify(password, share.PasswordHash))
+                return Unauthorized(new { error = new { message = "Invalid or missing password." } });
+        }
+
+        // Fetch attachment belonging to this specific note
+        var attachment = await _context.NoteAttachments
+            .FirstOrDefaultAsync(a => a.Id == attachmentId && a.NoteId == share.NoteId, ct);
+
+        if (attachment == null) return NotFound();
+
+        var stream = await _storageService.DownloadFileAsync(attachment.ObjectKey);
+        
+        if (inline)
+        {
+            return File(stream, attachment.MimeType);
+        }
+        else
+        {
+            var safeFilename = Uri.EscapeDataString(attachment.DisplayName ?? attachment.Filename);
+            Response.Headers.Append("Content-Disposition", $"attachment; filename*=UTF-8''{safeFilename}");
+            return File(stream, attachment.MimeType);
+        }
     }
 
     // ── Private helpers ──────────────────────────────────────────────────────
@@ -175,7 +214,7 @@ public class PublicController : ControllerBase
 </body>
 </html>";
 
-    private static string BuildNoteHtml(string title, string summary, DateTime? updatedAt, string contentJsonb)
+    private static string BuildNoteHtml(string title, string summary, DateTime? updatedAt, string contentJsonb, string token)
     {
         var sb = new StringBuilder();
 
@@ -234,7 +273,7 @@ public class PublicController : ControllerBase
             if (root.TryGetProperty("blocks", out var blocks) && blocks.ValueKind == JsonValueKind.Array)
             {
                 foreach (var block in blocks.EnumerateArray())
-                    sb.AppendLine(RenderBlock(block));
+                    sb.AppendLine(RenderBlock(block, token));
             }
         }
         catch
@@ -252,6 +291,7 @@ public class PublicController : ControllerBase
       var text = document.getElementById(id).innerText;
       navigator.clipboard.writeText(text).then(function() {
         var btn = document.querySelector(`button[onclick='copyCode(""""${id}"""")']`);
+        var btn = document.querySelector(`button[onclick='copyCode(""${id}"")']`);
         var oldText = btn.innerText;
         btn.innerText = 'Copied!';
         setTimeout(function() { btn.innerText = oldText; }, 2000);
@@ -265,9 +305,13 @@ public class PublicController : ControllerBase
         return sb.ToString();
     }
 
-    private static string RenderBlock(JsonElement block)
+    private static string RenderBlock(JsonElement block, string token)
     {
-        var blockType = block.TryGetProperty("type", out var tp) ? tp.GetString() ?? "" : "";
+        if (!block.TryGetProperty("type", out var typeProp) || typeProp.ValueKind != JsonValueKind.String)
+            return "<!-- invalid block -->";
+
+        var blockType = typeProp.GetString();
+        if (string.IsNullOrEmpty(blockType)) return "<!-- invalid block -->";
 
         return blockType.ToLowerInvariant() switch
         {
@@ -279,8 +323,8 @@ public class PublicController : ControllerBase
             "divider" => RenderDivider(block),
             "link" => RenderLink(block),
             "code" => RenderCode(block),
-            "displayattachment" => "<!-- display attachment (inline preview) -->",
-            "downloadattachment" => RenderDownloadAttachment(block),
+            "displayattachment" => RenderDisplayAttachment(block, token),
+            "downloadattachment" => RenderDownloadAttachment(block, token),
             "commandgenerator" => RenderCommandGenerator(block),
             "copycard" => RenderCopyCard(block),
             _ => $"<!-- unsupported block type: {Encode(blockType)} -->"
@@ -390,17 +434,32 @@ public class PublicController : ControllerBase
   <script>function copyCode(id){{var el=document.getElementById(id);navigator.clipboard.writeText(el.innerText);}}</script>";
     }
 
-    private static string RenderDownloadAttachment(JsonElement block)
+    private static string RenderDisplayAttachment(JsonElement block, string token)
+    {
+        if (!block.TryGetProperty("attachmentId", out var aid) || string.IsNullOrEmpty(aid.GetString()))
+            return "<!-- display attachment (missing id) -->";
+            
+        var attachmentId = aid.GetString();
+        return $@"  <div style='text-align: center; margin: 1.5rem 0;'>
+    <img src='/api/v1/public/Notes/{Encode(token)}/attachments/{Encode(attachmentId)}?inline=true' style='max-width:100%; border-radius:8px;' loading='lazy' />
+  </div>";
+    }
+
+    private static string RenderDownloadAttachment(JsonElement block, string token)
     {
         var displayName = block.TryGetProperty("displayName", out var dn) ? dn.GetString() ?? "Download" : "Download";
-        // No raw storage key is exposed. The attachmentId would need an authenticated download endpoint.
-        return $@"  <div class='file-card'>
+        
+        if (!block.TryGetProperty("attachmentId", out var aid) || string.IsNullOrEmpty(aid.GetString()))
+            return "<!-- download attachment (missing id) -->";
+            
+        var attachmentId = aid.GetString();
+        
+        return $@"  <a href='/api/v1/public/Notes/{Encode(token)}/attachments/{Encode(attachmentId)}' class='file-card' style='text-decoration:none; color:inherit; display:flex;'>
     <div class='file-info'>
-      <div class='file-name'>{Encode(displayName)}</div>
-      <div class='file-size'>File attachment</div>
+      <div class='file-name' style='text-decoration:underline;'>{Encode(displayName)}</div>
+      <div class='file-size'>File attachment &bull; Click to download</div>
     </div>
-    <span style='color:#6b7280;font-size:.85rem;'>Requires login to download</span>
-  </div>";
+  </a>";
     }
 
     private static string RenderCommandGenerator(JsonElement block)
