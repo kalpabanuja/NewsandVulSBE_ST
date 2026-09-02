@@ -326,7 +326,7 @@ public class PublicController : ControllerBase
             "code" => RenderCode(block),
             "displayattachment" => RenderDisplayAttachment(block, token, password),
             "downloadattachment" => RenderDownloadAttachment(block, token, password),
-            "commandgenerator" => RenderCommandGenerator(block),
+            "interactivetool" => RenderInteractiveTool(block),
             "copycard" => RenderCopyCard(block),
             _ => $"<!-- unsupported block type: {Encode(blockType)} -->"
         };
@@ -514,14 +514,12 @@ public class PublicController : ControllerBase
   </a>";
     }
 
-    private static string RenderCommandGenerator(JsonElement block)
+    private static string RenderInteractiveTool(JsonElement block)
     {
-        var name = block.TryGetProperty("name", out var np) ? np.GetString() ?? "Command Generator" : "Command Generator";
-        var desc = block.TryGetProperty("description", out var dp) ? dp.GetString() ?? "" : "";
+        var toolId = block.TryGetProperty("toolId", out var tid) ? tid.GetString() ?? "Unknown" : "Unknown";
         return $@"  <div style='border:1px solid #e5e7eb;border-radius:8px;padding:1rem;margin:.75rem 0;background:#f0f9ff;'>
-    <strong>&#128736; {Encode(name)}</strong>
-    {(string.IsNullOrEmpty(desc) ? "" : $"<p style='margin:.5rem 0 0;color:#374151;'>{Encode(desc)}</p>")}
-    <p style='font-size:.8rem;color:#9ca3af;margin:.5rem 0 0;'>Open the app to use this generator.</p>
+    <strong>&#128736; Interactive Tool</strong>
+    <p style='font-size:.8rem;color:#9ca3af;margin:.5rem 0 0;'>Interactive tools require a sandboxed environment and cannot be executed directly in this web view. Open the note in the ThreatIntel app to use this tool.</p>
   </div>";
     }
 
