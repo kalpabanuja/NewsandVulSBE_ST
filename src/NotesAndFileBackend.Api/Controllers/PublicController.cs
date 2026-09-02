@@ -186,11 +186,11 @@ public class PublicController : ControllerBase
 
         if (tool == null) return NotFound();
 
-        // Strict CSP: no external scripts/styles/images, no outbound connections
-        Response.Headers.Append("Content-Security-Policy", "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none';");
+        // Strict CSP: no external scripts/styles/images, no outbound connections.
+        // We use frame-ancestors 'self' instead of X-Frame-Options: SAMEORIGIN because 
+        // the sandbox='allow-scripts' attribute gives the iframe a 'null' origin, which can trip up legacy headers.
+        Response.Headers.Append("Content-Security-Policy", "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'self';");
         Response.Headers.Append("X-Content-Type-Options", "nosniff");
-        Response.Headers.Append("X-Frame-Options", "SAMEORIGIN");
-        Response.Headers.Append("Cross-Origin-Resource-Policy", "same-origin");
 
         var html = $@"<!DOCTYPE html>
 <html>
