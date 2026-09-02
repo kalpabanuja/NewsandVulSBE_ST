@@ -13,19 +13,41 @@ public class SecurityHeadersMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
+        bool isIframeEndpoint = context.Request.Path.StartsWithSegments("/api/v1/public/Notes") && 
+                                (context.Request.Path.Value?.EndsWith("/iframe", StringComparison.OrdinalIgnoreCase) == true);
+
         // Add Security Headers to all responses
         context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
-        context.Response.Headers.Append("X-Frame-Options", "DENY");
+        
+        if (!isIframeEndpoint)
+        {
+            context.Response.Headers.Append("X-Frame-Options", "DENY");
+        }
+        
         context.Response.Headers.Append("X-XSS-Protection", "1; mode=block");
         context.Response.Headers.Append("Referrer-Policy", "strict-origin-when-cross-origin");
 
         // The dashboard page (/) uses inline <script> and <style> tags, so it needs a relaxed CSP.
         // All other routes (API, health checks, etc.) get the strict policy.
-        var csp = context.Request.Path == "/" || context.Request.Path.StartsWithSegments("/api/v1/public")
-            ? "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; frame-ancestors 'none';"
-            : "default-src 'self'; frame-ancestors 'none';";
+        string csp;
+        if (isIframeEndpoint)
+        {
+            // Controller sets its own strict CSP for the sandboxed iframe, avoid conflicts.
+            csp = ""; 
+        }
+        else if (context.Request.Path == "/" || context.Request.Path.StartsWithSegments("/api/v1/public"))
+        {
+            csp = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; frame-ancestors 'none';";
+        }
+        else
+        {
+            csp = "default-src 'self'; frame-ancestors 'none';";
+        }
 
-        context.Response.Headers.Append("Content-Security-Policy", csp);
+        if (!string.IsNullOrEmpty(csp))
+        {
+            context.Response.Headers.Append("Content-Security-Policy", csp);
+        }
 
         // Strict-Transport-Security (HSTS) is typically handled by app.UseHsts(), but we can enforce it strictly here.
         if (context.Request.IsHttps)
