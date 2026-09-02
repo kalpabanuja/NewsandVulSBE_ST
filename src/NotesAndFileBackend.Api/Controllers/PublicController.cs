@@ -161,6 +161,59 @@ public class PublicController : ControllerBase
         }
     }
 
+    [HttpGet("Notes/{token}/tools/{toolId}/iframe")]
+    public async Task<IActionResult> GetSharedNoteToolIframe(string token, Guid toolId, [FromHeader(Name = "X-Share-Password")] string? headerPassword, [FromQuery(Name = "pwd")] string? queryPassword, CancellationToken ct)
+    {
+        var share = await _context.PublicNoteShares
+            .Include(s => s.Note)
+            .FirstOrDefaultAsync(s => s.TokenHash == token, ct);
+
+        // Basic validation matching the note view
+        if (share == null || share.RevokedAt != null || share.Note.IsDeleted || (share.ExpiresAt.HasValue && share.ExpiresAt.Value < DateTime.UtcNow) || (share.MaxViews.HasValue && share.ViewCount >= share.MaxViews.Value))
+            return GoneResponse(Request);
+
+        // Password protection
+        var password = headerPassword ?? queryPassword;
+        if (!string.IsNullOrWhiteSpace(share.PasswordHash))
+        {
+            if (string.IsNullOrWhiteSpace(password) || !BCrypt.Net.BCrypt.Verify(password, share.PasswordHash))
+                return Unauthorized(new { error = new { message = "Invalid or missing password." } });
+        }
+
+        // Fetch the tool belonging to this specific note
+        var tool = await _context.CustomInteractiveTools
+            .FirstOrDefaultAsync(t => t.Id == toolId && t.NoteId == share.NoteId, ct);
+
+        if (tool == null) return NotFound();
+
+        // Strict CSP: no external scripts/styles/images, no outbound connections
+        Response.Headers.Append("Content-Security-Policy", "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none';");
+        Response.Headers.Append("X-Content-Type-Options", "nosniff");
+        Response.Headers.Append("X-Frame-Options", "SAMEORIGIN");
+        Response.Headers.Append("Cross-Origin-Resource-Policy", "same-origin");
+
+        var html = $@"<!DOCTYPE html>
+<html>
+<head>
+    <meta charset=""UTF-8"">
+    <meta name=""viewport"" content=""width=device-width,initial-scale=1"">
+    <title>{Encode(tool.Name)}</title>
+    <style>
+        body {{ margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; overflow-x: hidden; }}
+        {tool.CssSource}
+    </style>
+</head>
+<body>
+    {tool.HtmlSource}
+    <script>
+        {tool.JavascriptSource}
+    </script>
+</body>
+</html>";
+
+        return Content(html, "text/html", Encoding.UTF8);
+    }
+
     // ── Private helpers ──────────────────────────────────────────────────────
 
     private IActionResult GoneResponse(HttpRequest request)
@@ -326,7 +379,7 @@ public class PublicController : ControllerBase
             "code" => RenderCode(block),
             "displayattachment" => RenderDisplayAttachment(block, token, password),
             "downloadattachment" => RenderDownloadAttachment(block, token, password),
-            "interactivetool" => RenderInteractiveTool(block),
+            "interactivetool" => RenderInteractiveTool(block, token, password),
             "copycard" => RenderCopyCard(block),
             _ => $"<!-- unsupported block type: {Encode(blockType)} -->"
         };
@@ -514,12 +567,21 @@ public class PublicController : ControllerBase
   </a>";
     }
 
-    private static string RenderInteractiveTool(JsonElement block)
+    private static string RenderInteractiveTool(JsonElement block, string token, string? password = null)
     {
         var toolId = block.TryGetProperty("toolId", out var tid) ? tid.GetString() ?? "Unknown" : "Unknown";
-        return $@"  <div style='border:1px solid #e5e7eb;border-radius:8px;padding:1rem;margin:.75rem 0;background:#f0f9ff;'>
-    <strong>&#128736; Interactive Tool</strong>
-    <p style='font-size:.8rem;color:#9ca3af;margin:.5rem 0 0;'>Interactive tools require a sandboxed environment and cannot be executed directly in this web view. Open the note in the ThreatIntel app to use this tool.</p>
+        if (toolId == "Unknown") return "<!-- invalid interactive tool block -->";
+
+        var pwdParam = string.IsNullOrWhiteSpace(password) ? "" : $"?pwd={Uri.EscapeDataString(password)}";
+        var srcUrl = $"/api/v1/public/Notes/{Encode(token)}/tools/{Encode(toolId)}/iframe{pwdParam}";
+
+        return $@"  <div style='margin:.75rem 0; width: 100%;'>
+    <iframe 
+        sandbox='allow-scripts' 
+        src='{srcUrl}' 
+        style='width: 100%; min-height: 400px; border: 1px solid #e5e7eb; border-radius: 8px; background: #fff;'
+        title='Interactive Tool'>
+    </iframe>
   </div>";
     }
 
