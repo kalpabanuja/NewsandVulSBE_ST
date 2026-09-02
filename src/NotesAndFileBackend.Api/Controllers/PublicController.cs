@@ -312,9 +312,24 @@ public class PublicController : ControllerBase
     .file-card .file-size { color: #6b7280; font-size: .85rem; }
     .download-btn { padding: .4rem .9rem; background: #2563eb; color: white; border-radius: 6px; text-decoration: none; font-size: .9rem; }
     .meta-footer { margin-top: 3rem; font-size: .85rem; color: #9ca3af; border-top: 1px solid #e5e7eb; padding-top: 1rem; }
+    .theme-toggle { position: absolute; top: 1rem; right: 1.5rem; background: transparent; border: 1px solid #d1d5db; border-radius: 6px; padding: 0.4rem 0.6rem; cursor: pointer; color: inherit; font-size: 0.9rem; z-index: 10; display: flex; align-items: center; gap: 0.4rem; }
+    
+    /* Dark Mode Overrides */
+    body.dark-mode { color: #f3f4f6; background: #111827; }
+    .dark-mode .theme-toggle { border-color: #4b5563; }
+    .dark-mode h1.note-title { border-bottom-color: #374151; }
+    .dark-mode .note-summary { color: #9ca3af; }
+    .dark-mode h1,.dark-mode h2,.dark-mode h3,.dark-mode h4,.dark-mode h5 { color: #f9fafb; }
+    .dark-mode hr.divider-singleLine, .dark-mode hr.divider-breakLines, .dark-mode hr.divider-doubleLine { border-top-color: #4b5563; }
+    .dark-mode .file-card { border-color: #374151; background: #1f2937; }
+    .dark-mode .file-card .file-size { color: #9ca3af; }
+    .dark-mode .meta-footer { border-top-color: #374151; color: #6b7280; }
+    .dark-mode iframe { border-color: #374151 !important; background: #111827 !important; }
+    .dark-mode div[style*=""background:#faf5ff""] { background: #3b2c4a !important; border-color: #4c3968 !important; }
   </style>");
         sb.AppendLine("</head>");
         sb.AppendLine("<body>");
+        sb.AppendLine("  <button class='theme-toggle' onclick='toggleTheme()' id='themeBtn'><span id='themeIcon'>🌙</span> <span id='themeText'>Dark</span></button>");
         sb.AppendLine($"  <h1 class='note-title'>{Encode(title)}</h1>");
         if (!string.IsNullOrWhiteSpace(summary))
             sb.AppendLine($"  <p class='note-summary'>{Encode(summary)}</p>");
@@ -339,17 +354,34 @@ public class PublicController : ControllerBase
         var updated = updatedAt.HasValue ? updatedAt.Value.ToString("yyyy-MM-dd HH:mm") : string.Empty;
         sb.AppendLine($"  <div class='meta-footer'>Shared securely via ThreatIntel &bull; Last updated: {Encode(updated)}</div>");
         
-        // Add script for copy block functionality
+        // Add script for copy block and theme toggle functionality
         sb.AppendLine(@"  <script>
     function copyCode(id) {
       var text = document.getElementById(id).innerText;
       navigator.clipboard.writeText(text).then(function() {
         var btn = document.querySelector(`button[onclick='copyCode(""""${id}"""")']`);
-        var btn = document.querySelector(`button[onclick='copyCode(""${id}"")']`);
-        var oldText = btn.innerText;
-        btn.innerText = 'Copied!';
-        setTimeout(function() { btn.innerText = oldText; }, 2000);
+        if (!btn) btn = document.querySelector(`button[onclick='copyCode(""${id}"")']`);
+        if (btn) {
+            var oldText = btn.innerText;
+            btn.innerText = 'Copied!';
+            setTimeout(function() { btn.innerText = oldText; }, 2000);
+        }
       });
+    }
+
+    function toggleTheme() {
+        document.body.classList.toggle('dark-mode');
+        var isDark = document.body.classList.contains('dark-mode');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        document.getElementById('themeIcon').innerText = isDark ? '☀️' : '🌙';
+        document.getElementById('themeText').innerText = isDark ? 'Light' : 'Dark';
+    }
+
+    // Load saved theme
+    if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.body.classList.add('dark-mode');
+        document.getElementById('themeIcon').innerText = '☀️';
+        document.getElementById('themeText').innerText = 'Light';
     }
   </script>");
         
