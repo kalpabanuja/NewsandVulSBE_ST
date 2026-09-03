@@ -58,6 +58,7 @@ public class NoteSearchItem
     public bool IsFavorite { get; set; }
     public bool IsPinned { get; set; }
     public DateTime? UpdatedAt { get; set; }
+    public DateTime? CreatedAt { get; set; }
     public List<NoteBlockMatch> MatchedBlocks { get; set; } = new List<NoteBlockMatch>();
 }
 

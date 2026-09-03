@@ -159,7 +159,8 @@ public class NotesController : ControllerBase
                 d.IsFavorite,
                 d.IsPinned,
                 d.IsArchived,
-                d.UpdatedAt
+                d.UpdatedAt,
+                d.CreatedAt
             })
             .OrderByDescending(d => d.UpdatedAt)
             .Skip((page - 1) * pageSize)
@@ -331,7 +332,8 @@ public class NotesController : ControllerBase
                 d.IsFavorite,
                 d.IsPinned,
                 d.IsArchived,
-                d.DeletedAt
+                d.DeletedAt,
+                d.CreatedAt
             })
             .OrderByDescending(d => d.DeletedAt)
             .Skip((page - 1) * pageSize)
@@ -509,7 +511,8 @@ public class NotesController : ControllerBase
                 ToolName = n.ToolName,
                 IsFavorite = n.IsFavorite,
                 IsPinned = n.IsPinned,
-                UpdatedAt = n.UpdatedAt
+                UpdatedAt = n.UpdatedAt,
+                CreatedAt = n.CreatedAt
             })
             .ToListAsync(ct);
 
