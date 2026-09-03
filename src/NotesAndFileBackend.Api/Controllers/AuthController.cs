@@ -99,6 +99,7 @@ public class AuthController : ControllerBase
 
         var device = await _context.Devices.FirstOrDefaultAsync(d => d.UserId == user.Id && d.DeviceName == request.DeviceName);
         var newRefreshToken = _tokenService.GenerateRefreshToken();
+        var expiryDuration = request.RememberMe ? TimeSpan.FromDays(30) : TimeSpan.FromHours(24);
 
         if (device == null)
         {
@@ -109,7 +110,7 @@ public class AuthController : ControllerBase
                 Platform = request.Platform,
                 AppVersion = "1.0.0",
                 RefreshToken = newRefreshToken,
-                RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(30)
+                RefreshTokenExpiryTime = DateTime.UtcNow.Add(expiryDuration)
             };
             _context.Devices.Add(device);
         }
@@ -117,7 +118,7 @@ public class AuthController : ControllerBase
         {
             device.LastSeenAt = DateTime.UtcNow;
             device.RefreshToken = newRefreshToken;
-            device.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(30);
+            device.RefreshTokenExpiryTime = DateTime.UtcNow.Add(expiryDuration);
             _context.Devices.Update(device);
         }
 
@@ -189,9 +190,13 @@ public class AuthController : ControllerBase
         var newAccessToken = _tokenService.GenerateAccessToken(device.User, device);
         var newRefreshToken = _tokenService.GenerateRefreshToken();
 
+        // Determine if it was a RememberMe token (long-lived) based on remaining time roughly
+        var isLongLived = (device.RefreshTokenExpiryTime - DateTime.UtcNow)?.TotalDays > 2;
+        var expiryDuration = isLongLived ? TimeSpan.FromDays(30) : TimeSpan.FromHours(24);
+
         // Save new refresh token (refresh token rotation)
         device.RefreshToken = newRefreshToken;
-        device.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(30);
+        device.RefreshTokenExpiryTime = DateTime.UtcNow.Add(expiryDuration);
         device.LastSeenAt = DateTime.UtcNow;
         
         _context.Devices.Update(device);
