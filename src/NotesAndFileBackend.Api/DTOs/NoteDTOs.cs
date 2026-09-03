@@ -63,6 +63,7 @@ public class NoteSearchItem
     public DateTime? UpdatedAt { get; set; }
     public DateTime? CreatedAt { get; set; }
     public DateTime? DeletedAt { get; set; }
+    public string Visibility { get; set; } = "PRIVATE";
     public List<NoteBlockMatch> MatchedBlocks { get; set; } = new List<NoteBlockMatch>();
 }
 

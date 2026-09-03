@@ -163,7 +163,8 @@ public class NotesController : ControllerBase
                 d.IsDeleted,
                 d.UpdatedAt,
                 d.CreatedAt,
-                d.DeletedAt
+                d.DeletedAt,
+                d.Visibility
             })
             .OrderByDescending(d => d.UpdatedAt)
             .Skip((page - 1) * pageSize)
@@ -344,7 +345,8 @@ public class NotesController : ControllerBase
                 d.IsDeleted,
                 d.UpdatedAt,
                 d.CreatedAt,
-                d.DeletedAt
+                d.DeletedAt,
+                Visibility = d.Visibility
             })
             .OrderByDescending(d => d.DeletedAt)
             .Skip((page - 1) * pageSize)
@@ -527,7 +529,8 @@ public class NotesController : ControllerBase
                 IsDeleted = n.IsDeleted,
                 UpdatedAt = n.UpdatedAt,
                 CreatedAt = n.CreatedAt,
-                DeletedAt = n.DeletedAt
+                DeletedAt = n.DeletedAt,
+                Visibility = n.Visibility
             })
             .ToListAsync(ct);
 
