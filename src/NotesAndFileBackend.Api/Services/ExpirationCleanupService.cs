@@ -90,7 +90,19 @@ public class ExpirationCleanupService : BackgroundService
             _logger.LogInformation($"Removed {oldAudits.Count} old audit events.");
         }
 
-        if (expiredFiles.Any() || expiredFileShares.Any() || expiredDocShares.Any() || oldAudits.Any())
+        // Cleanup soft-deleted notes older than 24 hours
+        var twentyFourHoursAgo = now.AddHours(-24);
+        var notesToHardDelete = await context.Notes
+            .Where(n => n.IsDeleted && n.DeletedAt != null && n.DeletedAt <= twentyFourHoursAgo)
+            .ToListAsync(stoppingToken);
+
+        if (notesToHardDelete.Any())
+        {
+            context.Notes.RemoveRange(notesToHardDelete);
+            _logger.LogInformation($"Hard deleted {notesToHardDelete.Count} notes that were in the trash for over 24 hours.");
+        }
+
+        if (expiredFiles.Any() || expiredFileShares.Any() || expiredDocShares.Any() || oldAudits.Any() || notesToHardDelete.Any())
         {
             await context.SaveChangesAsync(stoppingToken);
         }

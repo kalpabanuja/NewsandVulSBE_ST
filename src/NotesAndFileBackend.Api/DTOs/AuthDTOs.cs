@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace NotesAndFileBackend.Api.DTOs;
 
 public class SignUpRequest
@@ -15,6 +17,8 @@ public class SignInRequest
     public string Password { get; set; } = string.Empty;
     public string DeviceName { get; set; } = string.Empty;
     public string Platform { get; set; } = string.Empty;
+    
+    [JsonPropertyName("remember_me")]
     public bool RememberMe { get; set; } = false;
 }
 

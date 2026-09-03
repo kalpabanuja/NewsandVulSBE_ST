@@ -326,10 +326,48 @@ public class PublicController : ControllerBase
     .dark-mode .meta-footer { border-top-color: #374151; color: #6b7280; }
     .dark-mode iframe { border-color: #374151 !important; background: #111827 !important; }
     .dark-mode div[style*=""background:#faf5ff""] { background: #3b2c4a !important; border-color: #4c3968 !important; }
+
+    /* Cyber Theme */
+    body.theme-cyber { color: #00ff00; background: #0a0a0a; font-family: 'Fira Code', monospace; }
+    .theme-cyber .theme-toggle { border-color: #004400; color: #00ff00; }
+    .theme-cyber h1.note-title { border-bottom-color: #004400; }
+    .theme-cyber .note-summary { color: #00cc00; }
+    .theme-cyber h1,.theme-cyber h2,.theme-cyber h3,.theme-cyber h4,.theme-cyber h5 { color: #00ff00; }
+    .theme-cyber hr.divider-singleLine, .theme-cyber hr.divider-breakLines, .theme-cyber hr.divider-doubleLine { border-top-color: #004400; }
+    .theme-cyber .file-card { border-color: #004400; background: #001100; }
+    .theme-cyber .file-card .file-size { color: #00cc00; }
+    .theme-cyber .meta-footer { border-top-color: #004400; color: #00aa00; }
+    .theme-cyber iframe { border-color: #004400 !important; background: #0a0a0a !important; }
+    .theme-cyber div[style*=""background:#faf5ff""] { background: #002200 !important; border-color: #004400 !important; color: #00ff00 !important; }
+
+    /* Baby Bird Theme */
+    body.theme-babybird { color: #0c4a6e; background: #e0f2fe; }
+    .theme-babybird .theme-toggle { border-color: #7dd3fc; }
+    .theme-babybird h1.note-title { border-bottom-color: #bae6fd; }
+    .theme-babybird .note-summary { color: #0369a1; }
+    .theme-babybird h1,.theme-babybird h2,.theme-babybird h3,.theme-babybird h4,.theme-babybird h5 { color: #082f49; }
+    .theme-babybird hr.divider-singleLine, .theme-babybird hr.divider-breakLines, .theme-babybird hr.divider-doubleLine { border-top-color: #bae6fd; }
+    .theme-babybird .file-card { border-color: #7dd3fc; background: #f0f9ff; }
+    .theme-babybird .file-card .file-size { color: #0284c7; }
+    .theme-babybird .meta-footer { border-top-color: #bae6fd; color: #0284c7; }
+    .theme-babybird iframe { border-color: #7dd3fc !important; background: #e0f2fe !important; }
+
+    /* Killer Theme */
+    body.theme-killer { color: #fca5a5; background: #450a0a; }
+    .theme-killer .theme-toggle { border-color: #7f1d1d; }
+    .theme-killer h1.note-title { border-bottom-color: #7f1d1d; }
+    .theme-killer .note-summary { color: #ef4444; }
+    .theme-killer h1,.theme-killer h2,.theme-killer h3,.theme-killer h4,.theme-killer h5 { color: #fecaca; }
+    .theme-killer hr.divider-singleLine, .theme-killer hr.divider-breakLines, .theme-killer hr.divider-doubleLine { border-top-color: #7f1d1d; }
+    .theme-killer .file-card { border-color: #7f1d1d; background: #280505; }
+    .theme-killer .file-card .file-size { color: #ef4444; }
+    .theme-killer .meta-footer { border-top-color: #7f1d1d; color: #ef4444; }
+    .theme-killer iframe { border-color: #7f1d1d !important; background: #450a0a !important; }
+    .theme-killer div[style*=""background:#faf5ff""] { background: #3a0a0a !important; border-color: #7f1d1d !important; color: #fca5a5 !important; }
   </style>");
         sb.AppendLine("</head>");
         sb.AppendLine("<body>");
-        sb.AppendLine("  <button class='theme-toggle' onclick='toggleTheme()' id='themeBtn'><span id='themeIcon'>🌙</span> <span id='themeText'>Dark</span></button>");
+        sb.AppendLine("  <button class='theme-toggle' onclick='toggleTheme()' id='themeBtn'><span id='themeIcon'>☀️</span> <span id='themeText'>Light</span></button>");
         sb.AppendLine($"  <h1 class='note-title'>{Encode(title)}</h1>");
         if (!string.IsNullOrWhiteSpace(summary))
             sb.AppendLine($"  <p class='note-summary'>{Encode(summary)}</p>");
@@ -369,19 +407,40 @@ public class PublicController : ControllerBase
       });
     }
 
+    const themes = [
+        { id: 'light', icon: '☀️', text: 'Light' },
+        { id: 'dark-mode', icon: '🌙', text: 'Dark' },
+        { id: 'theme-cyber', icon: '💻', text: 'Cyber' },
+        { id: 'theme-babybird', icon: '🐦', text: 'Baby Bird' },
+        { id: 'theme-killer', icon: '🔪', text: 'Killer' }
+    ];
+
     function toggleTheme() {
-        document.body.classList.toggle('dark-mode');
-        var isDark = document.body.classList.contains('dark-mode');
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        document.getElementById('themeIcon').innerText = isDark ? '☀️' : '🌙';
-        document.getElementById('themeText').innerText = isDark ? 'Light' : 'Dark';
+        var currentThemeClass = Array.from(document.body.classList).find(c => themes.some(t => t.id === c)) || 'light';
+        var currentIndex = themes.findIndex(t => t.id === currentThemeClass);
+        if(currentIndex === -1) currentIndex = 0;
+        
+        var nextIndex = (currentIndex + 1) % themes.length;
+        var nextTheme = themes[nextIndex];
+        
+        themes.forEach(t => { if(t.id !== 'light') document.body.classList.remove(t.id); });
+        
+        if (nextTheme.id !== 'light') document.body.classList.add(nextTheme.id);
+        
+        localStorage.setItem('theme', nextTheme.id);
+        document.getElementById('themeIcon').innerText = nextTheme.icon;
+        document.getElementById('themeText').innerText = nextTheme.text;
     }
 
     // Load saved theme
-    if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.body.classList.add('dark-mode');
-        document.getElementById('themeIcon').innerText = '☀️';
-        document.getElementById('themeText').innerText = 'Light';
+    var savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) savedTheme = 'dark-mode';
+    
+    var themeObj = themes.find(t => t.id === savedTheme);
+    if (themeObj) {
+        if (themeObj.id !== 'light') document.body.classList.add(themeObj.id);
+        document.getElementById('themeIcon').innerText = themeObj.icon;
+        document.getElementById('themeText').innerText = themeObj.text;
     }
   </script>");
         
