@@ -52,13 +52,17 @@ public class NoteSearchItem
     public Guid Id { get; set; }
     public string Title { get; set; } = string.Empty;
     public string Summary { get; set; } = string.Empty;
+    public Guid? CategoryId { get; set; }
     public string? Category { get; set; }
     public List<string> Tags { get; set; } = new List<string>();
     public string? ToolName { get; set; }
     public bool IsFavorite { get; set; }
     public bool IsPinned { get; set; }
+    public bool IsArchived { get; set; }
+    public bool IsDeleted { get; set; }
     public DateTime? UpdatedAt { get; set; }
     public DateTime? CreatedAt { get; set; }
+    public DateTime? DeletedAt { get; set; }
     public List<NoteBlockMatch> MatchedBlocks { get; set; } = new List<NoteBlockMatch>();
 }
 

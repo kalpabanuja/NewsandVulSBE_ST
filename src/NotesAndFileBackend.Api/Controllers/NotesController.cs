@@ -153,14 +153,17 @@ public class NotesController : ControllerBase
                 d.Id, 
                 d.Title, 
                 d.Summary,
+                d.CategoryId,
                 Category = d.Category != null ? d.Category.Name : null,
                 Tags = d.NoteTags.Select(nt => nt.Tag.Name).ToList(),
                 d.ToolName,
                 d.IsFavorite,
                 d.IsPinned,
                 d.IsArchived,
+                d.IsDeleted,
                 d.UpdatedAt,
-                d.CreatedAt
+                d.CreatedAt,
+                d.DeletedAt
             })
             .OrderByDescending(d => d.UpdatedAt)
             .Skip((page - 1) * pageSize)
@@ -175,6 +178,7 @@ public class NotesController : ControllerBase
     {
         var userId = GetCurrentUserId();
         var note = await _context.Notes
+            .Include(d => d.User)
             .Include(d => d.Attachments)
             .Include(d => d.PublicShares.Where(s => s.RevokedAt == null))
             .Include(d => d.NoteTags).ThenInclude(nt => nt.Tag)
@@ -197,9 +201,13 @@ public class NotesController : ControllerBase
             note.IsPinned,
             note.IsFavorite,
             note.IsArchived,
+            note.IsDeleted,
             note.Version,
             note.CreatedAt,
             note.UpdatedAt,
+            note.DeletedAt,
+            OwnerId = note.UserId,
+            OwnerName = note.User?.DisplayName,
             PublicShares = note.PublicShares.Select(ps => new { ps.Id, ps.TokenHash, ps.ExpiresAt })
         });
     }
@@ -326,14 +334,17 @@ public class NotesController : ControllerBase
                 d.Id, 
                 d.Title, 
                 d.Summary,
+                d.CategoryId,
                 Category = d.Category != null ? d.Category.Name : null,
                 Tags = d.NoteTags.Select(nt => nt.Tag.Name).ToList(),
                 d.ToolName,
                 d.IsFavorite,
                 d.IsPinned,
                 d.IsArchived,
-                d.DeletedAt,
-                d.CreatedAt
+                d.IsDeleted,
+                d.UpdatedAt,
+                d.CreatedAt,
+                d.DeletedAt
             })
             .OrderByDescending(d => d.DeletedAt)
             .Skip((page - 1) * pageSize)
@@ -506,13 +517,17 @@ public class NotesController : ControllerBase
                 Id = n.Id,
                 Title = n.Title,
                 Summary = n.Summary,
+                CategoryId = n.CategoryId,
                 Category = n.Category != null ? n.Category.Name : null,
                 Tags = n.NoteTags.Select(nt => nt.Tag.Name).ToList(),
                 ToolName = n.ToolName,
                 IsFavorite = n.IsFavorite,
                 IsPinned = n.IsPinned,
+                IsArchived = n.IsArchived,
+                IsDeleted = n.IsDeleted,
                 UpdatedAt = n.UpdatedAt,
-                CreatedAt = n.CreatedAt
+                CreatedAt = n.CreatedAt,
+                DeletedAt = n.DeletedAt
             })
             .ToListAsync(ct);
 
