@@ -16,6 +16,7 @@ public class StoredFile : BaseEntity
     public string Checksum { get; set; } = string.Empty;
 
     public string Status { get; set; } = "PENDING"; // PENDING, UPLOADING, ACTIVE, DELETED
+    public bool ShareWithEveryone { get; set; } = false;
     
     public DateTime? RetentionExpiresAt { get; set; }
     public DateTime? DeletedAt { get; set; }

@@ -174,6 +174,46 @@ public class NotesController : ControllerBase
         return Ok(notes);
     }
 
+    [HttpGet("community")]
+    public async Task<IActionResult> ListCommunityNotes([FromQuery] int page = 1, [FromQuery] int pageSize = 20, CancellationToken ct = default)
+    {
+        pageSize = Math.Min(pageSize, 100);
+        page = Math.Max(1, page);
+        
+        var query = _context.Notes
+            .Include(n => n.User)
+            .Include(n => n.NoteTags).ThenInclude(nt => nt.Tag)
+            .Include(n => n.Category)
+            .Where(d => d.Visibility == "PUBLIC" && d.IsDeleted == false && d.IsArchived == false);
+
+        var notes = await query
+            .Select(d => new { 
+                d.Id, 
+                d.Title, 
+                d.Summary,
+                d.CategoryId,
+                Category = d.Category != null ? d.Category.Name : null,
+                Tags = d.NoteTags.Select(nt => nt.Tag.Name).ToList(),
+                d.ToolName,
+                d.IsFavorite,
+                d.IsPinned,
+                d.IsArchived,
+                d.IsDeleted,
+                d.UpdatedAt,
+                d.CreatedAt,
+                d.DeletedAt,
+                d.Visibility,
+                OwnerId = d.UserId,
+                OwnerName = d.User != null ? d.User.DisplayName : "Unknown"
+            })
+            .OrderByDescending(d => d.UpdatedAt)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(ct);
+            
+        return Ok(notes);
+    }
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetNote(Guid id, CancellationToken ct)
     {

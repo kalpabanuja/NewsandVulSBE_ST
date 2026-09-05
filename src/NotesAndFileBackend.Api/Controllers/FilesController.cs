@@ -158,6 +158,48 @@ public class FilesController : ControllerBase
         return Ok(files);
     }
     
+    [HttpGet("community")]
+    public async Task<IActionResult> ListCommunityFiles([FromQuery] string? search, [FromQuery] string? sortBy = "date", [FromQuery] string? sortOrder = "desc")
+    {
+        bool isDesc = sortOrder?.ToLower() != "asc";
+
+        var query = _context.Files
+            .Where(f => f.ShareWithEveryone == true && f.Status == "ACTIVE");
+
+        if (!string.IsNullOrWhiteSpace(search))
+            query = query.Where(f => f.OriginalFilename.ToLower().Contains(search.ToLower()));
+
+        var filesQuery = query.Select(f => new
+        {
+            f.Id,
+            f.OriginalFilename,
+            f.MimeType,
+            f.Extension,
+            f.ByteSize,
+            f.Status,
+            f.StorageBackend,
+            f.RetentionExpiresAt,
+            f.CreatedAt,
+            f.UpdatedAt,
+            f.ShareWithEveryone,
+            OwnerId = f.OwnerUserId,
+            OwnerName = f.OwnerUser != null ? f.OwnerUser.DisplayName : "Unknown",
+            PublicShares = f.PublicShares
+                .Where(s => s.RevokedAt == null)
+                .Select(s => new { s.Id, s.TokenHash, s.ExpiresAt, s.AccessCount })
+        });
+
+        var files = isDesc
+            ? (sortBy?.ToLower() == "size"
+                ? await filesQuery.OrderByDescending(f => f.ByteSize).ToListAsync()
+                : await filesQuery.OrderByDescending(f => f.CreatedAt).ToListAsync())
+            : (sortBy?.ToLower() == "size"
+                ? await filesQuery.OrderBy(f => f.ByteSize).ToListAsync()
+                : await filesQuery.OrderBy(f => f.CreatedAt).ToListAsync());
+
+        return Ok(files);
+    }
+    
     [HttpGet("{id}")]
     public async Task<IActionResult> GetFile(Guid id)
     {
@@ -226,6 +268,31 @@ public class FilesController : ControllerBase
         }
 
         return NoContent();
+    }
+
+    [HttpPatch("{id}/visibility")]
+    public async Task<IActionResult> UpdateFileVisibility(Guid id, [FromBody] NotesAndFileBackend.Api.DTOs.UpdateFileVisibilityRequest request)
+    {
+        var UserId = GetCurrentUserId();
+        var file = await _context.Files.FirstOrDefaultAsync(f => f.Id == id && f.OwnerUserId == UserId && f.Status == "ACTIVE");
+        
+        if (file == null) return NotFound();
+
+        file.ShareWithEveryone = request.ShareWithEveryone;
+        file.UpdatedAt = DateTime.UtcNow;
+
+        // Audit log
+        _context.AuditEvents.Add(new AuditEvent { UserId = UserId, EventType = "file.visibility_changed", ResourceType = "file", ResourceId = file.Id.ToString() });
+
+        await _context.SaveChangesAsync();
+
+        return Ok(new
+        {
+            file.Id,
+            file.OriginalFilename,
+            file.ShareWithEveryone,
+            file.UpdatedAt
+        });
     }
 
     [HttpPost("{id}/share")]

@@ -26,3 +26,8 @@ public class SharedNoteDto
     public System.Text.Json.JsonElement ContentJsonb { get; set; }
     public DateTime UpdatedAt { get; set; }
 }
+
+public class UpdateFileVisibilityRequest
+{
+    public bool ShareWithEveryone { get; set; }
+}
