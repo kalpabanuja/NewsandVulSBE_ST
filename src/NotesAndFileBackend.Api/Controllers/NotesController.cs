@@ -224,7 +224,7 @@ public class NotesController : ControllerBase
             .Include(d => d.PublicShares.Where(s => s.RevokedAt == null))
             .Include(d => d.NoteTags).ThenInclude(nt => nt.Tag)
             .Include(d => d.Category)
-            .FirstOrDefaultAsync(d => d.Id == id && d.UserId == userId && d.IsDeleted == false, ct);
+            .FirstOrDefaultAsync(d => d.Id == id && (d.UserId == userId || d.Visibility == "PUBLIC") && d.IsDeleted == false, ct);
             
         if (note == null) return NotFound();
         

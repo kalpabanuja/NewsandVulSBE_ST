@@ -205,7 +205,7 @@ public class FilesController : ControllerBase
     {
         var UserId = GetCurrentUserId();
         var file = await _context.Files
-            .Where(f => f.Id == id && f.OwnerUserId == UserId && f.Status == "ACTIVE")
+            .Where(f => f.Id == id && (f.OwnerUserId == UserId || f.ShareWithEveryone) && f.Status == "ACTIVE")
             .Select(f => new
             {
                 f.Id,
@@ -233,7 +233,7 @@ public class FilesController : ControllerBase
     public async Task<IActionResult> DownloadFile(Guid id)
     {
         var UserId = GetCurrentUserId();
-        var file = await _context.Files.FirstOrDefaultAsync(f => f.Id == id && f.OwnerUserId == UserId && f.Status == "ACTIVE");
+        var file = await _context.Files.FirstOrDefaultAsync(f => f.Id == id && (f.OwnerUserId == UserId || f.ShareWithEveryone) && f.Status == "ACTIVE");
         
         if (file == null) return NotFound();
         
